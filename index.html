@@ -1042,16 +1042,20 @@
 
         <div class="row-2">
 
-            <select
+       <select
     id="prop-system"
     class="modal-input"
     style="flex: 1;"
     onchange="validateTournamentSystem()"
 >
+    <option value="Single Elimination" id="normal-system-option">
+        На вылет
+    </option>
 
-<option value="Спидран" id="speedrun-option">
-    Спидран
-</option>
+    <option value="Спидран" id="speedrun-option">
+        Спидран
+    </option>
+</select>
 
             </select>
 
@@ -2610,45 +2614,77 @@ function isSpeedrunBlockedGame(gameValue) {
 
     const game = String(gameValue || "")
         .trim()
-        .toLowerCase()
-        .replace(/\s+/g, " ");
+        .toLowerCase();
 
     return (
-        game.includes("cs") ||
-        game.includes("counter strike") ||
-        game.includes("counter-strike") ||
-        game.includes("dota")
+        game === "cs 2" ||
+        game === "cs2" ||
+        game === "dota 2" ||
+        game === "dota2"
     );
 }
 
 function updateSystemOptions() {
-    const gameSel = document.getElementById("prop-game");
-    const systemSel = document.getElementById("prop-system");
-    const speedrunOption = document.getElementById("speedrun-option");
 
-    if (!gameSel || !systemSel || !speedrunOption) {
+    const gameSel =
+        document.getElementById("prop-game");
+
+    const systemSel =
+        document.getElementById("prop-system");
+
+    const speedrunOption =
+        document.getElementById("speedrun-option");
+
+    const normalOption =
+        document.getElementById("normal-system-option");
+
+    if (
+        !gameSel ||
+        !systemSel ||
+        !speedrunOption ||
+        !normalOption
+    ) {
         return;
     }
 
-    const blocked = isSpeedrunBlockedGame(gameSel.value);
+    const game =
+        String(gameSel.value || "")
+            .trim()
+            .toLowerCase();
+
+    const blocked =
+        game === "cs 2" ||
+        game === "cs2" ||
+        game === "dota 2" ||
+        game === "dota2";
 
     if (blocked) {
 
-        // Скрываем Speedrun
+        // CS 2 / Dota 2:
+        // Speedrun полностью скрываем
         speedrunOption.hidden = true;
         speedrunOption.style.display = "none";
 
-        // Если Speedrun уже был выбран,
-        // автоматически переключаем на обычный турнир
+        // Показываем обычный режим
+        normalOption.hidden = false;
+        normalOption.style.display = "";
+
+        // Если был выбран Speedrun —
+        // переключаем на "На вылет"
         if (systemSel.value === "Спидран") {
             systemSel.value = "Single Elimination";
         }
 
     } else {
 
-        // Для остальных игр Speedrun доступен
+        // Другие игры:
+        // оба режима доступны
         speedrunOption.hidden = false;
         speedrunOption.style.display = "";
+
+        normalOption.hidden = false;
+        normalOption.style.display = "";
+
     }
 }
 
@@ -3977,18 +4013,18 @@ function validateTournamentSystem() {
 
     function openProposeModal() {
 
-        const modal =
-            document.getElementById(
-                "proposeModal"
-            );
+    const modal =
+        document.getElementById(
+            "proposeModal"
+        );
 
-
-        if (modal) {
-
-            modal.style.display =
-                "flex";
-        }
+    if (modal) {
+        modal.style.display = "flex";
     }
+
+    updateFormats();
+    updateSystemOptions();
+}
 
 
     function closeProposeModal() {
