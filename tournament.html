@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -482,6 +483,14 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .player-item:hover {
+            background: rgba(166,124,255,0.1);
+            border-color: var(--purple);
+            color: white;
         }
 
         .player-item.me {
@@ -1061,7 +1070,7 @@
 <!-- NAV -->
 <div class="top-nav">
     <div class="nav-inner">
-        <a href="index.html" class="nav-link">← Назад</a>
+        <a href="index.html" class="nav-link" id="nav-back">← Назад</a>
 
         <button
             class="lang-btn"
@@ -1094,27 +1103,27 @@
         <div class="wg-meta-grid">
 
             <div class="meta-box">
-                <span class="meta-label">Организатор</span>
+                <span class="meta-label" id="lbl-org">Организатор</span>
                 <span class="meta-val" id="t-author">...</span>
             </div>
 
             <div class="meta-box">
-                <span class="meta-label">Формат</span>
+                <span class="meta-label" id="lbl-format">Формат</span>
                 <span class="meta-val" id="t-format">...</span>
             </div>
 
             <div class="meta-box">
-                <span class="meta-label">Система</span>
+                <span class="meta-label" id="lbl-system">Система</span>
                 <span class="meta-val" id="t-system">...</span>
             </div>
 
             <div class="meta-box">
-                <span class="meta-label">Слоты</span>
+                <span class="meta-label" id="lbl-slots">Слоты</span>
                 <span class="meta-val" id="t-max">...</span>
             </div>
 
             <div class="meta-box">
-                <span class="meta-label">Призовые</span>
+                <span class="meta-label" id="lbl-prize">Призовые</span>
                 <span class="meta-val green" id="t-prize">...</span>
             </div>
 
@@ -1127,7 +1136,7 @@
 
         <div class="wg-card">
 
-            <h2 class="wg-card-title">
+            <h2 class="wg-card-title" id="lbl-desc">
                 Описание и регламент
             </h2>
 
@@ -1159,7 +1168,7 @@
                     class="admin-controls-box"
                 ></div>
 
-                <div class="players-title">
+                <div class="players-title" id="lbl-members">
                     Участники
                 </div>
 
@@ -1212,7 +1221,7 @@
         style="display:none; margin-bottom:30px;"
     >
 
-        <h2 class="wg-card-title">
+        <h2 class="wg-card-title" id="lbl-tab-lb">
             Итоговая таблица
         </h2>
 
@@ -1228,7 +1237,7 @@
         style="display:none; margin-bottom:30px;"
     >
 
-        <h2 class="wg-card-title">
+        <h2 class="wg-card-title" id="lbl-tab-br">
             Турнирная сетка
         </h2>
 
@@ -1304,6 +1313,7 @@
         >
 
             <h4
+                id="lbl-admin-panel"
                 style="
                     margin:0 0 12px;
                     color:#ff3c64;
@@ -1360,6 +1370,7 @@
 
             <button
                 class="btn-save"
+                id="btn-save"
                 onclick="saveMatchScore()"
             >
                 Сохранить результат
@@ -1375,7 +1386,75 @@
 
         <button
             class="btn-cancel"
+            id="btn-close"
             onclick="closeMatchModal()"
+        >
+            Закрыть
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ПРОФИЛЬ ИГРОКА (НОВОЕ МОДАЛЬНОЕ ОКНО) -->
+<div
+    class="modal-overlay"
+    id="profileModal"
+    onclick="handleProfileBackground(event)"
+>
+
+    <div
+        class="modal-box"
+        onclick="event.stopPropagation()"
+        style="max-width: 400px;"
+    >
+
+        <h3
+            id="prof-header"
+            style="
+                margin:0 0 20px;
+                color:#858592;
+                text-align:center;
+                font-size:11px;
+                text-transform:uppercase;
+            "
+        >
+            Профиль игрока
+        </h3>
+
+        <div style="display:flex; flex-direction:column; align-items:center; gap:10px;">
+            <img 
+                id="prof-avatar" 
+                src="" 
+                style="width:80px; height:80px; border-radius:50%; border:2px solid var(--purple); object-fit:cover; background:#0b0b0e;"
+            >
+            <h2 id="prof-name" style="margin:0; color:white;">Name</h2>
+            <div style="color:var(--muted); font-size:12px;">
+                <span id="prof-steam-lbl">Steam ID:</span> 
+                <span id="prof-steam" style="color:white; font-family:monospace;">...</span>
+            </div>
+        </div>
+        
+        <div class="wg-meta-grid" style="margin-top:25px; grid-template-columns: repeat(3, 1fr); text-align:center; background:#0c0c10; padding:15px; border-radius:8px; border:1px solid #303039;">
+            <div class="meta-box">
+                <span class="meta-label" id="prof-lbl-kd">K/D Рейтинг</span>
+                <span class="meta-val green" id="prof-kd" style="font-size:18px;">0.00</span>
+            </div>
+            <div class="meta-box">
+                <span class="meta-label" id="prof-lbl-win">Винрейт</span>
+                <span class="meta-val" id="prof-winrate" style="font-size:18px;">0%</span>
+            </div>
+            <div class="meta-box">
+                <span class="meta-label" id="prof-lbl-matches">Матчи</span>
+                <span class="meta-val" id="prof-matches" style="font-size:18px;">0</span>
+            </div>
+        </div>
+
+        <button
+            class="btn-cancel"
+            id="btn-prof-close"
+            onclick="closeProfileModal()"
         >
             Закрыть
         </button>
@@ -1428,8 +1507,37 @@ let loadingTournament = false;
 let currentLang =
     localStorage.getItem("siteLang") || "RU";
 
-/* КЕШ АВАТАРОК */
-let avatarsCache = {};
+
+/* СЛОВАРЬ ДЛЯ ПЕРЕВОДА (НОВОЕ) */
+const dict = {
+    RU: {
+        back: "← Назад",
+        org: "Организатор", format: "Формат", system: "Система", slots: "Слоты", prize: "Призовые",
+        desc: "Описание и регламент", members: "Участники",
+        tabLb: "🏆 Итоги", tabBr: "🌳 Сетка", lbTitle: "Итоговая таблица", brTitle: "Турнирная сетка",
+        btnJoin: "Участвовать", btnLeave: "✖ Отменить участие", btnRun: "Турнир идёт", btnFin: "Турнир завершён",
+        statWait: "Ожидание игроков", statRun: "🔴 Турнир идёт", statFin: "🏆 Завершён",
+        joinOpen: "Регистрация открыта", joinDone: "Вы зарегистрированы", joinClosed: "Регистрация закрыта",
+        chatPl: "Сообщение или ссылка...", adminPanel: "Панель судьи", saveBtn: "Сохранить результат", close: "Закрыть",
+        profTitle: "Профиль игрока", pSteam: "Steam ID:", pKd: "K/D Рейтинг", pWin: "Винрейт", pMat: "Матчи",
+        notSet: "Не указан"
+    },
+    EN: {
+        back: "← Back",
+        org: "Organizer", format: "Format", system: "System", slots: "Slots", prize: "Prize",
+        desc: "Rules & Description", members: "Participants",
+        tabLb: "🏆 Leaderboard", tabBr: "🌳 Bracket", lbTitle: "Final Standings", brTitle: "Tournament Bracket",
+        btnJoin: "Join", btnLeave: "✖ Leave", btnRun: "Running", btnFin: "Finished",
+        statWait: "Waiting for players", statRun: "🔴 Live", statFin: "🏆 Finished",
+        joinOpen: "Registration Open", joinDone: "Registered", joinClosed: "Registration Closed",
+        chatPl: "Message or link...", adminPanel: "Admin Panel", saveBtn: "Save Result", close: "Close",
+        profTitle: "Player Profile", pSteam: "Steam ID:", pKd: "K/D Ratio", pWin: "Winrate", pMat: "Matches",
+        notSet: "Not set"
+    }
+};
+
+/* КЕШ ЮЗЕРОВ (ТЕПЕРЬ ХРАНИМ И АВАТАР И STEAM ID) */
+let usersCache = {};
 const defaultAvatar = "https://via.placeholder.com/40/141419/a67cff?text=TU";
 
 
@@ -1509,17 +1617,16 @@ function setLoadingButton(button, loading) {
 }
 
 /* =========================================================
-   AVATARS PRELOADER
+   USERS PRELOADER (ОБНОВЛЕНО ДЛЯ ПРОФИЛЕЙ)
    ========================================================= */
 
-async function preloadAvatars(data) {
+async function preloadUsers(data) {
     let namesToFetch = [];
 
-    // Собираем всех уникальных игроков, чтобы загрузить их аватары
     if (data.format === "1v1" || data.system === "Спидран") {
         if (data.players) namesToFetch = Object.keys(data.players);
     } 
-    // Для командных турниров достаем игроков из команд
+    
     if (data.teams) {
         Object.values(data.teams).forEach(team => {
             if (team.players) {
@@ -1528,18 +1635,17 @@ async function preloadAvatars(data) {
         });
     }
 
-    // Убираем дубликаты
     namesToFetch = [...new Set(namesToFetch)];
 
-    // Загружаем все аватарки параллельно (быстро)
     await Promise.all(namesToFetch.map(async (name) => {
-        if (avatarsCache[name]) return; // уже загружено
+        if (usersCache[name]) return; 
         try {
             const res = await fetch(`https://retro-cup-51db5-default-rtdb.firebaseio.com/users/${encodeURIComponent(name)}.json`);
             const userData = await res.json();
-            avatarsCache[name] = (userData && userData.avatar) ? userData.avatar : defaultAvatar;
+            usersCache[name] = userData || { avatar: defaultAvatar, steamId: null };
+            if (!usersCache[name].avatar) usersCache[name].avatar = defaultAvatar;
         } catch(e) {
-            avatarsCache[name] = defaultAvatar;
+            usersCache[name] = { avatar: defaultAvatar, steamId: null };
         }
     }));
 }
@@ -1618,8 +1724,42 @@ async function firebaseDelete(path) {
 
 
 /* =========================================================
-   LANGUAGE
+   LANGUAGE (ОБНОВЛЕНО ДЛЯ ПОЛНОГО ПЕРЕВОДА)
    ========================================================= */
+
+function applyTranslations() {
+    const l = dict[currentLang];
+    
+    document.getElementById("nav-back").innerText = l.back;
+    document.getElementById("lbl-org").innerText = l.org;
+    document.getElementById("lbl-format").innerText = l.format;
+    document.getElementById("lbl-system").innerText = l.system;
+    document.getElementById("lbl-slots").innerText = l.slots;
+    document.getElementById("lbl-prize").innerText = l.prize;
+    document.getElementById("lbl-desc").innerText = l.desc;
+    document.getElementById("lbl-members").innerText = l.members;
+    
+    document.getElementById("tab-btn-leaderboard").innerText = l.tabLb;
+    document.getElementById("tab-btn-bracket").innerText = l.tabBr;
+    document.getElementById("lbl-tab-lb").innerText = l.lbTitle;
+    document.getElementById("lbl-tab-br").innerText = l.brTitle;
+    
+    document.getElementById("chat-input").placeholder = l.chatPl;
+    document.getElementById("lbl-admin-panel").innerText = l.adminPanel;
+    document.getElementById("btn-save").innerText = l.saveBtn;
+    document.getElementById("btn-close").innerText = l.close;
+
+    // Перевод профиля
+    document.getElementById("prof-header").innerText = l.profTitle;
+    document.getElementById("prof-steam-lbl").innerText = l.pSteam;
+    document.getElementById("prof-lbl-kd").innerText = l.pKd;
+    document.getElementById("prof-lbl-win").innerText = l.pWin;
+    document.getElementById("prof-lbl-matches").innerText = l.pMat;
+    document.getElementById("btn-prof-close").innerText = l.close;
+
+    updateTournamentStatus();
+    updateJoinButton();
+}
 
 function toggleLanguage() {
 
@@ -1637,7 +1777,68 @@ function toggleLanguage() {
         "lang-toggle"
     ).innerText = currentLang;
 
+    applyTranslations();
     loadTournamentData(true);
+}
+
+
+/* =========================================================
+   PROFILE MODAL LOGIC (НОВОЕ)
+   ========================================================= */
+
+function openProfile(playerName) {
+    const user = usersCache[playerName] || { avatar: defaultAvatar, steamId: null };
+    const l = dict[currentLang];
+    
+    document.getElementById("prof-avatar").src = user.avatar;
+    document.getElementById("prof-name").innerText = playerName;
+    document.getElementById("prof-steam").innerText = user.steamId || l.notSet;
+
+    let totalKills = 0;
+    let totalDeaths = 0;
+    let matchesPlayed = 0;
+    let matchesWon = 0;
+
+    // Высчитываем стату на основе всех матчей в турнире
+    if (matchResults) {
+        Object.values(matchResults).forEach(match => {
+            if (match.p1 === playerName || match.p2 === playerName) {
+                matchesPlayed++;
+                
+                if (match.winner === playerName) {
+                    matchesWon++;
+                }
+
+                if (match.p1 === playerName) {
+                    totalKills += parseInt(match.s1 || 0);
+                    totalDeaths += parseInt(match.s2 || 0);
+                } else {
+                    totalKills += parseInt(match.s2 || 0);
+                    totalDeaths += parseInt(match.s1 || 0);
+                }
+            }
+        });
+    }
+
+    // Если смертей 0, но есть убийства, КД равно убийствам, иначе 0
+    let kd = totalDeaths === 0 ? (totalKills > 0 ? totalKills : 0) : (totalKills / totalDeaths);
+    let winrate = matchesPlayed === 0 ? 0 : (matchesWon / matchesPlayed) * 100;
+
+    document.getElementById("prof-kd").innerText = kd.toFixed(2);
+    document.getElementById("prof-winrate").innerText = winrate.toFixed(1) + "%";
+    document.getElementById("prof-matches").innerText = matchesPlayed;
+
+    document.getElementById("profileModal").style.display = "flex";
+}
+
+function closeProfileModal() {
+    document.getElementById("profileModal").style.display = "none";
+}
+
+function handleProfileBackground(event) {
+    if (event.target.id === "profileModal") {
+        closeProfileModal();
+    }
 }
 
 
@@ -1728,21 +1929,24 @@ async function loadTournamentData(force = false) {
         matchResults = data.matches || {};
 
         /* HEADER */
-        document.getElementById("t-game").innerText = data.game || "Игра не указана";
-        document.getElementById("t-name").innerText = data.name || "Без названия";
+        document.getElementById("t-game").innerText = data.game || "---";
+        document.getElementById("t-name").innerText = data.name || "---";
 
         const author = document.getElementById("t-author");
         if (data.author === ADMIN_USER) {
             author.innerHTML = `<span style="color:#ffcc00;">👑 Retro Cup</span>`;
         } else {
-            author.innerText = data.author || "Не указан";
+            author.innerText = data.author || "---";
         }
 
-        document.getElementById("t-format").innerText = data.format || "Не указан";
-        document.getElementById("t-system").innerText = data.system || "Не указана";
+        document.getElementById("t-format").innerText = data.format || "---";
+        document.getElementById("t-system").innerText = data.system || "---";
         document.getElementById("t-max").innerText = maxLimit;
-        document.getElementById("t-prize").innerText = data.prize || "Нет";
-        document.getElementById("t-rules").innerText = data.rules || "Правила не указаны";
+        document.getElementById("t-prize").innerText = data.prize || "---";
+        document.getElementById("t-rules").innerText = data.rules || "---";
+
+        /* APPLY LANGUAGE */
+        applyTranslations();
 
         /* STATUS */
         updateTournamentStatus();
@@ -1750,8 +1954,8 @@ async function loadTournamentData(force = false) {
         /* ADMIN */
         updateAdminControls();
 
-        /* ПРЕДЗАГРУЗКА АВАТАРОК ПЕРЕД ОТРИСОВКОЙ */
-        await preloadAvatars(data);
+        /* ПРЕДЗАГРУЗКА АВАТАРОК И ЮЗЕРОВ ПЕРЕД ОТРИСОВКОЙ */
+        await preloadUsers(data);
 
         /* PLAYERS */
         const result = renderParticipants(data);
@@ -1796,14 +2000,16 @@ async function loadTournamentData(force = false) {
 function updateTournamentStatus() {
     const badge = document.getElementById("tourney-status-badge");
     badge.className = "status-badge";
+    
+    const l = dict[currentLang];
 
     if (tStatus === "waiting" || tStatus === "registration") {
-        badge.innerText = "Ожидание игроков";
+        badge.innerText = l.statWait;
     } else if (tStatus === "active") {
-        badge.innerText = "🔴 Турнир идёт";
+        badge.innerText = l.statRun;
         badge.classList.add("active");
     } else if (tStatus === "finished") {
-        badge.innerText = "🏆 Завершён";
+        badge.innerText = l.statFin;
         badge.classList.add("finished");
     } else {
         badge.innerText = tStatus;
@@ -1974,10 +2180,11 @@ function renderParticipants(data) {
 
                     players.forEach(player => {
                         const me = player === currentUser ? " me" : "";
-                        const avatarSrc = avatarsCache[player] || defaultAvatar;
+                        const avatarSrc = (usersCache[player] && usersCache[player].avatar) ? usersCache[player].avatar : defaultAvatar;
 
+                        // Добавлен клик для профиля
                         html += `
-                            <div class="player-item${me}">
+                            <div class="player-item${me}" onclick="openProfile('${escapeHTML(player)}')">
                                 <img src="${avatarSrc}" class="player-avatar-small" alt="">
                                 <span>${escapeHTML(player)}</span>
                             </div>
@@ -2009,10 +2216,11 @@ function renderParticipants(data) {
                     validParticipants.push(player);
 
                     const me = player === currentUser ? " me" : "";
-                    const avatarSrc = avatarsCache[player] || defaultAvatar;
+                    const avatarSrc = (usersCache[player] && usersCache[player].avatar) ? usersCache[player].avatar : defaultAvatar;
 
+                    // Добавлен клик для профиля
                     container.innerHTML += `
-                        <div class="player-item${me}" style="margin-bottom:5px;">
+                        <div class="player-item${me}" style="margin-bottom:5px;" onclick="openProfile('${escapeHTML(player)}')">
                             <img src="${avatarSrc}" class="player-avatar-small" alt="">
                             <span>${escapeHTML(player)}</span>
                         </div>
@@ -2040,12 +2248,15 @@ function renderParticipants(data) {
                 `;
             }
 
-            let avatarHtml = !player.isTeam && avatarsCache[player.name] 
-                ? `<img src="${avatarsCache[player.name]}" class="player-avatar-small" alt="">` : "";
+            let avatarHtml = !player.isTeam && usersCache[player.name] && usersCache[player.name].avatar 
+                ? `<img src="${usersCache[player.name].avatar}" class="player-avatar-small" alt="">` : "";
+
+            let clickAction = !player.isTeam ? `onclick="openProfile('${escapeHTML(player.name)}')"` : "";
+            let pointerClass = !player.isTeam ? `style="cursor:pointer;"` : "";
 
             container.innerHTML += `
                 <div class="speedrun-item">
-                    <div style="display:flex; align-items:center; gap:8px; min-width:0;">
+                    <div ${clickAction} ${pointerClass} style="display:flex; align-items:center; gap:8px; min-width:0;">
                         <div class="speedrun-rank ${rankClass}">#${rank}</div>
                         ${avatarHtml}
                         <div style="font-size:13px; font-weight:800; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
@@ -2064,7 +2275,7 @@ function renderParticipants(data) {
     if (!container.innerHTML.trim()) {
         container.innerHTML = `
             <div class="empty-state">
-                Пока никто не зарегистрирован.
+                ...
             </div>
         `;
     }
@@ -2108,6 +2319,8 @@ function updateJoinButton() {
         document.getElementById(
             "join-status"
         );
+        
+    const l = dict[currentLang];
 
 
     if (
@@ -2121,11 +2334,11 @@ function updateJoinButton() {
 
         button.innerText =
             tStatus === "active"
-                ? "Турнир идёт"
-                : "Турнир завершён";
+                ? l.btnRun
+                : l.btnFin;
 
         status.innerText =
-            "Регистрация закрыта";
+            l.joinClosed;
 
         status.style.color =
             "#ff3c64";
@@ -2140,13 +2353,13 @@ function updateJoinButton() {
     if (isJoined) {
 
         button.innerText =
-            "✖ Отменить участие";
+            l.btnLeave;
 
         button.className =
             "wg-btn leave";
 
         status.innerText =
-            "Вы зарегистрированы";
+            l.joinDone;
 
         status.style.color =
             "#00ffcc";
@@ -2154,13 +2367,13 @@ function updateJoinButton() {
     } else {
 
         button.innerText =
-            "Участвовать";
+            l.btnJoin;
 
         button.className =
             "wg-btn";
 
         status.innerText =
-            "Регистрация открыта";
+            l.joinOpen;
 
         status.style.color =
             "#858592";
@@ -2174,8 +2387,8 @@ function updateJoinButton() {
 
 function getAvatarImgHTML(name) {
     if (!name || name === "---" || name === "TBD") return "";
-    if (avatarsCache[name]) {
-        return `<img src="${avatarsCache[name]}" class="player-avatar-small" style="margin-right:6px;" alt="">`;
+    if (usersCache[name] && usersCache[name].avatar) {
+        return `<img src="${usersCache[name].avatar}" class="player-avatar-small" style="margin-right:6px;" alt="">`;
     }
     return "";
 }
@@ -2226,10 +2439,19 @@ function generateMatchHTML(
     let p1Avatar = getAvatarImgHTML(p1Display);
     let p2Avatar = getAvatarImgHTML(p2Display);
 
+    // Добавляем клики на имена для открытия профиля (останавливаем всплытие, чтобы не открыть чат матча случайно)
+    let p1Click = (matchObj.p1 && matchObj.p1 !== "---" && matchObj.p1 !== "TBD" && tournamentFormat === "1v1") 
+        ? `onclick="event.stopPropagation(); openProfile('${escapeHTML(matchObj.p1)}');" style="cursor:pointer;"` 
+        : "";
+    
+    let p2Click = (matchObj.p2 && matchObj.p2 !== "---" && matchObj.p2 !== "TBD" && tournamentFormat === "1v1") 
+        ? `onclick="event.stopPropagation(); openProfile('${escapeHTML(matchObj.p2)}');" style="cursor:pointer;"` 
+        : "";
+
     return `
         <div class="match ${clickableClass}" ${clickAction}>
             <div class="match-team ${p1Class}">
-                <div style="display:flex; align-items:center; min-width:0; overflow:hidden;">
+                <div ${p1Click} style="display:flex; align-items:center; min-width:0; overflow:hidden;">
                     ${p1Avatar}
                     <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
                         ${escapeHTML(p1Display)}
@@ -2239,7 +2461,7 @@ function generateMatchHTML(
             </div>
 
             <div class="match-team ${p2Class}">
-                <div style="display:flex; align-items:center; min-width:0; overflow:hidden;">
+                <div ${p2Click} style="display:flex; align-items:center; min-width:0; overflow:hidden;">
                     ${p2Avatar}
                     <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
                         ${escapeHTML(p2Display)}
@@ -2540,8 +2762,8 @@ function generateLeaderboardSE(
                             ? "top3"
                             : "";
 
-            let avatarHtml = avatarsCache[player] 
-                ? `<img src="${avatarsCache[player]}" class="player-avatar-small" alt="">` : "";
+            let avatarHtml = usersCache[player] && usersCache[player].avatar
+                ? `<img src="${usersCache[player].avatar}" class="player-avatar-small" alt="">` : "";
 
 
             container.innerHTML += `
@@ -2735,7 +2957,7 @@ function renderDoubleElimination(
         html += `</div>`;
     }
 
-    let gfAvatar = matches.GF.winner && avatarsCache[matches.GF.winner] ? `<img src="${avatarsCache[matches.GF.winner]}" class="player-avatar-small" alt="">` : "";
+    let gfAvatar = matches.GF.winner && usersCache[matches.GF.winner] && usersCache[matches.GF.winner].avatar ? `<img src="${usersCache[matches.GF.winner].avatar}" class="player-avatar-small" alt="">` : "";
 
     html += `<h3 style="color:#ffcc00; margin:0 0 10px; font-size:13px;">ГРАНД-ФИНАЛ</h3>
         <div class="bracket">
@@ -3574,6 +3796,7 @@ document.addEventListener(
         ) {
 
             closeMatchModal();
+            closeProfileModal();
         }
 
 
@@ -3601,6 +3824,9 @@ document.getElementById(
     currentLang;
 
 
+// Сразу при загрузке применяем перевод, если стоит EN
+applyTranslations();
+
 loadTournamentData(
     true
 );
@@ -3621,4 +3847,3 @@ setInterval(
 
 </body>
 </html>
-```
