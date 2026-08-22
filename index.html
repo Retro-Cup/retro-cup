@@ -1000,11 +1000,11 @@
         <div class="row-2">
 
             <select
-                id="prop-game"
-                class="modal-input"
-                style="flex: 1;"
-                onchange="updateFormats()"
-            >
+    id="prop-game"
+    class="modal-input"
+    style="flex: 1;"
+    onchange="updateFormats(); updateSystemOptions()"
+>
 
                 <option value="CS 2">
                     CS 2
@@ -1043,18 +1043,15 @@
         <div class="row-2">
 
             <select
-                id="prop-system"
-                class="modal-input"
-                style="flex: 1;"
-            >
+    id="prop-system"
+    class="modal-input"
+    style="flex: 1;"
+    onchange="validateTournamentSystem()"
+>
 
-                <option value="Single Elimination">
-                    На вылет
-                </option>
-
-                <option value="Спидран">
-                    Спидран
-                </option>
+                <option value="Спидран" id="speedrun-option">
+    Спидран
+</option>
 
             </select>
 
@@ -2605,6 +2602,70 @@
         }
     }
 
+    /* =========================================================
+   SPEEDRUN — ОГРАНИЧЕНИЕ ДЛЯ CS 2 И DOTA 2
+   ========================================================= */
+
+function isSpeedrunBlockedGame(gameValue) {
+    const game = String(gameValue || "")
+        .trim()
+        .toLowerCase();
+
+    return (
+        game === "cs 2" ||
+        game === "cs2" ||
+        game === "dota 2" ||
+        game === "dota2"
+    );
+}
+
+function updateSystemOptions() {
+    const gameSel = document.getElementById("prop-game");
+    const systemSel = document.getElementById("prop-system");
+    const speedrunOption = document.getElementById("speedrun-option");
+
+    if (!gameSel || !systemSel || !speedrunOption) {
+        return;
+    }
+
+    const blocked = isSpeedrunBlockedGame(gameSel.value);
+
+    if (blocked) {
+
+        // Скрываем Speedrun
+        speedrunOption.hidden = true;
+        speedrunOption.style.display = "none";
+
+        // Если Speedrun уже был выбран,
+        // автоматически переключаем на обычный турнир
+        if (systemSel.value === "Спидран") {
+            systemSel.value = "Single Elimination";
+        }
+
+    } else {
+
+        // Для остальных игр Speedrun доступен
+        speedrunOption.hidden = false;
+        speedrunOption.style.display = "";
+    }
+}
+
+function validateTournamentSystem() {
+    const gameSel = document.getElementById("prop-game");
+    const systemSel = document.getElementById("prop-system");
+
+    if (!gameSel || !systemSel) {
+        return;
+    }
+
+    if (
+        isSpeedrunBlockedGame(gameSel.value) &&
+        systemSel.value === "Спидран"
+    ) {
+        systemSel.value = "Single Elimination";
+    }
+}
+
 
     /* =========================================================
        СЕССИЯ
@@ -3262,16 +3323,25 @@
         /*
          * Firebase object -> array
          */
-        let tournaments =
-            Object.entries(
-                data || {}
-            )
-            .map(
-                ([key, tournament]) => ({
-                    key,
-                    ...tournament
-                })
-            );
+        let tournaments = Object.entries(data || {})
+    .filter(([key, tournament]) => {
+
+        // Архивные турниры не показываем
+        // на главной странице.
+        //
+        // Но из Firebase они НЕ удаляются,
+        // поэтому matches сохраняются.
+
+        return (
+            key !== "archived" &&
+            !(tournament && tournament.archived === true)
+        );
+
+    })
+    .map(([key, tournament]) => ({
+        key,
+        ...tournament
+    }));
 
         /*
          * Статистика
@@ -3788,70 +3858,115 @@
        УДАЛЕНИЕ ТУРНИРА
     ========================================================= */
 
-    async function deleteTourney(key) {
+   async function deleteTourney(key) {
 
-        if (
-            !confirm(
-                dictionary[currentLang]
-                    .confirmDelete
-            )
-        ) {
-            return;
-        }
-
-
-        try {
-
-            const response =
-                await fetch(
-                    dbTournaments +
-                    encodeURIComponent(key) +
-                    ".json",
-                    {
-                        method: "DELETE"
-                    }
-                );
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    "Delete failed"
-                );
-            }
-
-
-            lastTournamentsData =
-                "";
-
-
-            lastRenderSignature =
-                "";
-
-
-            await loadTournaments();
-
-
-            showToast(
-                currentLang === "RU"
-                    ? "Турнир удалён"
-                    : "Tournament deleted",
-                "success"
-            );
-
-
-        } catch (error) {
-
-            console.error(error);
-
-
-            showToast(
-                dictionary[currentLang]
-                    .deleteError,
-                "error"
-            );
-        }
+    if (!confirm(dictionary[currentLang].confirmDelete)) {
+        return;
     }
+
+    try {
+
+        /*
+         * ВАЖНО:
+         *
+         * Мы больше НЕ удаляем турнир через DELETE.
+         *
+         * Вместо этого ставим archived: true.
+         *
+         * Турнир исчезает с главной страницы,
+         * но сам турнир и его matches остаются
+         * в Firebase.
+         *
+         * Благодаря этому профиль продолжает
+         * считать K/D, Winrate и сыгранные матчи.
+         */
+
+        const tournamentUrl =
+            dbTournaments +
+            encodeURIComponent(key) +
+            ".json";
+
+        // Получаем существующий турнир
+        const getResponse = await fetch(
+            tournamentUrl + "?cache=" + Date.now()
+        );
+
+        if (!getResponse.ok) {
+            throw new Error(
+                "Не удалось получить турнир перед архивированием"
+            );
+        }
+
+        const tournament = await getResponse.json();
+
+        if (!tournament) {
+            throw new Error("Турнир не найден");
+        }
+
+        // Создаём архивную версию
+        const archivedTournament = {
+            ...tournament,
+
+            archived: true,
+
+            archivedAt:
+                new Date().toISOString(),
+
+            archivedBy:
+                currentUser || "0m3gas"
+        };
+
+        // Сохраняем обратно в Firebase
+        const archiveResponse = await fetch(
+            tournamentUrl,
+            {
+                method: "PUT",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body:
+                    JSON.stringify(
+                        archivedTournament
+                    )
+            }
+        );
+
+        if (!archiveResponse.ok) {
+            throw new Error(
+                "Не удалось архивировать турнир"
+            );
+        }
+
+        // Сбрасываем кэш
+        lastTournamentsData = "";
+        lastRenderSignature = "";
+
+        // Перезагружаем список
+        await loadTournaments();
+
+        showToast(
+            currentLang === "RU"
+                ? "Турнир скрыт, статистика сохранена"
+                : "Tournament hidden, statistics preserved",
+            "success"
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Archive tournament error:",
+            error
+        );
+
+        showToast(
+            dictionary[currentLang].deleteError,
+            "error"
+        );
+    }
+}
 
 
     /* =========================================================
@@ -3936,10 +4051,15 @@
             ).value;
 
 
-        const system =
-            document.getElementById(
-                "prop-system"
-            ).value;
+        let system =
+    document.getElementById("prop-system").value;
+
+if (
+    isSpeedrunBlockedGame(game) &&
+    system === "Спидран"
+) {
+    system = "Single Elimination";
+}
 
 
         const max =
