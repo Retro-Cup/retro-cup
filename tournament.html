@@ -1537,7 +1537,7 @@ const dict = {
     }
 };
 
-/* КЕШ ЮЗЕРОВ (ТЕПЕРЬ ХРАНИМ И АВАТАР И STEAM ID) */
+/* КЕШ ЮЗЕРОВ (ТЕПЕРЬ ХРАНИМ И АВАТАР И STEAM CODE) */
 let usersCache = {};
 const defaultAvatar = "https://via.placeholder.com/40/141419/a67cff?text=TU";
 
@@ -1618,7 +1618,7 @@ function setLoadingButton(button, loading) {
 }
 
 /* =========================================================
-   USERS PRELOADER (ЗДЕСЬ МЫ БЕРЕМ STEAM CODE ИЗ БАЗЫ)
+   USERS PRELOADER
    ========================================================= */
 
 async function preloadUsers(data) {
@@ -1639,12 +1639,12 @@ async function preloadUsers(data) {
     namesToFetch = [...new Set(namesToFetch)];
 
     await Promise.all(namesToFetch.map(async (name) => {
-        if (usersCache[name]) return; 
+        // Чтобы SteamID обновлялся динамически без перезагрузки всей страницы,
+        // мы все равно скачиваем его заново (Firebase делает это за миллисекунды)
         try {
             const res = await fetch(`https://retro-cup-51db5-default-rtdb.firebaseio.com/users/${encodeURIComponent(name)}.json`);
             const userData = await res.json();
             
-            // ВОТ ТУТ МЫ ЗАПИСЫВАЕМ steamCode В КЕШ
             usersCache[name] = userData || { avatar: defaultAvatar, steamCode: null };
             
             if (!usersCache[name].avatar) usersCache[name].avatar = defaultAvatar;
@@ -1787,54 +1787,120 @@ function toggleLanguage() {
 
 
 /* =========================================================
-   PROFILE MODAL LOGIC (ЗДЕСЬ ОТОБРАЖАЕМ steamCode)
+   GLOBAL STATS (ГЛОБАЛЬНАЯ СТАТИСТИКА СО ВСЕХ ТУРНИРОВ)
    ========================================================= */
 
-function openProfile(playerName) {
-    const user = usersCache[playerName] || { avatar: defaultAvatar, steamCode: null };
-    const l = dict[currentLang];
+let allTournamentsCache = null;
+let lastTournamentsFetch = 0;
+
+async function getGlobalStats(playerName) {
+    const now = Date.now();
     
-    document.getElementById("prof-avatar").src = user.avatar;
-    document.getElementById("prof-name").innerText = playerName;
-    
-    // ВОТ ТУТ МЫ ВЫВОДИМ STEAM CODE (или надпись "Не указан")
-    document.getElementById("prof-steam").innerText = user.steamCode || l.notSet;
+    // Кэшируем все турниры на 15 секунд, чтобы не перегружать базу запросами
+    // При сохранении нового матча (saveMatchScore) мы будем сбрасывать этот кэш
+    if (!allTournamentsCache || now - lastTournamentsFetch > 15000) {
+        try {
+            const res = await firebaseGet("tournaments");
+            allTournamentsCache = res;
+            lastTournamentsFetch = now;
+        } catch (e) {
+            console.error("Ошибка загрузки всех турниров", e);
+            return { kd: "0.00", winrate: "0.0%", matches: 0 };
+        }
+    }
 
     let totalKills = 0;
     let totalDeaths = 0;
     let matchesPlayed = 0;
     let matchesWon = 0;
 
-    // Высчитываем стату на основе всех матчей в турнире
-    if (matchResults) {
-        Object.values(matchResults).forEach(match => {
-            if (match.p1 === playerName || match.p2 === playerName) {
-                matchesPlayed++;
-                
-                if (match.winner === playerName) {
-                    matchesWon++;
-                }
+    if (allTournamentsCache) {
+        Object.values(allTournamentsCache).forEach(tourney => {
+            if (tourney.matches) {
+                Object.values(tourney.matches).forEach(match => {
+                    if (match && (match.p1 === playerName || match.p2 === playerName)) {
+                        
+                        // Парсим счёт, чтобы убедиться, что матч реально был сыгран (не тех. победа без очков)
+                        let s1 = parseInt(match.s1);
+                        let s2 = parseInt(match.s2);
 
-                if (match.p1 === playerName) {
-                    totalKills += parseInt(match.s1 || 0);
-                    totalDeaths += parseInt(match.s2 || 0);
-                } else {
-                    totalKills += parseInt(match.s2 || 0);
-                    totalDeaths += parseInt(match.s1 || 0);
-                }
+                        if (!isNaN(s1) && !isNaN(s2)) {
+                            matchesPlayed++;
+                            
+                            if (match.winner === playerName) {
+                                matchesWon++;
+                            }
+
+                            if (match.p1 === playerName) {
+                                totalKills += s1;
+                                totalDeaths += s2;
+                            } else {
+                                totalKills += s2;
+                                totalDeaths += s1;
+                            }
+                        }
+                    }
+                });
             }
         });
     }
 
-    // Если смертей 0, но есть убийства, КД равно убийствам, иначе 0
     let kd = totalDeaths === 0 ? (totalKills > 0 ? totalKills : 0) : (totalKills / totalDeaths);
     let winrate = matchesPlayed === 0 ? 0 : (matchesWon / matchesPlayed) * 100;
 
-    document.getElementById("prof-kd").innerText = kd.toFixed(2);
-    document.getElementById("prof-winrate").innerText = winrate.toFixed(1) + "%";
-    document.getElementById("prof-matches").innerText = matchesPlayed;
+    return {
+        kd: kd.toFixed(2),
+        winrate: winrate.toFixed(1) + "%",
+        matches: matchesPlayed
+    };
+}
 
+
+/* =========================================================
+   PROFILE MODAL LOGIC (ТЕПЕРЬ С ГЛОБАЛЬНОЙ СТАТИСТИКОЙ)
+   ========================================================= */
+
+async function openProfile(playerName) {
+    const l = dict[currentLang];
+
+    // Сначала ставим загрузку, пока статистика считается
+    document.getElementById("prof-kd").innerText = "...";
+    document.getElementById("prof-winrate").innerText = "...";
+    document.getElementById("prof-matches").innerText = "...";
+    document.getElementById("prof-steam").innerText = "⏳...";
+
+    // Показываем окно сразу, чтобы пользователь видел, что что-то происходит
     document.getElementById("profileModal").style.display = "flex";
+
+    // Прямо сейчас скачиваем свежие данные профиля, чтобы SteamID был актуален на 100%
+    let user;
+    try {
+        const res = await fetch(`https://retro-cup-51db5-default-rtdb.firebaseio.com/users/${encodeURIComponent(playerName)}.json`);
+        user = await res.json();
+        if (!user) user = { avatar: defaultAvatar, steamCode: null };
+    } catch (e) {
+        user = { avatar: defaultAvatar, steamCode: null };
+    }
+
+    document.getElementById("prof-avatar").src = user.avatar || defaultAvatar;
+    document.getElementById("prof-name").innerText = playerName;
+    
+    // ВЫВОДИМ STEAM CODE (или надпись "Не указан")
+    let stCode = user.steamCode;
+    if (typeof stCode === "string") stCode = stCode.trim();
+    
+    if (stCode && stCode !== "") {
+        document.getElementById("prof-steam").innerText = stCode;
+    } else {
+        document.getElementById("prof-steam").innerText = l.notSet;
+    }
+
+    // Высчитываем ГЛОБАЛЬНУЮ статистику
+    const stats = await getGlobalStats(playerName);
+
+    document.getElementById("prof-kd").innerText = stats.kd;
+    document.getElementById("prof-winrate").innerText = stats.winrate;
+    document.getElementById("prof-matches").innerText = stats.matches;
 }
 
 function closeProfileModal() {
@@ -3475,6 +3541,9 @@ async function saveMatchScore() {
         closeMatchModal();
 
         cachedData = "";
+        
+        // СБРАСЫВАЕМ КЭШ ВСЕХ ТУРНИРОВ, ЧТОБЫ СТАТИСТИКА ОБНОВИЛАСЬ МГНОВЕННО
+        lastTournamentsFetch = 0;
 
         await loadTournamentData(
             true
