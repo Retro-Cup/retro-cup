@@ -1049,7 +1049,7 @@
     onchange="validateTournamentSystem()"
 >
 
-                <option value="Спидран" id="speedrun-option">
+<option value="Спидран" id="speedrun-option">
     Спидран
 </option>
 
@@ -2607,15 +2607,17 @@
    ========================================================= */
 
 function isSpeedrunBlockedGame(gameValue) {
+
     const game = String(gameValue || "")
         .trim()
-        .toLowerCase();
+        .toLowerCase()
+        .replace(/\s+/g, " ");
 
     return (
-        game === "cs 2" ||
-        game === "cs2" ||
-        game === "dota 2" ||
-        game === "dota2"
+        game.includes("cs") ||
+        game.includes("counter strike") ||
+        game.includes("counter-strike") ||
+        game.includes("dota")
     );
 }
 
