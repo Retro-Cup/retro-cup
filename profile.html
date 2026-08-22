@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -180,6 +181,46 @@
             transform: translateY(-2px);
         }
 
+        /* ==========================================
+           СТАТИСТИКА (НОВОЕ)
+        ========================================== */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #25252d;
+            text-align: center;
+        }
+
+        .stat-box {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: #0c0c10;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #303039;
+        }
+
+        .stat-label {
+            color: #8c8c9b;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .stat-val {
+            color: white;
+            font-size: 22px;
+            font-weight: 900;
+        }
+
+        .stat-val.green {
+            color: #00ffcc;
+        }
+
         /* Модальное окно */
         .modal-overlay {
             display: none;
@@ -313,6 +354,10 @@
             .modal-box {
                 padding: 25px 20px;
             }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -399,6 +444,24 @@
 
         </div>
 
+        <!-- ==========================================
+             ГЛОБАЛЬНАЯ СТАТИСТИКА
+        ========================================== -->
+        <div class="stats-container">
+            <div class="stat-box">
+                <span class="stat-label">K/D Рейтинг</span>
+                <span class="stat-val green" id="stat-kd">⏳...</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">Винрейт</span>
+                <span class="stat-val" id="stat-winrate">⏳...</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">Матчи</span>
+                <span class="stat-val" id="stat-matches">⏳...</span>
+            </div>
+        </div>
+
     </div>
 
 </div>
@@ -462,8 +525,8 @@
        FIREBASE
     ========================================== */
 
-    const dbUsersUrl =
-        "https://retro-cup-51db5-default-rtdb.firebaseio.com/users/";
+    const dbBase = "https://retro-cup-51db5-default-rtdb.firebaseio.com/";
+    const dbUsersUrl = dbBase + "users/";
 
     let currentUser =
         localStorage.getItem("currentUser");
@@ -487,7 +550,72 @@
 
 
     /* ==========================================
-       ЗАГРУЗКА ДАННЫХ ПОЛЬЗОВАТЕЛЯ
+       ПОДСЧЕТ ГЛОБАЛЬНОЙ СТАТИСТИКИ (НОВОЕ)
+    ========================================== */
+    async function getGlobalStats(playerName) {
+        try {
+            // Скачиваем все турниры разом
+            const response = await fetch(dbBase + "tournaments.json");
+            const tournaments = await response.json();
+
+            let totalKills = 0;
+            let totalDeaths = 0;
+            let matchesPlayed = 0;
+            let matchesWon = 0;
+
+            if (tournaments) {
+                // Перебираем каждый турнир
+                Object.values(tournaments).forEach(tourney => {
+                    if (tourney.matches) {
+                        // Перебираем каждый матч в турнире
+                        Object.values(tourney.matches).forEach(match => {
+                            // Если игрок участвовал в матче
+                            if (match && (match.p1 === playerName || match.p2 === playerName)) {
+                                
+                                let s1 = parseInt(match.s1);
+                                let s2 = parseInt(match.s2);
+
+                                // Проверяем, что матч был реально сыгран (есть счет)
+                                if (!isNaN(s1) && !isNaN(s2)) {
+                                    matchesPlayed++;
+                                    
+                                    if (match.winner === playerName) {
+                                        matchesWon++;
+                                    }
+
+                                    // Суммируем фраги и смерти
+                                    if (match.p1 === playerName) {
+                                        totalKills += s1;
+                                        totalDeaths += s2;
+                                    } else {
+                                        totalKills += s2;
+                                        totalDeaths += s1;
+                                    }
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+
+            let kd = totalDeaths === 0 ? (totalKills > 0 ? totalKills : 0) : (totalKills / totalDeaths);
+            let winrate = matchesPlayed === 0 ? 0 : (matchesWon / matchesPlayed) * 100;
+
+            return {
+                kd: kd.toFixed(2),
+                winrate: winrate.toFixed(1) + "%",
+                matches: matchesPlayed
+            };
+
+        } catch (error) {
+            console.error("Ошибка загрузки статистики:", error);
+            return { kd: "0.00", winrate: "0.0%", matches: 0 };
+        }
+    }
+
+
+    /* ==========================================
+       ЗАГРУЗКА ДАННЫХ ПОЛЬЗОВАТЕЛЯ И СТАТИСТИКИ
     ========================================== */
 
     async function loadUserData() {
@@ -547,6 +675,17 @@
                 ).src = data.avatar;
 
             }
+            
+            /* -------------------------------
+               ГЛОБАЛЬНАЯ СТАТИСТИКА (НОВОЕ)
+            -------------------------------- */
+            
+            const stats = await getGlobalStats(currentUser);
+            
+            document.getElementById("stat-kd").innerText = stats.kd;
+            document.getElementById("stat-winrate").innerText = stats.winrate;
+            document.getElementById("stat-matches").innerText = stats.matches;
+
 
         } catch (error) {
 
@@ -558,6 +697,10 @@
             document.getElementById(
                 "display-steam"
             ).innerText = "Ошибка загрузки";
+            
+            document.getElementById("stat-kd").innerText = "---";
+            document.getElementById("stat-winrate").innerText = "---";
+            document.getElementById("stat-matches").innerText = "---";
 
         }
     }
