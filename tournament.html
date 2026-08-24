@@ -2408,6 +2408,10 @@ function getLevelColor(
    СОЗДАНИЕ LEVEL В МИНИ-ПРОФИЛЕ
    ========================================================= */
 
+/* =========================================================
+   СОЗДАНИЕ LEVEL В МИНИ-ПРОФИЛЕ
+   ========================================================= */
+
 function createMiniProfileLevel() {
 
     const modalBox =
@@ -2475,9 +2479,11 @@ function createMiniProfileLevel() {
                 transition:0.3s;
             "
         >
+
             <span id="prof-level">
                 1
             </span>
+
         </div>
 
 
@@ -2497,19 +2503,7 @@ function createMiniProfileLevel() {
                     text-transform:uppercase;
                 "
             >
-                ${dict[currentLang].level}
-            </div>
-
-
-            <div
-                id="prof-level-name"
-                style="
-                    color:white;
-                    font-size:16px;
-                    font-weight:900;
-                "
-            >
-                Level 1
+                Retro Cup Level
             </div>
 
 
@@ -2548,7 +2542,6 @@ function createMiniProfileLevel() {
         );
     }
 }
-
 /* =========================================================
    ОБНОВЛЕНИЕ LEVEL В МИНИ-ПРОФИЛЕ
    ========================================================= */
