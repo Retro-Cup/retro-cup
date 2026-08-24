@@ -1895,71 +1895,43 @@
        ПРОВЕРКА АДМИНА
     ========================================== */
 
+       /* ==========================================
+       ПРОВЕРКА АДМИНА (ТОЛЬКО 0m3gas)
+    ========================================== */
     function isLevelAdmin(data) {
-
-        if (
-            currentUser &&
-            currentUser.toLowerCase() ===
-                "0m3gas"
-        ) {
-
+        // Если текущий юзер 0m3gas (игнорируя большие/маленькие буквы)
+        if (currentUser && currentUser.toLowerCase() === "0m3gas") {
             return true;
-
+        }
+        
+        // Либо если в базе Firebase у юзера прописано admin: true
+        if (data && data.admin === true) {
+            return true;
         }
 
-
-        if (
-            data &&
-            data.admin === true
-        ) {
-
-            return true;
-
-        }
-
-
+        // Для всех остальных возвращаем false
         return false;
-
     }
 
-
     /* ==========================================
-       ПОКАЗ ADMIN CONTROL
+       ПОКАЗ / СКРЫТИЕ ADMIN CONTROL
     ========================================== */
-
     function updateAdminLevelButton(data) {
-
-        const section =
-            document.getElementById(
-                "admin-level-section"
-            );
-
-
+        const section = document.getElementById("admin-level-section");
+        
         if (!section) {
-
             return;
-
         }
 
+        currentUserIsAdmin = isLevelAdmin(data);
 
-        currentUserIsAdmin =
-            isLevelAdmin(data);
-
-
-        if (
-            currentUserIsAdmin
-        ) {
-
-            section.style.display =
-                "block";
-
+        if (currentUserIsAdmin) {
+            // Если это ТЫ (0m3gas) — показываем блок управления
+            section.style.display = "block";
         } else {
-
-            section.style.display =
-                "none";
-
+            // Если это обычный игрок — блок ПОЛНОСТЬЮ ИСЧЕЗАЕТ с экрана
+            section.style.display = "none";
         }
-
     }
 
 
