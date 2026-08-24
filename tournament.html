@@ -2546,6 +2546,10 @@ function createMiniProfileLevel() {
    ОБНОВЛЕНИЕ LEVEL В МИНИ-ПРОФИЛЕ
    ========================================================= */
 
+/* =========================================================
+   ОБНОВЛЕНИЕ LEVEL В МИНИ-ПРОФИЛЕ
+   ========================================================= */
+
 function updateMiniProfileLevel(
     pr,
     savedLevel = null
@@ -2554,13 +2558,9 @@ function updateMiniProfileLevel(
     createMiniProfileLevel();
 
 
-    /*
-       Если Firebase передал сохранённый LEVEL —
-       используем именно его.
-
-       Если LEVEL не передан —
-       рассчитываем его по PR.
-    */
+    /* =====================================================
+       ОПРЕДЕЛЯЕМ LEVEL
+    ===================================================== */
 
     let level;
 
@@ -2585,24 +2585,26 @@ function updateMiniProfileLevel(
     } else {
 
         level =
-            calculateLevel(pr);
+            calculateLevel(
+                pr
+            );
 
     }
 
 
     const color =
-        getLevelColor(level);
+        getLevelColor(
+            level
+        );
 
+
+    /* =====================================================
+       ELEMENTS
+    ===================================================== */
 
     const levelText =
         document.getElementById(
             "prof-level"
-        );
-
-
-    const levelName =
-        document.getElementById(
-            "prof-level-name"
         );
 
 
@@ -2619,7 +2621,7 @@ function updateMiniProfileLevel(
 
 
     /* =====================================================
-       ЧИСЛО В КРУГУ
+       LEVEL В КРУГУ
     ===================================================== */
 
     if (levelText) {
@@ -2631,23 +2633,11 @@ function updateMiniProfileLevel(
 
 
     /* =====================================================
-       LEVEL СПРАВА ОТ КРУГА
-    ===================================================== */
-
-    if (levelName) {
-
-        levelName.innerText =
-            "Level " +
-            level;
-
-        levelName.style.color =
-            color;
-
-    }
-
-
-    /* =====================================================
-       PR СПРАВА ОТ КРУГА
+       PR СПРАВА
+       
+       БОЛЬШЕ НИКАКОГО
+       "LEVEL 10"
+       ЗДЕСЬ НЕТ
     ===================================================== */
 
     if (prText) {
@@ -2658,11 +2648,16 @@ function updateMiniProfileLevel(
 
         prText.innerText =
             (
-                Number.isFinite(numericPR)
-                    ? Math.round(numericPR)
+                Number.isFinite(
+                    numericPR
+                )
+                    ? Math.round(
+                        numericPR
+                    )
                     : 1
             ) +
             " PR";
+
 
         prText.style.color =
             color;
@@ -2671,16 +2666,10 @@ function updateMiniProfileLevel(
 
 
     /* =====================================================
-       КРУГ LEVEL
+       КРУГ
     ===================================================== */
 
     if (circle) {
-
-        /*
-           Полностью обновляем класс,
-           чтобы CSS level-1 ... level-10
-           соответствовал текущему уровню.
-        */
 
         circle.className =
             "level-circle level-" +
@@ -2699,7 +2688,9 @@ function updateMiniProfileLevel(
            LEVEL 10
         ================================================= */
 
-        if (level >= 10) {
+        if (
+            level >= 10
+        ) {
 
             circle.style.boxShadow =
                 `
@@ -2726,21 +2717,25 @@ function updateMiniProfileLevel(
     }
 
 
-    /*
-       Для проверки в консоли
-    */
+    /* =====================================================
+       DEBUG
+    ===================================================== */
 
     console.log(
         "MINI PROFILE LEVEL:",
         {
-            PR: pr,
-            FirebaseLevel: savedLevel,
-            DisplayLevel: level
+            PR:
+                pr,
+
+            FirebaseLevel:
+                savedLevel,
+
+            DisplayLevel:
+                level
         }
     );
 
 }
-
 
 /* =========================================================
    CSS ДЛЯ LEVEL 10
