@@ -1836,18 +1836,9 @@ const PR_REWARD_BASE = {
    Level 10 = 1000 PR
 */
 
-const LEVEL_THRESHOLDS = [
-    1,
-    20,
-    50,
-    100,
-    150,
-    250,
-    400,
-    600,
-    800,
-    1000
-];
+ const LEVEL_THRESHOLDS = [
+        1, 25, 50, 100, 175, 250, 350, 450, 600, 800, 1000, 1250, 1500, 1750, 2000
+    ];
 
 
 /* =========================================================
@@ -2379,30 +2370,27 @@ function calculateLevel(
    LEVEL COLOR
    ========================================================= */
 
-function getLevelColor(
-    level
-) {
-
+function getLevelColor(level) {
     const colors = {
-
         1: "#777783",
         2: "#ffffff",
-        3: "#5aa9ff",
-        4: "#48e0ff",
-        5: "#a67cff",
-        6: "#d16cff",
-        7: "#ff5c8a",
-        8: "#ff7a45",
-        9: "#ffd84d",
-        10: "#ffffff"
-
+        3: "#85e085",
+        4: "#33cc33",
+        5: "#5aa9ff",
+        6: "#00ffff",
+        7: "#4d4dff",
+        8: "#a67cff",
+        9: "#ff4dff",
+        10: "#ff5c8a",
+        11: "#ff7a45",
+        12: "#ffd84d",
+        13: "#ff3333",
+        14: "#cc0000",
+        15: "#e6ffff"
     };
 
-
-    return colors[level] ||
-        "#a67cff";
+    return colors[level] || "#a67cff";
 }
-
 
 /* =========================================================
    СОЗДАНИЕ LEVEL В МИНИ-ПРОФИЛЕ
