@@ -2131,17 +2131,20 @@ function updateAdminControls() {
    PARTICIPANTS
    ========================================================= */
 
-function copyTeamName(name) {
-    navigator.clipboard.writeText(name)
+function createTeamInvite(name) {
+    const inviteUrl =
+        `${window.location.origin}${window.location.pathname}?id=${encodeURIComponent(tourneyId)}&team=${encodeURIComponent(name)}`;
+
+    navigator.clipboard.writeText(inviteUrl)
         .then(() => {
             showToast(
-                `Название "${name}" скопировано! Отправь его другу.`,
-                "info"
+                "Ссылка для вступления в команду скопирована!",
+                "success"
             );
         })
         .catch(() => {
             showToast(
-                "Не удалось скопировать название.",
+                "Не удалось скопировать ссылку.",
                 "error"
             );
         });
@@ -2215,25 +2218,25 @@ function renderParticipants(data) {
                         );
                     }
 
-                    let inviteBtnHTML = "";
+                   let inviteBtnHTML = "";
 
-                    if (
-                        players.includes(
-                            currentUser
-                        ) &&
-                        players.length <
-                            requiredSize
-                    ) {
-                        inviteBtnHTML = `
-                            <button
-                                class="invite-btn"
-                                onclick="copyTeamName('${escapeHTML(teamName)}')"
-                                title="Скопировать название"
-                            >
-                                ➕
-                            </button>
-                        `;
-                    }
+if (
+    players.includes(
+        currentUser
+    ) &&
+    players.length <
+        requiredSize
+) {
+    inviteBtnHTML = `
+        <button
+            class="invite-btn"
+            onclick="createTeamInvite(${JSON.stringify(teamName)})"
+            title="Скопировать ссылку для вступления"
+        >
+            🔗
+        </button>
+    `;
+}
 
                     let html = `
                         <div class="team-block">
@@ -3775,7 +3778,11 @@ async function handleJoinClick() {
         } else {
             // === ЛОГИКА ВХОДА В ТУРНИР ===
             if (tournamentFormat === "2v2" || tournamentFormat === "5v5") {
-                const teamName = prompt("Введите название команды:");
+               const inviteTeam = urlParams.get("team");
+
+const teamName = inviteTeam
+    ? decodeURIComponent(inviteTeam)
+    : prompt("Введите название команды:");
                 
                 if (!teamName || !teamName.trim()) {
                     button.disabled = false;
