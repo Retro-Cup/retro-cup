@@ -1423,34 +1423,227 @@
             Профиль игрока
         </h3>
 
-        <div style="display:flex; flex-direction:column; align-items:center; gap:10px;">
+
+        <!-- ======================================
+             АВАТАР + ИМЯ
+        ======================================= -->
+
+        <div
+            style="
+                display:flex;
+                flex-direction:column;
+                align-items:center;
+                gap:10px;
+            "
+        >
+
             <img 
                 id="prof-avatar" 
                 src="" 
-                style="width:80px; height:80px; border-radius:50%; border:2px solid var(--purple); object-fit:cover; background:#0b0b0e;"
+                style="
+                    width:80px;
+                    height:80px;
+                    border-radius:50%;
+                    border:2px solid var(--purple);
+                    object-fit:cover;
+                    background:#0b0b0e;
+                "
             >
-            <h2 id="prof-name" style="margin:0; color:white;">Name</h2>
-            <div style="color:var(--muted); font-size:12px;">
-                <span id="prof-steam-lbl">Steam ID:</span> 
-                <!-- ТУТ БУДЕТ ВЫВОДИТЬСЯ STEAM ID -->
-                <span id="prof-steam" style="color:white; font-family:monospace;">...</span>
+
+
+            <h2
+                id="prof-name"
+                style="
+                    margin:0;
+                    color:white;
+                "
+            >
+                Name
+            </h2>
+
+
+            <!-- ======================================
+                 LEVEL
+            ======================================= -->
+
+            <div
+                id="prof-level-wrapper"
+                style="
+                    display:flex;
+                    align-items:center;
+                    gap:8px;
+                    margin-top:2px;
+                "
+            >
+
+                <div
+                    id="prof-level-circle"
+                    class="level-circle level-1"
+                    style="
+                        width:38px;
+                        height:38px;
+                        min-width:38px;
+                        border-width:2px;
+                        font-size:14px;
+                    "
+                >
+
+                    <span id="prof-level">
+                        1
+                    </span>
+
+                </div>
+
+
+                <div
+                    style="
+                        display:flex;
+                        flex-direction:column;
+                        align-items:flex-start;
+                        gap:2px;
+                    "
+                >
+
+                    <span
+                        style="
+                            color:#858592;
+                            font-size:9px;
+                            text-transform:uppercase;
+                            font-weight:900;
+                        "
+                    >
+                        Retro Cup Level
+                    </span>
+
+
+                    <span
+                        id="prof-pr"
+                        style="
+                            color:#a67cff;
+                            font-size:12px;
+                            font-weight:900;
+                        "
+                    >
+                        1 PR
+                    </span>
+
+                </div>
+
             </div>
+
+
+            <!-- ======================================
+                 STEAM
+            ======================================= -->
+
+            <div
+                style="
+                    color:var(--muted);
+                    font-size:12px;
+                "
+            >
+
+                <span id="prof-steam-lbl">
+                    Steam ID:
+                </span> 
+
+                <span
+                    id="prof-steam"
+                    style="
+                        color:white;
+                        font-family:monospace;
+                    "
+                >
+                    ...
+                </span>
+
+            </div>
+
         </div>
-        
-        <div class="wg-meta-grid" style="margin-top:25px; grid-template-columns: repeat(3, 1fr); text-align:center; background:#0c0c10; padding:15px; border-radius:8px; border:1px solid #303039;">
+
+
+        <!-- ======================================
+             СТАТИСТИКА
+        ======================================= -->
+
+        <div
+            class="wg-meta-grid"
+            style="
+                margin-top:25px;
+                grid-template-columns:repeat(3, 1fr);
+                text-align:center;
+                background:#0c0c10;
+                padding:15px;
+                border-radius:8px;
+                border:1px solid #303039;
+            "
+        >
+
             <div class="meta-box">
-                <span class="meta-label" id="prof-lbl-kd">K/D Рейтинг</span>
-                <span class="meta-val green" id="prof-kd" style="font-size:18px;">0.00</span>
+
+                <span
+                    class="meta-label"
+                    id="prof-lbl-kd"
+                >
+                    K/D Рейтинг
+                </span>
+
+                <span
+                    class="meta-val green"
+                    id="prof-kd"
+                    style="font-size:18px;"
+                >
+                    0.00
+                </span>
+
             </div>
+
+
             <div class="meta-box">
-                <span class="meta-label" id="prof-lbl-win">Винрейт</span>
-                <span class="meta-val" id="prof-winrate" style="font-size:18px;">0%</span>
+
+                <span
+                    class="meta-label"
+                    id="prof-lbl-win"
+                >
+                    Винрейт
+                </span>
+
+                <span
+                    class="meta-val"
+                    id="prof-winrate"
+                    style="font-size:18px;"
+                >
+                    0%
+                </span>
+
             </div>
+
+
             <div class="meta-box">
-                <span class="meta-label" id="prof-lbl-matches">Матчи</span>
-                <span class="meta-val" id="prof-matches" style="font-size:18px;">0</span>
+
+                <span
+                    class="meta-label"
+                    id="prof-lbl-matches"
+                >
+                    Матчи
+                </span>
+
+                <span
+                    class="meta-val"
+                    id="prof-matches"
+                    style="font-size:18px;"
+                >
+                    0
+                </span>
+
             </div>
+
         </div>
+
+
+        <!-- ======================================
+             ЗАКРЫТЬ
+        ======================================= -->
 
         <button
             class="btn-cancel"
@@ -1463,7 +1656,6 @@
     </div>
 
 </div>
-
 
 <!-- TOASTS -->
 <div id="toast-container"></div>
@@ -1513,26 +1705,6 @@ let currentLang =
    PR SYSTEM
    ========================================================= */
 
-/*
-    Базовая награда за первую победу:
-
-    1v1 = 10 PR
-    2v2 = 20 PR
-    5v5 = 25 PR
-
-    Коэффициент:
-
-    1-я победа = x1.0
-    2-я победа = x1.5
-    3-я победа = x2.0
-    4-я победа = x2.5
-    и т.д.
-
-    Формула:
-
-    coefficient = 1 + (winsBefore * 0.5)
-*/
-
 const PR_REWARD_BASE = {
     "1v1": 10,
     "2v2": 20,
@@ -1541,17 +1713,50 @@ const PR_REWARD_BASE = {
 
 
 /* =========================================================
+   RETRO CUP LEVEL SYSTEM
+   =========================================================
+
+   Level 1  = 1 PR
+   Level 2  = 20 PR
+   Level 3  = 50 PR
+   Level 4  = 100 PR
+   Level 5  = 150 PR
+   Level 6  = 250 PR
+   Level 7  = 400 PR
+   Level 8  = 600 PR
+   Level 9  = 800 PR
+   Level 10 = 1000 PR
+*/
+
+const LEVEL_THRESHOLDS = [
+    1,
+    20,
+    50,
+    100,
+    150,
+    250,
+    400,
+    600,
+    800,
+    1000
+];
+
+
+/* =========================================================
    СЛОВАРЬ
    ========================================================= */
 
 const dict = {
+
     RU: {
+
         back: "← Назад",
         org: "Организатор",
         format: "Формат",
         system: "Система",
         slots: "Слоты",
         prize: "Призовые",
+
         desc: "Описание и регламент",
         members: "Участники",
 
@@ -1586,10 +1791,15 @@ const dict = {
         pWin: "Винрейт",
         pMat: "Матчи",
 
-        notSet: "Не указан"
+        notSet: "Не указан",
+
+        level: "LEVEL",
+        pr: "PR"
     },
 
+
     EN: {
+
         back: "← Back",
         org: "Organizer",
         format: "Format",
@@ -1631,8 +1841,12 @@ const dict = {
         pWin: "Winrate",
         pMat: "Matches",
 
-        notSet: "Not set"
+        notSet: "Not set",
+
+        level: "LEVEL",
+        pr: "PR"
     }
+
 };
 
 
@@ -1651,7 +1865,9 @@ const defaultAvatar =
    ========================================================= */
 
 if (!tourneyId || !currentUser) {
-    window.location.href = "index.html";
+
+    window.location.href =
+        "index.html";
 }
 
 
@@ -1770,6 +1986,7 @@ async function preloadUsers(data) {
     ) {
 
         if (data.players) {
+
             namesToFetch =
                 Object.keys(
                     data.players
@@ -1797,6 +2014,7 @@ async function preloadUsers(data) {
     namesToFetch =
         [...new Set(namesToFetch)];
 
+
     await Promise.all(
         namesToFetch.map(
             async name => {
@@ -1813,11 +2031,17 @@ async function preloadUsers(data) {
 
                     usersCache[name] =
                         userData || {
+
                             avatar:
                                 defaultAvatar,
+
                             steamCode:
-                                null
+                                null,
+
+                            pr:
+                                1
                         };
+
 
                     if (
                         !usersCache[name].avatar
@@ -1830,10 +2054,15 @@ async function preloadUsers(data) {
                 } catch (e) {
 
                     usersCache[name] = {
+
                         avatar:
                             defaultAvatar,
+
                         steamCode:
-                            null
+                            null,
+
+                        pr:
+                            1
                     };
                 }
             }
@@ -1860,6 +2089,7 @@ async function firebaseRequest(
                 ...options,
 
                 headers: {
+
                     "Content-Type":
                         "application/json",
 
@@ -1867,6 +2097,7 @@ async function firebaseRequest(
                 }
             }
         );
+
 
     if (!response.ok) {
 
@@ -1900,7 +2131,9 @@ async function firebasePut(
     return await firebaseRequest(
         path,
         {
+
             method: "PUT",
+
             body:
                 JSON.stringify(data)
         }
@@ -1916,7 +2149,9 @@ async function firebasePatch(
     return await firebaseRequest(
         path,
         {
+
             method: "PATCH",
+
             body:
                 JSON.stringify(data)
         }
@@ -1931,6 +2166,7 @@ async function firebaseDelete(
     return await firebaseRequest(
         path,
         {
+
             method: "DELETE"
         }
     );
@@ -1982,13 +2218,405 @@ function calculatePRReward(
 }
 
 
-/*
-    Получаем количество побед игрока
-    ДО текущего матча.
+/* =========================================================
+   LEVEL
+   ========================================================= */
 
-    Учитываются только реальные
-    сохранённые результаты.
-*/
+function calculateLevel(
+    pr
+) {
+
+    const numericPR =
+        Number(pr);
+
+
+    if (
+        isNaN(numericPR) ||
+        numericPR < 1
+    ) {
+
+        return 1;
+    }
+
+
+    let level = 1;
+
+
+    for (
+        let i = 0;
+        i < LEVEL_THRESHOLDS.length;
+        i++
+    ) {
+
+        if (
+            numericPR >=
+            LEVEL_THRESHOLDS[i]
+        ) {
+
+            level =
+                i + 1;
+
+        } else {
+
+            break;
+        }
+    }
+
+
+    return level;
+}
+
+
+/* =========================================================
+   LEVEL COLOR
+   ========================================================= */
+
+function getLevelColor(
+    level
+) {
+
+    const colors = {
+
+        1: "#777783",
+        2: "#ffffff",
+        3: "#5aa9ff",
+        4: "#48e0ff",
+        5: "#a67cff",
+        6: "#d16cff",
+        7: "#ff5c8a",
+        8: "#ff7a45",
+        9: "#ffd84d",
+        10: "#ffffff"
+
+    };
+
+
+    return colors[level] ||
+        "#a67cff";
+}
+
+
+/* =========================================================
+   СОЗДАНИЕ LEVEL В МИНИ-ПРОФИЛЕ
+   ========================================================= */
+
+function createMiniProfileLevel() {
+
+    const modalBox =
+        document.querySelector(
+            "#profileModal .modal-box"
+        );
+
+
+    if (!modalBox) {
+        return;
+    }
+
+
+    /*
+       Если блок уже существует —
+       второй раз не создаём.
+    */
+
+    if (
+        document.getElementById(
+            "prof-level-wrapper"
+        )
+    ) {
+
+        return;
+    }
+
+
+    const levelWrapper =
+        document.createElement(
+            "div"
+        );
+
+
+    levelWrapper.id =
+        "prof-level-wrapper";
+
+
+    levelWrapper.style.cssText = `
+        margin-top:20px;
+        padding:15px;
+        background:#0c0c10;
+        border:1px solid #303039;
+        border-radius:8px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        gap:14px;
+    `;
+
+
+    levelWrapper.innerHTML = `
+
+        <div
+            id="prof-level-circle"
+            style="
+                width:58px;
+                height:58px;
+                min-width:58px;
+                border-radius:50%;
+                border:3px solid #777783;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                background:#101014;
+                color:#777783;
+                font-size:20px;
+                font-weight:900;
+                box-shadow:0 0 18px rgba(150,150,160,0.15);
+                transition:0.3s;
+            "
+        >
+            <span id="prof-level">
+                1
+            </span>
+        </div>
+
+
+        <div
+            style="
+                display:flex;
+                flex-direction:column;
+                gap:3px;
+            "
+        >
+
+            <div
+                style="
+                    color:#858592;
+                    font-size:10px;
+                    font-weight:900;
+                    text-transform:uppercase;
+                "
+            >
+                ${dict[currentLang].level}
+            </div>
+
+
+            <div
+                id="prof-level-name"
+                style="
+                    color:white;
+                    font-size:16px;
+                    font-weight:900;
+                "
+            >
+                Level 1
+            </div>
+
+
+            <div
+                id="prof-pr"
+                style="
+                    color:#a67cff;
+                    font-size:13px;
+                    font-weight:900;
+                "
+            >
+                1 PR
+            </div>
+
+        </div>
+    `;
+
+
+    /*
+       Вставляем уровень
+       перед статистикой.
+    */
+
+    const statsGrid =
+        modalBox.querySelector(
+            ".wg-meta-grid"
+        );
+
+
+    if (statsGrid) {
+
+        modalBox.insertBefore(
+            levelWrapper,
+            statsGrid
+        );
+
+    } else {
+
+        modalBox.appendChild(
+            levelWrapper
+        );
+    }
+}
+
+
+/* =========================================================
+   ОБНОВЛЕНИЕ LEVEL В МИНИ-ПРОФИЛЕ
+   ========================================================= */
+
+function updateMiniProfileLevel(
+    pr
+) {
+
+    createMiniProfileLevel();
+
+
+    const level =
+        calculateLevel(pr);
+
+
+    const color =
+        getLevelColor(level);
+
+
+    const levelText =
+        document.getElementById(
+            "prof-level"
+        );
+
+
+    const levelName =
+        document.getElementById(
+            "prof-level-name"
+        );
+
+
+    const prText =
+        document.getElementById(
+            "prof-pr"
+        );
+
+
+    const circle =
+        document.getElementById(
+            "prof-level-circle"
+        );
+
+
+    if (levelText) {
+
+        levelText.innerText =
+            level;
+    }
+
+
+    if (levelName) {
+
+        levelName.innerText =
+            "Level " +
+            level;
+
+        levelName.style.color =
+            color;
+    }
+
+
+    if (prText) {
+
+        prText.innerText =
+            Math.round(pr) +
+            " PR";
+
+        prText.style.color =
+            color;
+    }
+
+
+    if (circle) {
+
+        circle.style.color =
+            color;
+
+        circle.style.borderColor =
+            color;
+
+
+        if (level >= 10) {
+
+            circle.style.boxShadow =
+                `
+                0 0 18px rgba(255,255,255,0.5),
+                0 0 35px rgba(166,124,255,0.35)
+                `;
+
+            circle.style.animation =
+                "retroMiniLevelGlow 2s infinite alternate";
+
+        } else {
+
+            circle.style.boxShadow =
+                `0 0 18px ${color}55`;
+
+            circle.style.animation =
+                "none";
+        }
+    }
+}
+
+
+/* =========================================================
+   CSS ДЛЯ LEVEL 10
+   ========================================================= */
+
+(function addMiniLevelStyle() {
+
+    if (
+        document.getElementById(
+            "retro-mini-level-style"
+        )
+    ) {
+        return;
+    }
+
+
+    const style =
+        document.createElement(
+            "style"
+        );
+
+
+    style.id =
+        "retro-mini-level-style";
+
+
+    style.innerHTML = `
+
+        @keyframes retroMiniLevelGlow {
+
+            from {
+
+                box-shadow:
+                    0 0 18px rgba(255,255,255,0.35),
+                    0 0 30px rgba(166,124,255,0.25);
+
+            }
+
+            to {
+
+                box-shadow:
+                    0 0 25px rgba(255,255,255,0.65),
+                    0 0 45px rgba(166,124,255,0.45);
+
+            }
+
+        }
+
+    `;
+
+
+    document.head.appendChild(
+        style
+    );
+
+})();
+
+
+/* =========================================================
+   ПОЛУЧАЕМ ПОБЕДЫ ИГРОКА
+   ========================================================= */
+
 async function getTournamentWins(
     playerName,
     currentMatchId
@@ -1999,11 +2627,15 @@ async function getTournamentWins(
             `tournaments/${safeFirebaseKey(tourneyId)}/matches`
         );
 
+
     if (!matches) {
+
         return 0;
     }
 
+
     let wins = 0;
+
 
     Object.keys(
         matches
@@ -2013,32 +2645,40 @@ async function getTournamentWins(
             matchId ===
             currentMatchId
         ) {
+
             return;
         }
+
 
         const match =
             matches[matchId];
 
+
         if (!match) {
+
             return;
         }
+
 
         if (
             match.winner ===
             playerName
         ) {
+
             wins++;
         }
+
     });
+
 
     return wins;
 }
 
 
-/*
-    Для команды считаем победы команды
-    в текущем турнире.
-*/
+/* =========================================================
+   ПОБЕДЫ КОМАНДЫ
+   ========================================================= */
+
 async function getTournamentTeamWins(
     teamName,
     currentMatchId
@@ -2051,9 +2691,10 @@ async function getTournamentTeamWins(
 }
 
 
-/*
-    Получаем игроков команды.
-*/
+/* =========================================================
+   ИГРОКИ КОМАНДЫ
+   ========================================================= */
+
 async function getTeamPlayers(
     teamName
 ) {
@@ -2063,12 +2704,15 @@ async function getTeamPlayers(
             `tournaments/${safeFirebaseKey(tourneyId)}/teams/${safeFirebaseKey(teamName)}`
         );
 
+
     if (
         !team ||
         !team.players
     ) {
+
         return [];
     }
+
 
     return Object.keys(
         team.players
@@ -2076,9 +2720,10 @@ async function getTeamPlayers(
 }
 
 
-/*
-    Получаем текущий PR игрока.
-*/
+/* =========================================================
+   ПОЛУЧАЕМ PR
+   ========================================================= */
+
 async function getUserPR(
     playerName
 ) {
@@ -2088,59 +2733,36 @@ async function getUserPR(
             `users/${safeFirebaseKey(playerName)}`
         );
 
+
     if (
-        !user ||
-        typeof user.pr !== "number"
+        !user
     ) {
-        return 0;
+
+        return 1;
     }
 
-    return user.pr;
+
+    const pr =
+        Number(user.pr);
+
+
+    if (
+        isNaN(pr) ||
+        pr < 1
+    ) {
+
+        return 1;
+    }
+
+
+    return pr;
 }
 
 
-/*
-    Формула уровня.
+/* =========================================================
+   НАЧИСЛЕНИЕ PR
+   ========================================================= */
 
-    Пока используется простая
-    система:
-
-    0 PR     = LVL 1
-    100 PR   = LVL 2
-    250 PR   = LVL 3
-    450 PR   = LVL 4
-    ...
-
-    Формула:
-    level = floor(sqrt(PR / 50)) + 1
-
-    Позже можем заменить формулу,
-    когда сделаем интерфейс профиля.
-*/
-function calculateLevel(
-    pr
-) {
-
-    const numericPR =
-        Math.max(
-            0,
-            Number(pr) || 0
-        );
-
-    return Math.max(
-        1,
-        Math.floor(
-            Math.sqrt(
-                numericPR / 50
-            )
-        ) + 1
-    );
-}
-
-
-/*
-    Начисление PR игроку.
-*/
 async function addPRToPlayer(
     playerName,
     amount
@@ -2151,36 +2773,46 @@ async function addPRToPlayer(
         !Number.isFinite(amount) ||
         amount <= 0
     ) {
+
         return;
     }
+
 
     const currentPR =
         await getUserPR(
             playerName
         );
 
+
     const newPR =
-        currentPR + amount;
+        currentPR +
+        amount;
+
 
     const newLevel =
         calculateLevel(
             newPR
         );
 
+
     await firebasePatch(
         `users/${safeFirebaseKey(playerName)}`,
         {
-            pr: newPR,
-            level: newLevel
+
+            pr:
+                newPR,
+
+            level:
+                newLevel
         }
     );
 }
 
 
-/*
-    Проверяем, была ли уже выдана
-    награда за конкретный матч.
-*/
+/* =========================================================
+   ПРОВЕРКА НАГРАДЫ
+   ========================================================= */
+
 async function isMatchRewarded(
     matchId
 ) {
@@ -2190,20 +2822,15 @@ async function isMatchRewarded(
             `tournaments/${safeFirebaseKey(tourneyId)}/rewards/${safeFirebaseKey(matchId)}`
         );
 
+
     return !!reward;
 }
 
 
-/*
-    Главная функция выдачи PR.
+/* =========================================================
+   НАЧИСЛЕНИЕ PR ЗА МАТЧ
+   ========================================================= */
 
-    ВАЖНО:
-
-    Она вызывается только после
-    сохранения настоящего результата.
-
-    Поэтому AUTO/byes награду не получают.
-*/
 async function awardMatchPR(
     matchId,
     p1,
@@ -2211,13 +2838,11 @@ async function awardMatchPR(
     winner
 ) {
 
-    /*
-        Защита от повторной награды.
-    */
     const alreadyRewarded =
         await isMatchRewarded(
             matchId
         );
+
 
     if (alreadyRewarded) {
 
@@ -2230,22 +2855,20 @@ async function awardMatchPR(
     }
 
 
-    /*
-        Не выдаём PR для неизвестного
-        формата.
-    */
     const basePR =
         getBasePR();
 
+
     if (basePR <= 0) {
+
         return;
     }
 
 
-    /*
-        Если это 1v1 —
-        winner является ником игрока.
-    */
+    /* ==========================================
+       1V1
+    ========================================== */
+
     if (
         tournamentFormat ===
         "1v1"
@@ -2257,14 +2880,17 @@ async function awardMatchPR(
                 matchId
             );
 
+
         const coefficient =
             getPRCoefficient(
                 winsBefore
             );
 
+
         const reward =
             basePR *
             coefficient;
+
 
         await addPRToPlayer(
             winner,
@@ -2272,22 +2898,26 @@ async function awardMatchPR(
         );
 
 
-        /*
-            Сохраняем информацию,
-            что этот матч уже награждён.
-        */
         await firebasePut(
             `tournaments/${safeFirebaseKey(tourneyId)}/rewards/${safeFirebaseKey(matchId)}`,
             {
+
                 winner,
+
                 format:
                     tournamentFormat,
+
                 basePR,
+
                 winsBefore,
+
                 coefficient,
+
                 reward,
+
                 players:
                     [winner],
+
                 time:
                     new Date().toISOString()
             }
@@ -2298,25 +2928,27 @@ async function awardMatchPR(
             `PR: ${winner} получил ${reward} PR`
         );
 
+
         return;
     }
 
 
-    /*
-        2v2 / 5v5
+    /* ==========================================
+       2V2 / 5V5
+    ========================================== */
 
-        winner здесь является
-        названием команды.
-    */
     if (
-        tournamentFormat === "2v2" ||
-        tournamentFormat === "5v5"
+        tournamentFormat ===
+            "2v2" ||
+        tournamentFormat ===
+            "5v5"
     ) {
 
         const teamPlayers =
             await getTeamPlayers(
                 winner
             );
+
 
         if (
             !teamPlayers.length
@@ -2349,10 +2981,6 @@ async function awardMatchPR(
             coefficient;
 
 
-        /*
-            Выдаём PR каждому игроку
-            команды.
-        */
         for (
             const player
             of teamPlayers
@@ -2365,14 +2993,12 @@ async function awardMatchPR(
         }
 
 
-        /*
-            Сохраняем reward только
-            после успешного начисления.
-        */
         await firebasePut(
             `tournaments/${safeFirebaseKey(tourneyId)}/rewards/${safeFirebaseKey(matchId)}`,
             {
+
                 winner,
+
                 team:
                     winner,
 
@@ -2412,115 +3038,158 @@ function applyTranslations() {
     const l =
         dict[currentLang];
 
-    document.getElementById(
-        "nav-back"
-    ).innerText =
-        l.back;
 
-    document.getElementById(
-        "lbl-org"
-    ).innerText =
-        l.org;
+    const setText = (
+        id,
+        value
+    ) => {
 
-    document.getElementById(
-        "lbl-format"
-    ).innerText =
-        l.format;
+        const el =
+            document.getElementById(id);
 
-    document.getElementById(
-        "lbl-system"
-    ).innerText =
-        l.system;
+        if (el) {
 
-    document.getElementById(
-        "lbl-slots"
-    ).innerText =
-        l.slots;
+            el.innerText =
+                value;
+        }
+    };
 
-    document.getElementById(
-        "lbl-prize"
-    ).innerText =
-        l.prize;
 
-    document.getElementById(
-        "lbl-desc"
-    ).innerText =
-        l.desc;
+    setText(
+        "nav-back",
+        l.back
+    );
 
-    document.getElementById(
-        "lbl-members"
-    ).innerText =
-        l.members;
+    setText(
+        "lbl-org",
+        l.org
+    );
 
-    document.getElementById(
-        "tab-btn-leaderboard"
-    ).innerText =
-        l.tabLb;
+    setText(
+        "lbl-format",
+        l.format
+    );
 
-    document.getElementById(
-        "tab-btn-bracket"
-    ).innerText =
-        l.tabBr;
+    setText(
+        "lbl-system",
+        l.system
+    );
 
-    document.getElementById(
-        "lbl-tab-lb"
-    ).innerText =
-        l.lbTitle;
+    setText(
+        "lbl-slots",
+        l.slots
+    );
 
-    document.getElementById(
-        "lbl-tab-br"
-    ).innerText =
-        l.brTitle;
+    setText(
+        "lbl-prize",
+        l.prize
+    );
 
-    document.getElementById(
-        "chat-input"
-    ).placeholder =
-        l.chatPl;
+    setText(
+        "lbl-desc",
+        l.desc
+    );
 
-    document.getElementById(
-        "lbl-admin-panel"
-    ).innerText =
-        l.adminPanel;
+    setText(
+        "lbl-members",
+        l.members
+    );
 
-    document.getElementById(
-        "btn-save"
-    ).innerText =
-        l.saveBtn;
+    setText(
+        "tab-btn-leaderboard",
+        l.tabLb
+    );
 
-    document.getElementById(
-        "btn-close"
-    ).innerText =
-        l.close;
+    setText(
+        "tab-btn-bracket",
+        l.tabBr
+    );
 
-    document.getElementById(
-        "prof-header"
-    ).innerText =
-        l.profTitle;
+    setText(
+        "lbl-tab-lb",
+        l.lbTitle
+    );
 
-    document.getElementById(
-        "prof-steam-lbl"
-    ).innerText =
-        l.pSteam;
+    setText(
+        "lbl-tab-br",
+        l.brTitle
+    );
 
-    document.getElementById(
-        "prof-lbl-kd"
-    ).innerText =
-        l.pKd;
 
-    document.getElementById(
-        "prof-lbl-win"
-    ).innerText =
-        l.pWin;
+    const chatInput =
+        document.getElementById(
+            "chat-input"
+        );
 
-    document.getElementById(
-        "prof-lbl-matches"
-    ).innerText =
-        l.pMat;
+    if (chatInput) {
 
-    document.getElementById(
-        "btn-prof-close"
-    ).innerText =
-        l.close;
+        chatInput.placeholder =
+            l.chatPl;
+    }
+
+
+    setText(
+        "lbl-admin-panel",
+        l.adminPanel
+    );
+
+    setText(
+        "btn-save",
+        l.saveBtn
+    );
+
+    setText(
+        "btn-close",
+        l.close
+    );
+
+    setText(
+        "prof-header",
+        l.profTitle
+    );
+
+    setText(
+        "prof-steam-lbl",
+        l.pSteam
+    );
+
+    setText(
+        "prof-lbl-kd",
+        l.pKd
+    );
+
+    setText(
+        "prof-lbl-win",
+        l.pWin
+    );
+
+    setText(
+        "prof-lbl-matches",
+        l.pMat
+    );
+
+    setText(
+        "btn-prof-close",
+        l.close
+    );
+
+
+    /*
+       Если мини-профиль уже был создан,
+       обновляем надпись LEVEL.
+    */
+
+    const levelLabel =
+        document.querySelector(
+            "#prof-level-wrapper > div:nth-child(2) > div:first-child"
+        );
+
+    if (levelLabel) {
+
+        levelLabel.innerText =
+            l.level;
+    }
+
 
     updateTournamentStatus();
     updateJoinButton();
@@ -2534,17 +3203,28 @@ function toggleLanguage() {
             ? "EN"
             : "RU";
 
+
     localStorage.setItem(
         "siteLang",
         currentLang
     );
 
-    document.getElementById(
-        "lang-toggle"
-    ).innerText =
-        currentLang;
+
+    const toggle =
+        document.getElementById(
+            "lang-toggle"
+        );
+
+
+    if (toggle) {
+
+        toggle.innerText =
+            currentLang;
+    }
+
 
     applyTranslations();
+
 
     loadTournamentData(
         true
@@ -2567,6 +3247,7 @@ async function getGlobalStats(
     const now =
         Date.now();
 
+
     if (
         !allTournamentsCache ||
         now -
@@ -2581,8 +3262,10 @@ async function getGlobalStats(
                     "tournaments"
                 );
 
+
             allTournamentsCache =
                 res;
+
 
             lastTournamentsFetch =
                 now;
@@ -2594,10 +3277,17 @@ async function getGlobalStats(
                 e
             );
 
+
             return {
-                kd: "0.00",
-                winrate: "0.0%",
-                matches: 0
+
+                kd:
+                    "0.00",
+
+                winrate:
+                    "0.0%",
+
+                matches:
+                    0
             };
         }
     }
@@ -2642,6 +3332,7 @@ async function getGlobalStats(
                                     parseInt(
                                         match.s1
                                     );
+
 
                                 const s2 =
                                     parseInt(
@@ -2719,6 +3410,7 @@ async function getGlobalStats(
 
 
     return {
+
         kd:
             kd.toFixed(2),
 
@@ -2744,32 +3436,95 @@ async function openProfile(
         dict[currentLang];
 
 
-    document.getElementById(
-        "prof-kd"
-    ).innerText =
-        "...";
+    /* ==========================================
+       СОЗДАЁМ LEVEL В МИНИ-ПРОФИЛЕ
+    ========================================== */
 
-    document.getElementById(
-        "prof-winrate"
-    ).innerText =
-        "...";
-
-    document.getElementById(
-        "prof-matches"
-    ).innerText =
-        "...";
-
-    document.getElementById(
-        "prof-steam"
-    ).innerText =
-        "⏳...";
+    createMiniProfileLevel();
 
 
-    document.getElementById(
-        "profileModal"
-    ).style.display =
-        "flex";
+    /* ==========================================
+       СБРОС СТАТИСТИКИ
+    ========================================== */
 
+    const profKD =
+        document.getElementById(
+            "prof-kd"
+        );
+
+    const profWinrate =
+        document.getElementById(
+            "prof-winrate"
+        );
+
+    const profMatches =
+        document.getElementById(
+            "prof-matches"
+        );
+
+    const profSteam =
+        document.getElementById(
+            "prof-steam"
+        );
+
+
+    if (profKD) {
+
+        profKD.innerText =
+            "...";
+    }
+
+
+    if (profWinrate) {
+
+        profWinrate.innerText =
+            "...";
+    }
+
+
+    if (profMatches) {
+
+        profMatches.innerText =
+            "...";
+    }
+
+
+    if (profSteam) {
+
+        profSteam.innerText =
+            "⏳...";
+    }
+
+
+    /* ==========================================
+       СБРОС LEVEL
+    ========================================== */
+
+    updateMiniProfileLevel(
+        1
+    );
+
+
+    /* ==========================================
+       ОТКРЫВАЕМ MODAL
+    ========================================== */
+
+    const modal =
+        document.getElementById(
+            "profileModal"
+        );
+
+
+    if (modal) {
+
+        modal.style.display =
+            "flex";
+    }
+
+
+    /* ==========================================
+       ЗАГРУЗКА USER
+    ========================================== */
 
     let user;
 
@@ -2781,12 +3536,24 @@ async function openProfile(
                 `${dbBase}users/${encodeURIComponent(playerName)}.json`
             );
 
+
+        if (!res.ok) {
+
+            throw new Error(
+                "HTTP " +
+                res.status
+            );
+        }
+
+
         user =
             await res.json();
+
 
         if (!user) {
 
             user = {
+
                 avatar:
                     defaultAvatar,
 
@@ -2794,16 +3561,20 @@ async function openProfile(
                     null,
 
                 pr:
-                    0,
-
-                level:
                     1
             };
         }
 
     } catch (e) {
 
+        console.error(
+            "Ошибка загрузки профиля игрока:",
+            e
+        );
+
+
         user = {
+
             avatar:
                 defaultAvatar,
 
@@ -2811,26 +3582,49 @@ async function openProfile(
                 null,
 
             pr:
-                0,
-
-            level:
                 1
         };
     }
 
 
-    document.getElementById(
-        "prof-avatar"
-    ).src =
-        user.avatar ||
-        defaultAvatar;
+    /* ==========================================
+       АВАТАР
+    ========================================== */
+
+    const avatar =
+        document.getElementById(
+            "prof-avatar"
+        );
 
 
-    document.getElementById(
-        "prof-name"
-    ).innerText =
-        playerName;
+    if (avatar) {
 
+        avatar.src =
+            user.avatar ||
+            defaultAvatar;
+    }
+
+
+    /* ==========================================
+       ИМЯ
+    ========================================== */
+
+    const nameElement =
+        document.getElementById(
+            "prof-name"
+        );
+
+
+    if (nameElement) {
+
+        nameElement.innerText =
+            playerName;
+    }
+
+
+    /* ==========================================
+       STEAM ID
+    ========================================== */
 
     let stCode =
         user.steamCode;
@@ -2846,71 +3640,77 @@ async function openProfile(
     }
 
 
+    if (profSteam) {
+
+        if (
+            stCode &&
+            stCode !== ""
+        ) {
+
+            profSteam.innerText =
+                stCode;
+
+        } else {
+
+            profSteam.innerText =
+                l.notSet;
+        }
+    }
+
+
+    /* ==========================================
+       PR
+    ========================================== */
+
+    let pr =
+        Number(user.pr);
+
+
     if (
-        stCode &&
-        stCode !== ""
+        isNaN(pr) ||
+        pr < 1
     ) {
 
-        document.getElementById(
-            "prof-steam"
-        ).innerText =
-            stCode;
-
-    } else {
-
-        document.getElementById(
-            "prof-steam"
-        ).innerText =
-            l.notSet;
+        pr = 1;
     }
 
 
-    /*
-        PR + LEVEL
-    */
+    pr =
+        Math.round(pr);
 
-    const pr =
-        Number(user.pr) || 0;
 
+    /* ==========================================
+       LEVEL
+    ========================================== */
 
     const level =
-        Number(user.level) ||
-        calculateLevel(pr);
-
-
-    /*
-        Сейчас элементы для LVL/PR
-        могут отсутствовать в старом
-        интерфейсе.
-
-        Поэтому ставим только если
-        они уже есть.
-    */
-
-    const profPR =
-        document.getElementById(
-            "prof-pr"
-        );
-
-    const profLevel =
-        document.getElementById(
-            "prof-level"
+        calculateLevel(
+            pr
         );
 
 
-    if (profPR) {
+    console.log(
+        "PROFILE:",
+        playerName,
+        "PR:",
+        pr,
+        "LEVEL:",
+        level
+    );
 
-        profPR.innerText =
-            Math.round(pr);
-    }
+
+    /* ==========================================
+       ПОКАЗЫВАЕМ LEVEL
+    ========================================== */
+
+    updateMiniProfileLevel(
+        pr
+    );
 
 
-    if (profLevel) {
-
-        profLevel.innerText =
-            level;
-    }
-
+    /* ==========================================
+       ГЛОБАЛЬНАЯ СТАТИСТИКА
+    ========================================== */
 
     const stats =
         await getGlobalStats(
@@ -2918,31 +3718,63 @@ async function openProfile(
         );
 
 
-    document.getElementById(
-        "prof-kd"
-    ).innerText =
-        stats.kd;
+    /* ==========================================
+       K/D
+    ========================================== */
 
-    document.getElementById(
-        "prof-winrate"
-    ).innerText =
-        stats.winrate;
+    if (profKD) {
 
-    document.getElementById(
-        "prof-matches"
-    ).innerText =
-        stats.matches;
+        profKD.innerText =
+            stats.kd;
+    }
+
+
+    /* ==========================================
+       WINRATE
+    ========================================== */
+
+    if (profWinrate) {
+
+        profWinrate.innerText =
+            stats.winrate;
+    }
+
+
+    /* ==========================================
+       MATCHES
+    ========================================== */
+
+    if (profMatches) {
+
+        profMatches.innerText =
+            stats.matches;
+    }
 }
 
+
+/* =========================================================
+   ЗАКРЫТИЕ МИНИ-ПРОФИЛЯ
+   ========================================================= */
 
 function closeProfileModal() {
 
-    document.getElementById(
-        "profileModal"
-    ).style.display =
-        "none";
+    const modal =
+        document.getElementById(
+            "profileModal"
+        );
+
+
+    if (modal) {
+
+        modal.style.display =
+            "none";
+    }
 }
 
+
+/* =========================================================
+   КЛИК ПО ФОНУ
+   ========================================================= */
 
 function handleProfileBackground(
     event
@@ -2956,7 +3788,6 @@ function handleProfileBackground(
         closeProfileModal();
     }
 }
-
 
 /* =========================================================
    TABS
