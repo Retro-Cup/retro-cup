@@ -2936,11 +2936,13 @@ async function getUserPR(
 
 
     const pr =
-        Number(user.pr);
+        Number(
+            user.pr
+        );
 
 
     if (
-        isNaN(pr) ||
+        !Number.isFinite(pr) ||
         pr < 1
     ) {
 
@@ -2971,22 +2973,113 @@ async function addPRToPlayer(
     }
 
 
-    const currentPR =
-        await getUserPR(
-            playerName
+    /* =====================================================
+       ПОЛУЧАЕМ ПОЛЬЗОВАТЕЛЯ
+    ===================================================== */
+
+    const user =
+        await firebaseGet(
+            `users/${safeFirebaseKey(playerName)}`
         );
 
+
+    /* =====================================================
+       ТЕКУЩИЙ PR
+    ===================================================== */
+
+    let currentPR;
+
+
+    if (
+        user
+    ) {
+
+        currentPR =
+            Number(
+                user.pr
+            );
+
+    } else {
+
+        currentPR =
+            1;
+
+    }
+
+
+    if (
+        !Number.isFinite(currentPR) ||
+        currentPR < 1
+    ) {
+
+        currentPR =
+            1;
+
+    }
+
+
+    /* =====================================================
+       НОВЫЙ PR
+    ===================================================== */
 
     const newPR =
         currentPR +
         amount;
 
 
-    const newLevel =
-        calculateLevel(
-            newPR
+    /* =====================================================
+       LEVEL
+       
+       Если level уже существует в Firebase —
+       сохраняем именно его.
+
+       Если level отсутствует —
+       рассчитываем автоматически по PR.
+    ===================================================== */
+
+    let currentLevel =
+        Number(
+            user?.level
         );
 
+
+    if (
+        !Number.isFinite(currentLevel) ||
+        currentLevel < 1
+    ) {
+
+        currentLevel =
+            calculateLevel(
+                newPR
+            );
+
+    } else {
+
+        currentLevel =
+            Math.floor(
+                currentLevel
+            );
+
+    }
+
+
+    /* =====================================================
+       ЗАЩИТА LEVEL
+    ===================================================== */
+
+    if (
+        currentLevel < 1
+    ) {
+
+        currentLevel =
+            1;
+
+    }
+
+
+    /* =====================================================
+       СОХРАНЯЕМ PR + LEVEL
+    ===================================================== */
 
     await firebasePatch(
         `users/${safeFirebaseKey(playerName)}`,
@@ -2996,9 +3089,45 @@ async function addPRToPlayer(
                 newPR,
 
             level:
-                newLevel
+                currentLevel
+
         }
     );
+
+
+    /* =====================================================
+       DEBUG
+    ===================================================== */
+
+    console.log(
+        "PR НАЧИСЛЕН:",
+        playerName
+    );
+
+
+    console.log(
+        "Старый PR:",
+        currentPR
+    );
+
+
+    console.log(
+        "Новый PR:",
+        newPR
+    );
+
+
+    console.log(
+        "Firebase Level:",
+        user?.level
+    );
+
+
+    console.log(
+        "Сохранённый Level:",
+        currentLevel
+    );
+
 }
 
 
@@ -3052,12 +3181,12 @@ async function awardMatchPR(
         getBasePR();
 
 
-    if (basePR <= 0) {
+    if (
+        basePR <= 0
+    ) {
 
         return;
     }
-
-
     /* ==========================================
        CSS ДЛЯ LEVEL
     ========================================== */
@@ -3627,6 +3756,10 @@ async function getGlobalStats(
    PROFILE MODAL
    ========================================================= */
 
+/* =========================================================
+   PROFILE MODAL
+   ========================================================= */
+
 async function openProfile(
     playerName
 ) {
@@ -3637,6 +3770,10 @@ async function openProfile(
 
     createMiniProfileLevel();
 
+
+    /* =====================================================
+       ELEMENTS
+    ===================================================== */
 
     const profKD =
         document.getElementById(
@@ -3661,6 +3798,10 @@ async function openProfile(
             "prof-steam"
         );
 
+
+    /* =====================================================
+       RESET STATS
+    ===================================================== */
 
     if (profKD) {
 
@@ -3694,16 +3835,9 @@ async function openProfile(
     }
 
 
-    /*
-       Временно показываем первый уровень,
-       пока загружается профиль.
-    */
-
-    updateMiniProfileLevel(
-        1,
-        1
-    );
-
+    /* =====================================================
+       OPEN MODAL
+    ===================================================== */
 
     const modal =
         document.getElementById(
@@ -3720,7 +3854,7 @@ async function openProfile(
 
 
     /* =====================================================
-       ЗАГРУЗКА USER
+       LOAD USER FROM FIREBASE
     ===================================================== */
 
     let user;
@@ -3747,6 +3881,10 @@ async function openProfile(
         user =
             await res.json();
 
+
+        /* =================================================
+           USER NOT FOUND
+        ================================================= */
 
         if (!user) {
 
@@ -3797,7 +3935,7 @@ async function openProfile(
 
 
     /* =====================================================
-       АВАТАР
+       AVATAR
     ===================================================== */
 
     const avatar =
@@ -3816,7 +3954,7 @@ async function openProfile(
 
 
     /* =====================================================
-       ИМЯ
+       NAME
     ===================================================== */
 
     const nameElement =
@@ -3881,7 +4019,7 @@ async function openProfile(
 
 
     if (
-        isNaN(pr) ||
+        !Number.isFinite(pr) ||
         pr < 1
     ) {
 
@@ -3895,25 +4033,36 @@ async function openProfile(
 
 
     /* =====================================================
-       LEVEL ИЗ FIREBASE
+       LEVEL
+       FIREBASE = ГЛАВНЫЙ ИСТОЧНИК
     ===================================================== */
 
-    let level =
+    let firebaseLevel =
         Number(user.level);
 
 
     /*
-       Если level существует в Firebase —
+       Если в Firebase есть нормальный level,
        используем именно его.
 
-       Если его нет или он неправильный —
-       рассчитываем уровень по PR.
+       calculateLevel(pr) используется
+       только если level отсутствует.
     */
 
+    let level;
+
+
     if (
-        !Number.isFinite(level) ||
-        level < 1
+        Number.isFinite(firebaseLevel) &&
+        firebaseLevel >= 1
     ) {
+
+        level =
+            Math.floor(
+                firebaseLevel
+            );
+
+    } else {
 
         level =
             calculateLevel(
@@ -3923,27 +4072,53 @@ async function openProfile(
     }
 
 
+    /* =====================================================
+       ЗАЩИТА ОТ НЕВЕРНОГО LEVEL
+    ===================================================== */
+
     level =
         Math.max(
             1,
-            Math.floor(level)
+            level
         );
 
 
     console.log(
+        "================================="
+    );
+
+    console.log(
         "PROFILE:",
-        playerName,
-        "PR:",
-        pr,
+        playerName
+    );
+
+    console.log(
+        "FIREBASE PR:",
+        user.pr
+    );
+
+    console.log(
         "FIREBASE LEVEL:",
-        user.level,
+        user.level
+    );
+
+    console.log(
+        "CALCULATED LEVEL:",
+        calculateLevel(pr)
+    );
+
+    console.log(
         "DISPLAY LEVEL:",
         level
     );
 
+    console.log(
+        "================================="
+    );
+
 
     /* =====================================================
-       ПОКАЗЫВАЕМ LEVEL
+       SHOW LEVEL
     ===================================================== */
 
     updateMiniProfileLevel(
@@ -3953,7 +4128,7 @@ async function openProfile(
 
 
     /* =====================================================
-       ГЛОБАЛЬНАЯ СТАТИСТИКА
+       GLOBAL STATS
     ===================================================== */
 
     const stats =
