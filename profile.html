@@ -1776,11 +1776,6 @@
         );
 
 
-    /*
-       Храним информацию,
-       является ли текущий пользователь админом.
-    */
-
     let currentUserIsAdmin =
         false;
 
@@ -1792,23 +1787,14 @@
     const LEVEL_THRESHOLDS = [
 
         1,
-
         20,
-
         50,
-
         100,
-
         150,
-
         250,
-
         400,
-
         600,
-
         800,
-
         1000
 
     ];
@@ -1820,6 +1806,19 @@
 
     function getLevelFromPR(pr) {
 
+        pr =
+            Number(pr);
+
+
+        if (
+            !Number.isFinite(pr) ||
+            pr < 1
+        ) {
+
+            return 1;
+
+        }
+
 
         let level = 1;
 
@@ -1829,7 +1828,6 @@
             i < LEVEL_THRESHOLDS.length;
             i++
         ) {
-
 
             if (
                 pr >=
@@ -1854,18 +1852,102 @@
 
 
     /* ==========================================
+       СИНХРОНИЗАЦИЯ LEVEL С PR
+       
+       ЭТО ГЛАВНОЕ ИСПРАВЛЕНИЕ БАГА
+    ========================================== */
+
+    async function syncUserLevel(
+        pr,
+        storedLevel
+    ) {
+
+        const calculatedLevel =
+            getLevelFromPR(pr);
+
+
+        const databaseLevel =
+            Number(storedLevel);
+
+
+        /*
+           Если level в Firebase отсутствует
+           или отличается от рассчитанного —
+           исправляем его.
+        */
+
+        if (
+            !Number.isFinite(databaseLevel) ||
+            databaseLevel !== calculatedLevel
+        ) {
+
+            try {
+
+                await fetch(
+                    dbUsersUrl +
+                    encodeURIComponent(
+                        currentUser
+                    ) +
+                    ".json",
+                    {
+
+                        method:
+                            "PATCH",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                        body:
+                            JSON.stringify({
+
+                                level:
+                                    calculatedLevel
+
+                            })
+
+                    }
+                );
+
+
+                console.log(
+                    "Level синхронизирован:",
+                    calculatedLevel
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Ошибка синхронизации Level:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        return calculatedLevel;
+
+    }
+
+
+    /* ==========================================
        ОБНОВЛЕНИЕ LEVEL НА ЭКРАНЕ
     ========================================== */
 
     function updateProfileLevel(pr) {
-
 
         pr =
             Number(pr);
 
 
         if (
-            isNaN(pr) ||
+            !Number.isFinite(pr) ||
             pr < 1
         ) {
 
@@ -1921,10 +2003,13 @@
             level;
 
 
+        /* ======================================
+           LEVEL 10
+        ====================================== */
+
         if (
             level >= 10
         ) {
-
 
             nextText.innerText =
                 "MAX LEVEL • 1000+ PR";
@@ -1947,6 +2032,10 @@
         }
 
 
+        /* ======================================
+           ОСТАЛЬНЫЕ LEVEL
+        ====================================== */
+
         const currentThreshold =
             LEVEL_THRESHOLDS[
                 level - 1
@@ -1960,7 +2049,8 @@
 
 
         const remaining =
-            nextThreshold - pr;
+            nextThreshold -
+            pr;
 
 
         nextText.innerText =
@@ -1998,45 +2088,39 @@
 
 
         progressBar.style.width =
-            safeProgress + "%";
+            safeProgress +
+            "%";
 
 
         const colors = [
 
             "#777783",
-
             "#ffffff",
-
             "#5aa9ff",
-
             "#48e0ff",
-
             "#a67cff",
-
             "#d16cff",
-
             "#ff5c8a",
-
             "#ff7a45",
-
             "#ffd84d"
 
         ];
 
 
-        progressBar.style.background =
+        const progressColor =
             colors[
                 level - 1
-            ] || "#a67cff";
+            ] ||
+            "#a67cff";
+
+
+        progressBar.style.background =
+            progressColor;
 
 
         progressBar.style.boxShadow =
             "0 0 12px " +
-            (
-                colors[
-                    level - 1
-                ] || "#a67cff"
-            );
+            progressColor;
 
     }
 
@@ -2046,11 +2130,6 @@
     ========================================== */
 
     function isLevelAdmin(data) {
-
-
-        /*
-           0m3gas всегда администратор.
-        */
 
         if (
             currentUser &&
@@ -2062,13 +2141,6 @@
 
         }
 
-
-        /*
-           Также разрешаем,
-           если в Firebase стоит:
-
-           admin: true
-        */
 
         if (
             data &&
@@ -2090,7 +2162,6 @@
     ========================================== */
 
     function updateAdminLevelButton(data) {
-
 
         const section =
             document.getElementById(
@@ -2132,13 +2203,10 @@
 
     if (!currentUser) {
 
-
         window.location.href =
             "auth.html";
 
-
     } else {
-
 
         document.getElementById(
             "welcome-text"
@@ -2159,9 +2227,7 @@
         playerName
     ) {
 
-
         try {
-
 
             const response =
                 await fetch(
@@ -2192,23 +2258,19 @@
 
             if (tournaments) {
 
-
                 Object.values(
                     tournaments
                 ).forEach(
                     tourney => {
 
-
                         if (
                             tourney.matches
                         ) {
-
 
                             Object.values(
                                 tourney.matches
                             ).forEach(
                                 match => {
-
 
                                     if (
                                         match &&
@@ -2219,7 +2281,6 @@
                                                 playerName
                                         )
                                     ) {
-
 
                                         let s1 =
                                             parseInt(
@@ -2237,7 +2298,6 @@
                                             !isNaN(s1) &&
                                             !isNaN(s2)
                                         ) {
-
 
                                             matchesPlayed++;
 
@@ -2257,7 +2317,6 @@
                                                 playerName
                                             ) {
 
-
                                                 totalKills +=
                                                     s1;
 
@@ -2265,9 +2324,7 @@
                                                 totalDeaths +=
                                                     s2;
 
-
                                             } else {
-
 
                                                 totalKills +=
                                                     s2;
@@ -2300,15 +2357,12 @@
                 totalDeaths === 0
             ) {
 
-
                 kd =
                     totalKills > 0
                         ? totalKills
                         : 0;
 
-
             } else {
-
 
                 kd =
                     totalKills /
@@ -2324,13 +2378,10 @@
                 matchesPlayed === 0
             ) {
 
-
                 winrate =
                     0;
 
-
             } else {
-
 
                 winrate =
                     (
@@ -2343,15 +2394,12 @@
 
             return {
 
-
                 kd:
                     kd.toFixed(2),
-
 
                 winrate:
                     winrate.toFixed(1) +
                     "%",
-
 
                 matches:
                     matchesPlayed
@@ -2361,7 +2409,6 @@
 
         } catch (error) {
 
-
             console.error(
                 "Ошибка загрузки статистики:",
                 error
@@ -2370,14 +2417,11 @@
 
             return {
 
-
                 kd:
                     "0.00",
 
-
                 winrate:
                     "0.0%",
-
 
                 matches:
                     0
@@ -2395,9 +2439,7 @@
 
     async function loadUserData() {
 
-
         try {
-
 
             const response =
                 await fetch(
@@ -2410,7 +2452,6 @@
 
 
             if (!response.ok) {
-
 
                 throw new Error(
                     "Ошибка HTTP: " +
@@ -2448,7 +2489,6 @@
                 data.steamCode
             ) {
 
-
                 steamElement.innerText =
                     data.steamCode;
 
@@ -2456,9 +2496,7 @@
                 steamElement.style.color =
                     "white";
 
-
             } else {
-
 
                 steamElement.innerText =
                     "Не указан";
@@ -2478,7 +2516,6 @@
                 data &&
                 data.avatar
             ) {
-
 
                 document.getElementById(
                     "profile-avatar"
@@ -2501,7 +2538,6 @@
                 data.pr !== undefined
             ) {
 
-
                 playerPR =
                     Number(
                         data.pr
@@ -2509,7 +2545,9 @@
 
 
                 if (
-                    isNaN(playerPR) ||
+                    !Number.isFinite(
+                        playerPR
+                    ) ||
                     playerPR < 1
                 ) {
 
@@ -2521,8 +2559,54 @@
             }
 
 
+            /*
+               Вычисляем настоящий Level
+               непосредственно из PR.
+            */
+
+            const calculatedLevel =
+                getLevelFromPR(
+                    playerPR
+                );
+
+
+            /*
+               Сохраняем правильный Level
+               в Firebase, если там старый.
+               
+               Например:
+
+               PR = 805
+               Firebase level = 8
+
+               станет:
+
+               PR = 805
+               Firebase level = 9
+            */
+
+            await syncUserLevel(
+                playerPR,
+                data
+                    ? data.level
+                    : undefined
+            );
+
+
+            /*
+               Обновляем интерфейс.
+            */
+
             updateProfileLevel(
                 playerPR
+            );
+
+
+            console.log(
+                "PR:",
+                playerPR,
+                "Calculated Level:",
+                calculatedLevel
             );
 
 
@@ -2555,7 +2639,6 @@
 
 
         } catch (error) {
-
 
             console.error(
                 "Ошибка загрузки профиля:",
@@ -2604,7 +2687,6 @@
         event
     ) {
 
-
         const file =
             event.target.files[0];
 
@@ -2621,7 +2703,6 @@
                 "image/"
             )
         ) {
-
 
             alert(
                 "Пожалуйста, выберите изображение."
@@ -2641,7 +2722,6 @@
             file.size >
             800 * 1024
         ) {
-
 
             alert(
                 "Файл слишком большой! " +
@@ -2665,7 +2745,6 @@
         reader.onload =
             async function(e) {
 
-
                 const base64Image =
                     e.target.result;
 
@@ -2678,7 +2757,6 @@
 
                 try {
 
-
                     const response =
                         await fetch(
                             dbUsersUrl +
@@ -2688,19 +2766,15 @@
                             ".json",
                             {
 
-
                                 method:
                                     "PATCH",
 
-
                                 headers: {
-
 
                                     "Content-Type":
                                         "application/json"
 
                                 },
-
 
                                 body:
                                     JSON.stringify({
@@ -2716,7 +2790,6 @@
 
                     if (!response.ok) {
 
-
                         throw new Error(
                             "Ошибка сохранения"
                         );
@@ -2730,7 +2803,6 @@
 
 
                 } catch (error) {
-
 
                     console.error(
                         "Ошибка сохранения аватарки:",
@@ -2749,7 +2821,6 @@
 
         reader.onerror =
             function() {
-
 
                 alert(
                     "Не удалось прочитать файл."
@@ -2770,7 +2841,6 @@
     ========================================== */
 
     function openModal() {
-
 
         const modal =
             document.getElementById(
@@ -2799,13 +2869,10 @@
                 "Ошибка загрузки"
         ) {
 
-
             input.value =
                 currentCode;
 
-
         } else {
-
 
             input.value =
                 "";
@@ -2820,12 +2887,9 @@
         setTimeout(
             function() {
 
-
                 input.focus();
 
-
                 input.select();
-
 
             },
             100
@@ -2839,7 +2903,6 @@
     ========================================== */
 
     function closeModal() {
-
 
         document.getElementById(
             "steamModal"
@@ -2857,12 +2920,10 @@
         event
     ) {
 
-
         if (
             event.target.id ===
             "steamModal"
         ) {
-
 
             closeModal();
 
@@ -2876,7 +2937,6 @@
     ========================================== */
 
     async function confirmSteamChange() {
-
 
         const input =
             document.getElementById(
@@ -2896,7 +2956,6 @@
 
         if (!newSteam) {
 
-
             alert(
                 "Поле не может быть пустым!"
             );
@@ -2913,7 +2972,6 @@
         if (
             newSteam.length < 3
         ) {
-
 
             alert(
                 "Steam ID слишком короткий."
@@ -2938,7 +2996,6 @@
 
         try {
 
-
             const response =
                 await fetch(
                     dbUsersUrl +
@@ -2948,19 +3005,15 @@
                     ".json",
                     {
 
-
                         method:
                             "PATCH",
 
-
                         headers: {
-
 
                             "Content-Type":
                                 "application/json"
 
                         },
-
 
                         body:
                             JSON.stringify({
@@ -2975,7 +3028,6 @@
 
 
             if (!response.ok) {
-
 
                 throw new Error(
                     "Ошибка HTTP: " +
@@ -3004,7 +3056,6 @@
 
         } catch (error) {
 
-
             console.error(
                 "Ошибка сохранения Steam ID:",
                 error
@@ -3016,7 +3067,6 @@
             );
 
         } finally {
-
 
             btn.innerText =
                 "Сохранить";
@@ -3036,11 +3086,9 @@
 
     function openLevelModal() {
 
-
         if (
             !currentUserIsAdmin
         ) {
-
 
             alert(
                 "У тебя нет доступа к управлению уровнем."
@@ -3077,7 +3125,6 @@
             currentLevel <= 10
         ) {
 
-
             input.value =
                 currentLevel;
 
@@ -3096,7 +3143,6 @@
 
     function closeLevelModal() {
 
-
         document.getElementById(
             "levelModal"
         ).style.display =
@@ -3113,12 +3159,10 @@
         event
     ) {
 
-
         if (
             event.target.id ===
             "levelModal"
         ) {
-
 
             closeLevelModal();
 
@@ -3133,15 +3177,9 @@
 
     async function confirmLevelChange() {
 
-
-        /*
-           Проверяем права.
-        */
-
         if (
             !currentUserIsAdmin
         ) {
-
 
             alert(
                 "У тебя нет доступа к этой функции."
@@ -3172,11 +3210,10 @@
 
 
         if (
-            isNaN(level) ||
+            !Number.isFinite(level) ||
             level < 1 ||
             level > 10
         ) {
-
 
             alert(
                 "Выбери уровень от 1 до 10."
@@ -3189,13 +3226,38 @@
 
 
         /*
-           Берём PR из существующей системы.
+           PR соответствует выбранному Level.
         */
 
         const newPR =
             LEVEL_THRESHOLDS[
                 level - 1
             ];
+
+
+        /*
+           Дополнительная проверка:
+           Level вычисляется из PR.
+        */
+
+        const calculatedLevel =
+            getLevelFromPR(
+                newPR
+            );
+
+
+        if (
+            calculatedLevel !== level
+        ) {
+
+            alert(
+                "Ошибка расчёта уровня."
+            );
+
+
+            return;
+
+        }
 
 
         button.innerText =
@@ -3208,7 +3270,6 @@
 
         try {
 
-
             const response =
                 await fetch(
                     dbUsersUrl +
@@ -3218,25 +3279,30 @@
                     ".json",
                     {
 
-
                         method:
                             "PATCH",
 
-
                         headers: {
-
 
                             "Content-Type":
                                 "application/json"
 
                         },
 
+                        /*
+                           ВАЖНО:
+                           Теперь сохраняем одновременно
+                           и PR, и LEVEL.
+                        */
 
                         body:
                             JSON.stringify({
 
                                 pr:
-                                    newPR
+                                    newPR,
+
+                                level:
+                                    calculatedLevel
 
                             })
 
@@ -3245,7 +3311,6 @@
 
 
             if (!response.ok) {
-
 
                 throw new Error(
                     "Ошибка HTTP: " +
@@ -3256,8 +3321,7 @@
 
 
             /*
-               Обновляем уровень
-               сразу на странице.
+               Обновляем интерфейс.
             */
 
             updateProfileLevel(
@@ -3271,7 +3335,7 @@
             alert(
                 "Уровень успешно установлен!\n\n" +
                 "Level " +
-                level +
+                calculatedLevel +
                 "\n" +
                 newPR +
                 " PR"
@@ -3279,7 +3343,6 @@
 
 
         } catch (error) {
-
 
             console.error(
                 "Ошибка сохранения уровня:",
@@ -3293,7 +3356,6 @@
 
 
         } finally {
-
 
             button.innerText =
                 "Сохранить";
@@ -3319,12 +3381,10 @@
             "keydown",
             function(event) {
 
-
                 if (
                     event.key ===
                     "Enter"
                 ) {
-
 
                     confirmSteamChange();
 
@@ -3335,7 +3395,6 @@
                     event.key ===
                     "Escape"
                 ) {
-
 
                     closeModal();
 
@@ -3357,12 +3416,10 @@
             "keydown",
             function(event) {
 
-
                 if (
                     event.key ===
                     "Enter"
                 ) {
-
 
                     confirmLevelChange();
 
@@ -3373,7 +3430,6 @@
                     event.key ===
                     "Escape"
                 ) {
-
 
                     closeLevelModal();
 
@@ -3388,7 +3444,6 @@
     ========================================== */
 
     function logout() {
-
 
         const confirmed =
             confirm(
