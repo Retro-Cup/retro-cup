@@ -2546,16 +2546,72 @@ function createMiniProfileLevel() {
    ОБНОВЛЕНИЕ LEVEL В МИНИ-ПРОФИЛЕ
    ========================================================= */
 
-/* =========================================================
-   ОБНОВЛЕНИЕ LEVEL В МИНИ-ПРОФИЛЕ
-   ========================================================= */
-
 function updateMiniProfileLevel(
     pr,
     savedLevel = null
 ) {
 
     createMiniProfileLevel();
+
+
+    /* =====================================================
+       УДАЛЯЕМ СТАРУЮ НАДПИСЬ LEVEL 10
+    ===================================================== */
+
+    const oldLevelName =
+        document.getElementById(
+            "prof-level-name"
+        );
+
+
+    if (oldLevelName) {
+
+        oldLevelName.remove();
+
+    }
+
+
+    /* =====================================================
+       УДАЛЯЕМ ЛЮБОЙ СТАРЫЙ ТЕКСТ
+       "Level 1", "Level 2", "Level 10" И Т.Д.
+    ===================================================== */
+
+    const levelWrapper =
+        document.getElementById(
+            "prof-level-wrapper"
+        );
+
+
+    if (levelWrapper) {
+
+        const textElements =
+            levelWrapper.querySelectorAll(
+                "div, span"
+            );
+
+
+        textElements.forEach(
+            element => {
+
+                const text =
+                    element.innerText
+                        ?.trim();
+
+
+                if (
+                    /^Level\s+\d+$/i.test(
+                        text
+                    )
+                ) {
+
+                    element.remove();
+
+                }
+
+            }
+        );
+
+    }
 
 
     /* =====================================================
@@ -2592,6 +2648,10 @@ function updateMiniProfileLevel(
     }
 
 
+    /* =====================================================
+       COLOR
+    ===================================================== */
+
     const color =
         getLevelColor(
             level
@@ -2599,7 +2659,7 @@ function updateMiniProfileLevel(
 
 
     /* =====================================================
-       ELEMENTS
+       LEVEL В КРУГУ
     ===================================================== */
 
     const levelText =
@@ -2607,22 +2667,6 @@ function updateMiniProfileLevel(
             "prof-level"
         );
 
-
-    const prText =
-        document.getElementById(
-            "prof-pr"
-        );
-
-
-    const circle =
-        document.getElementById(
-            "prof-level-circle"
-        );
-
-
-    /* =====================================================
-       LEVEL В КРУГУ
-    ===================================================== */
 
     if (levelText) {
 
@@ -2633,12 +2677,14 @@ function updateMiniProfileLevel(
 
 
     /* =====================================================
-       PR СПРАВА
-       
-       БОЛЬШЕ НИКАКОГО
-       "LEVEL 10"
-       ЗДЕСЬ НЕТ
+       PR
     ===================================================== */
+
+    const prText =
+        document.getElementById(
+            "prof-pr"
+        );
+
 
     if (prText) {
 
@@ -2666,8 +2712,14 @@ function updateMiniProfileLevel(
 
 
     /* =====================================================
-       КРУГ
+       КРУГ LEVEL
     ===================================================== */
+
+    const circle =
+        document.getElementById(
+            "prof-level-circle"
+        );
+
 
     if (circle) {
 
