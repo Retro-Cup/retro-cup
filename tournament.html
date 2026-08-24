@@ -2957,43 +2957,6 @@ async function getTeamPlayers(
    ПОЛУЧАЕМ PR
    ========================================================= */
 
-async function getUserPR(
-    playerName
-) {
-
-    const user =
-        await firebaseGet(
-            `users/${safeFirebaseKey(playerName)}`
-        );
-
-
-    if (
-        !user
-    ) {
-
-        return 1;
-    }
-
-
-    const pr =
-        Number(
-            user.pr
-        );
-
-
-    if (
-        !Number.isFinite(pr) ||
-        pr < 1
-    ) {
-
-        return 1;
-    }
-
-
-    return pr;
-}
-
-
 /* =========================================================
    НАЧИСЛЕНИЕ PR
    ========================================================= */
@@ -3014,7 +2977,7 @@ async function addPRToPlayer(
 
 
     /* =====================================================
-       ПОЛУЧАЕМ ПОЛЬЗОВАТЕЛЯ
+       ПОЛУЧАЕМ USER
     ===================================================== */
 
     const user =
@@ -3027,24 +2990,10 @@ async function addPRToPlayer(
        ТЕКУЩИЙ PR
     ===================================================== */
 
-    let currentPR;
-
-
-    if (
-        user
-    ) {
-
-        currentPR =
-            Number(
-                user.pr
-            );
-
-    } else {
-
-        currentPR =
-            1;
-
-    }
+    let currentPR =
+        Number(
+            user?.pr
+        );
 
 
     if (
@@ -3052,8 +3001,7 @@ async function addPRToPlayer(
         currentPR < 1
     ) {
 
-        currentPR =
-            1;
+        currentPR = 1;
 
     }
 
@@ -3069,56 +3017,68 @@ async function addPRToPlayer(
 
     /* =====================================================
        LEVEL
-       
-       Если level уже существует в Firebase —
-       сохраняем именно его.
-
-       Если level отсутствует —
-       рассчитываем автоматически по PR.
     ===================================================== */
 
-    let currentLevel =
-        Number(
-            user?.level
-        );
+    let newLevel;
 
+
+    /*
+       Если администратор вручную установил уровень,
+       сохраняем его.
+    */
 
     if (
-        !Number.isFinite(currentLevel) ||
-        currentLevel < 1
+        user?.levelManual === true
     ) {
 
-        currentLevel =
+        let manualLevel =
+            Number(
+                user.level
+            );
+
+
+        if (
+            !Number.isFinite(manualLevel) ||
+            manualLevel < 1
+        ) {
+
+            manualLevel =
+                calculateLevel(
+                    newPR
+                );
+
+        }
+
+
+        newLevel =
+            Math.max(
+                1,
+                Math.floor(
+                    manualLevel
+                )
+            );
+
+    }
+
+
+    /*
+       Если уровень обычный —
+       автоматически пересчитываем его
+       по новому PR.
+    */
+
+    else {
+
+        newLevel =
             calculateLevel(
                 newPR
             );
 
-    } else {
-
-        currentLevel =
-            Math.floor(
-                currentLevel
-            );
-
     }
 
 
     /* =====================================================
-       ЗАЩИТА LEVEL
-    ===================================================== */
-
-    if (
-        currentLevel < 1
-    ) {
-
-        currentLevel =
-            1;
-
-    }
-
-
-    /* =====================================================
-       СОХРАНЯЕМ PR + LEVEL
+       СОХРАНЯЕМ
     ===================================================== */
 
     await firebasePatch(
@@ -3129,7 +3089,7 @@ async function addPRToPlayer(
                 newPR,
 
             level:
-                currentLevel
+                newLevel
 
         }
     );
@@ -3158,19 +3118,23 @@ async function addPRToPlayer(
 
 
     console.log(
-        "Firebase Level:",
+        "Старый Level:",
         user?.level
     );
 
 
     console.log(
-        "Сохранённый Level:",
-        currentLevel
+        "Level Manual:",
+        user?.levelManual
+    );
+
+
+    console.log(
+        "Новый Level:",
+        newLevel
     );
 
 }
-
-
 /* =========================================================
    ПРОВЕРКА НАГРАДЫ
    ========================================================= */
