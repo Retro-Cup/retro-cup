@@ -1509,37 +1509,141 @@ let currentLang =
     localStorage.getItem("siteLang") || "RU";
 
 
-/* СЛОВАРЬ ДЛЯ ПЕРЕВОДА (НОВОЕ) */
+/* =========================================================
+   PR SYSTEM
+   ========================================================= */
+
+/*
+    Базовая награда за первую победу:
+
+    1v1 = 10 PR
+    2v2 = 20 PR
+    5v5 = 25 PR
+
+    Коэффициент:
+
+    1-я победа = x1.0
+    2-я победа = x1.5
+    3-я победа = x2.0
+    4-я победа = x2.5
+    и т.д.
+
+    Формула:
+
+    coefficient = 1 + (winsBefore * 0.5)
+*/
+
+const PR_REWARD_BASE = {
+    "1v1": 10,
+    "2v2": 20,
+    "5v5": 25
+};
+
+
+/* =========================================================
+   СЛОВАРЬ
+   ========================================================= */
+
 const dict = {
     RU: {
         back: "← Назад",
-        org: "Организатор", format: "Формат", system: "Система", slots: "Слоты", prize: "Призовые",
-        desc: "Описание и регламент", members: "Участники",
-        tabLb: "🏆 Итоги", tabBr: "🌳 Сетка", lbTitle: "Итоговая таблица", brTitle: "Турнирная сетка",
-        btnJoin: "Участвовать", btnLeave: "✖ Отменить участие", btnRun: "Турнир идёт", btnFin: "Турнир завершён",
-        statWait: "Ожидание игроков", statRun: "🔴 Турнир идёт", statFin: "🏆 Завершён",
-        joinOpen: "Регистрация открыта", joinDone: "Вы зарегистрированы", joinClosed: "Регистрация закрыта",
-        chatPl: "Сообщение или ссылка...", adminPanel: "Панель судьи", saveBtn: "Сохранить результат", close: "Закрыть",
-        profTitle: "Профиль игрока", pSteam: "Steam ID:", pKd: "K/D Рейтинг", pWin: "Винрейт", pMat: "Матчи",
+        org: "Организатор",
+        format: "Формат",
+        system: "Система",
+        slots: "Слоты",
+        prize: "Призовые",
+        desc: "Описание и регламент",
+        members: "Участники",
+
+        tabLb: "🏆 Итоги",
+        tabBr: "🌳 Сетка",
+
+        lbTitle: "Итоговая таблица",
+        brTitle: "Турнирная сетка",
+
+        btnJoin: "Участвовать",
+        btnLeave: "✖ Отменить участие",
+        btnRun: "Турнир идёт",
+        btnFin: "Турнир завершён",
+
+        statWait: "Ожидание игроков",
+        statRun: "🔴 Турнир идёт",
+        statFin: "🏆 Завершён",
+
+        joinOpen: "Регистрация открыта",
+        joinDone: "Вы зарегистрированы",
+        joinClosed: "Регистрация закрыта",
+
+        chatPl: "Сообщение или ссылка...",
+
+        adminPanel: "Панель судьи",
+        saveBtn: "Сохранить результат",
+        close: "Закрыть",
+
+        profTitle: "Профиль игрока",
+        pSteam: "Steam ID:",
+        pKd: "K/D Рейтинг",
+        pWin: "Винрейт",
+        pMat: "Матчи",
+
         notSet: "Не указан"
     },
+
     EN: {
         back: "← Back",
-        org: "Organizer", format: "Format", system: "System", slots: "Slots", prize: "Prize",
-        desc: "Rules & Description", members: "Participants",
-        tabLb: "🏆 Leaderboard", tabBr: "🌳 Bracket", lbTitle: "Final Standings", brTitle: "Tournament Bracket",
-        btnJoin: "Join", btnLeave: "✖ Leave", btnRun: "Running", btnFin: "Finished",
-        statWait: "Waiting for players", statRun: "🔴 Live", statFin: "🏆 Finished",
-        joinOpen: "Registration Open", joinDone: "Registered", joinClosed: "Registration Closed",
-        chatPl: "Message or link...", adminPanel: "Admin Panel", saveBtn: "Save Result", close: "Close",
-        profTitle: "Player Profile", pSteam: "Steam ID:", pKd: "K/D Ratio", pWin: "Winrate", pMat: "Matches",
+        org: "Organizer",
+        format: "Format",
+        system: "System",
+        slots: "Slots",
+        prize: "Prize",
+
+        desc: "Rules & Description",
+        members: "Participants",
+
+        tabLb: "🏆 Leaderboard",
+        tabBr: "🌳 Bracket",
+
+        lbTitle: "Final Standings",
+        brTitle: "Tournament Bracket",
+
+        btnJoin: "Join",
+        btnLeave: "✖ Leave",
+        btnRun: "Running",
+        btnFin: "Finished",
+
+        statWait: "Waiting for players",
+        statRun: "🔴 Live",
+        statFin: "🏆 Finished",
+
+        joinOpen: "Registration Open",
+        joinDone: "Registered",
+        joinClosed: "Registration Closed",
+
+        chatPl: "Message or link...",
+
+        adminPanel: "Admin Panel",
+        saveBtn: "Save Result",
+        close: "Close",
+
+        profTitle: "Player Profile",
+        pSteam: "Steam ID:",
+        pKd: "K/D Ratio",
+        pWin: "Winrate",
+        pMat: "Matches",
+
         notSet: "Not set"
     }
 };
 
-/* КЕШ ЮЗЕРОВ (ТЕПЕРЬ ХРАНИМ И АВАТАР И STEAM CODE) */
+
+/* =========================================================
+   USERS CACHE
+   ========================================================= */
+
 let usersCache = {};
-const defaultAvatar = "https://via.placeholder.com/40/141419/a67cff?text=TU";
+
+const defaultAvatar =
+    "https://via.placeholder.com/40/141419/a67cff?text=TU";
 
 
 /* =========================================================
@@ -1556,7 +1660,11 @@ if (!tourneyId || !currentUser) {
    ========================================================= */
 
 function escapeHTML(value) {
-    if (value === null || value === undefined) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
         return "";
     }
 
@@ -1570,14 +1678,24 @@ function escapeHTML(value) {
 
 
 function safeFirebaseKey(value) {
-    return encodeURIComponent(String(value));
+
+    return encodeURIComponent(
+        String(value)
+    );
 }
 
 
-function showToast(message, type = "info") {
+function showToast(
+    message,
+    type = "info"
+) {
 
     const container =
-        document.getElementById("toast-container");
+        document.getElementById(
+            "toast-container"
+        );
+
+    if (!container) return;
 
     const toast =
         document.createElement("div");
@@ -1585,13 +1703,20 @@ function showToast(message, type = "info") {
     toast.className =
         `toast ${type}`;
 
-    toast.textContent = message;
+    toast.textContent =
+        message;
 
-    container.appendChild(toast);
+    container.appendChild(
+        toast
+    );
 
     setTimeout(() => {
-        toast.style.opacity = "0";
-        toast.style.transform = "translateY(5px)";
+
+        toast.style.opacity =
+            "0";
+
+        toast.style.transform =
+            "translateY(5px)";
 
         setTimeout(() => {
             toast.remove();
@@ -1601,57 +1726,119 @@ function showToast(message, type = "info") {
 }
 
 
-function setLoadingButton(button, loading) {
+function setLoadingButton(
+    button,
+    loading
+) {
 
     if (!button) return;
 
     if (loading) {
-        button.dataset.oldText = button.innerText;
-        button.innerText = "Загрузка...";
-        button.disabled = true;
-    } else {
-        button.innerText =
-            button.dataset.oldText || button.innerText;
 
-        button.disabled = false;
+        button.dataset.oldText =
+            button.innerText;
+
+        button.innerText =
+            "Загрузка...";
+
+        button.disabled =
+            true;
+
+    } else {
+
+        button.innerText =
+            button.dataset.oldText ||
+            button.innerText;
+
+        button.disabled =
+            false;
     }
 }
+
 
 /* =========================================================
    USERS PRELOADER
    ========================================================= */
 
 async function preloadUsers(data) {
+
     let namesToFetch = [];
 
-    if (data.format === "1v1" || data.system === "Спидран") {
-        if (data.players) namesToFetch = Object.keys(data.players);
-    } 
-    
+    if (
+        data.format === "1v1" ||
+        data.system === "Спидран"
+    ) {
+
+        if (data.players) {
+            namesToFetch =
+                Object.keys(
+                    data.players
+                );
+        }
+    }
+
     if (data.teams) {
-        Object.values(data.teams).forEach(team => {
+
+        Object.values(
+            data.teams
+        ).forEach(team => {
+
             if (team.players) {
-                namesToFetch.push(...Object.keys(team.players));
+
+                namesToFetch.push(
+                    ...Object.keys(
+                        team.players
+                    )
+                );
             }
         });
     }
 
-    namesToFetch = [...new Set(namesToFetch)];
+    namesToFetch =
+        [...new Set(namesToFetch)];
 
-    await Promise.all(namesToFetch.map(async (name) => {
-        // Чтобы SteamID обновлялся динамически без перезагрузки всей страницы,
-        // мы все равно скачиваем его заново (Firebase делает это за миллисекунды)
-        try {
-            const res = await fetch(`https://retro-cup-51db5-default-rtdb.firebaseio.com/users/${encodeURIComponent(name)}.json`);
-            const userData = await res.json();
-            
-            usersCache[name] = userData || { avatar: defaultAvatar, steamCode: null };
-            
-            if (!usersCache[name].avatar) usersCache[name].avatar = defaultAvatar;
-        } catch(e) {
-            usersCache[name] = { avatar: defaultAvatar, steamCode: null };
-        }
-    }));
+    await Promise.all(
+        namesToFetch.map(
+            async name => {
+
+                try {
+
+                    const res =
+                        await fetch(
+                            `${dbBase}users/${encodeURIComponent(name)}.json`
+                        );
+
+                    const userData =
+                        await res.json();
+
+                    usersCache[name] =
+                        userData || {
+                            avatar:
+                                defaultAvatar,
+                            steamCode:
+                                null
+                        };
+
+                    if (
+                        !usersCache[name].avatar
+                    ) {
+
+                        usersCache[name].avatar =
+                            defaultAvatar;
+                    }
+
+                } catch (e) {
+
+                    usersCache[name] = {
+                        avatar:
+                            defaultAvatar,
+                        steamCode:
+                            null
+                    };
+                }
+            }
+        )
+    );
 }
 
 
@@ -1659,21 +1846,30 @@ async function preloadUsers(data) {
    FIREBASE API
    ========================================================= */
 
-async function firebaseRequest(path, options = {}) {
+async function firebaseRequest(
+    path,
+    options = {}
+) {
 
     const response =
         await fetch(
-            dbBase + path + ".json",
+            dbBase +
+            path +
+            ".json",
             {
                 ...options,
+
                 headers: {
-                    "Content-Type": "application/json",
+                    "Content-Type":
+                        "application/json",
+
                     ...(options.headers || {})
                 }
             }
         );
 
     if (!response.ok) {
+
         throw new Error(
             `Firebase error: ${response.status}`
         );
@@ -1683,40 +1879,54 @@ async function firebaseRequest(path, options = {}) {
 }
 
 
-async function firebaseGet(path) {
+async function firebaseGet(
+    path
+) {
 
     const response =
-        await firebaseRequest(path);
+        await firebaseRequest(
+            path
+        );
 
     return await response.json();
 }
 
 
-async function firebasePut(path, data) {
+async function firebasePut(
+    path,
+    data
+) {
 
     return await firebaseRequest(
         path,
         {
             method: "PUT",
-            body: JSON.stringify(data)
+            body:
+                JSON.stringify(data)
         }
     );
 }
 
 
-async function firebasePatch(path, data) {
+async function firebasePatch(
+    path,
+    data
+) {
 
     return await firebaseRequest(
         path,
         {
             method: "PATCH",
-            body: JSON.stringify(data)
+            body:
+                JSON.stringify(data)
         }
     );
 }
 
 
-async function firebaseDelete(path) {
+async function firebaseDelete(
+    path
+) {
 
     return await firebaseRequest(
         path,
@@ -1728,42 +1938,594 @@ async function firebaseDelete(path) {
 
 
 /* =========================================================
-   LANGUAGE (ОБНОВЛЕНО ДЛЯ ПОЛНОГО ПЕРЕВОДА)
+   PR HELPERS
+   ========================================================= */
+
+function getBasePR() {
+
+    if (
+        !PR_REWARD_BASE[
+            tournamentFormat
+        ]
+    ) {
+        return 0;
+    }
+
+    return PR_REWARD_BASE[
+        tournamentFormat
+    ];
+}
+
+
+function getPRCoefficient(
+    winsBefore
+) {
+
+    return 1 +
+        (winsBefore * 0.5);
+}
+
+
+function calculatePRReward(
+    winsBefore
+) {
+
+    const base =
+        getBasePR();
+
+    const coefficient =
+        getPRCoefficient(
+            winsBefore
+        );
+
+    return base * coefficient;
+}
+
+
+/*
+    Получаем количество побед игрока
+    ДО текущего матча.
+
+    Учитываются только реальные
+    сохранённые результаты.
+*/
+async function getTournamentWins(
+    playerName,
+    currentMatchId
+) {
+
+    const matches =
+        await firebaseGet(
+            `tournaments/${safeFirebaseKey(tourneyId)}/matches`
+        );
+
+    if (!matches) {
+        return 0;
+    }
+
+    let wins = 0;
+
+    Object.keys(
+        matches
+    ).forEach(matchId => {
+
+        if (
+            matchId ===
+            currentMatchId
+        ) {
+            return;
+        }
+
+        const match =
+            matches[matchId];
+
+        if (!match) {
+            return;
+        }
+
+        if (
+            match.winner ===
+            playerName
+        ) {
+            wins++;
+        }
+    });
+
+    return wins;
+}
+
+
+/*
+    Для команды считаем победы команды
+    в текущем турнире.
+*/
+async function getTournamentTeamWins(
+    teamName,
+    currentMatchId
+) {
+
+    return await getTournamentWins(
+        teamName,
+        currentMatchId
+    );
+}
+
+
+/*
+    Получаем игроков команды.
+*/
+async function getTeamPlayers(
+    teamName
+) {
+
+    const team =
+        await firebaseGet(
+            `tournaments/${safeFirebaseKey(tourneyId)}/teams/${safeFirebaseKey(teamName)}`
+        );
+
+    if (
+        !team ||
+        !team.players
+    ) {
+        return [];
+    }
+
+    return Object.keys(
+        team.players
+    );
+}
+
+
+/*
+    Получаем текущий PR игрока.
+*/
+async function getUserPR(
+    playerName
+) {
+
+    const user =
+        await firebaseGet(
+            `users/${safeFirebaseKey(playerName)}`
+        );
+
+    if (
+        !user ||
+        typeof user.pr !== "number"
+    ) {
+        return 0;
+    }
+
+    return user.pr;
+}
+
+
+/*
+    Формула уровня.
+
+    Пока используется простая
+    система:
+
+    0 PR     = LVL 1
+    100 PR   = LVL 2
+    250 PR   = LVL 3
+    450 PR   = LVL 4
+    ...
+
+    Формула:
+    level = floor(sqrt(PR / 50)) + 1
+
+    Позже можем заменить формулу,
+    когда сделаем интерфейс профиля.
+*/
+function calculateLevel(
+    pr
+) {
+
+    const numericPR =
+        Math.max(
+            0,
+            Number(pr) || 0
+        );
+
+    return Math.max(
+        1,
+        Math.floor(
+            Math.sqrt(
+                numericPR / 50
+            )
+        ) + 1
+    );
+}
+
+
+/*
+    Начисление PR игроку.
+*/
+async function addPRToPlayer(
+    playerName,
+    amount
+) {
+
+    if (
+        !playerName ||
+        !Number.isFinite(amount) ||
+        amount <= 0
+    ) {
+        return;
+    }
+
+    const currentPR =
+        await getUserPR(
+            playerName
+        );
+
+    const newPR =
+        currentPR + amount;
+
+    const newLevel =
+        calculateLevel(
+            newPR
+        );
+
+    await firebasePatch(
+        `users/${safeFirebaseKey(playerName)}`,
+        {
+            pr: newPR,
+            level: newLevel
+        }
+    );
+}
+
+
+/*
+    Проверяем, была ли уже выдана
+    награда за конкретный матч.
+*/
+async function isMatchRewarded(
+    matchId
+) {
+
+    const reward =
+        await firebaseGet(
+            `tournaments/${safeFirebaseKey(tourneyId)}/rewards/${safeFirebaseKey(matchId)}`
+        );
+
+    return !!reward;
+}
+
+
+/*
+    Главная функция выдачи PR.
+
+    ВАЖНО:
+
+    Она вызывается только после
+    сохранения настоящего результата.
+
+    Поэтому AUTO/byes награду не получают.
+*/
+async function awardMatchPR(
+    matchId,
+    p1,
+    p2,
+    winner
+) {
+
+    /*
+        Защита от повторной награды.
+    */
+    const alreadyRewarded =
+        await isMatchRewarded(
+            matchId
+        );
+
+    if (alreadyRewarded) {
+
+        console.log(
+            "PR уже выдавался за матч:",
+            matchId
+        );
+
+        return;
+    }
+
+
+    /*
+        Не выдаём PR для неизвестного
+        формата.
+    */
+    const basePR =
+        getBasePR();
+
+    if (basePR <= 0) {
+        return;
+    }
+
+
+    /*
+        Если это 1v1 —
+        winner является ником игрока.
+    */
+    if (
+        tournamentFormat ===
+        "1v1"
+    ) {
+
+        const winsBefore =
+            await getTournamentWins(
+                winner,
+                matchId
+            );
+
+        const coefficient =
+            getPRCoefficient(
+                winsBefore
+            );
+
+        const reward =
+            basePR *
+            coefficient;
+
+        await addPRToPlayer(
+            winner,
+            reward
+        );
+
+
+        /*
+            Сохраняем информацию,
+            что этот матч уже награждён.
+        */
+        await firebasePut(
+            `tournaments/${safeFirebaseKey(tourneyId)}/rewards/${safeFirebaseKey(matchId)}`,
+            {
+                winner,
+                format:
+                    tournamentFormat,
+                basePR,
+                winsBefore,
+                coefficient,
+                reward,
+                players:
+                    [winner],
+                time:
+                    new Date().toISOString()
+            }
+        );
+
+
+        console.log(
+            `PR: ${winner} получил ${reward} PR`
+        );
+
+        return;
+    }
+
+
+    /*
+        2v2 / 5v5
+
+        winner здесь является
+        названием команды.
+    */
+    if (
+        tournamentFormat === "2v2" ||
+        tournamentFormat === "5v5"
+    ) {
+
+        const teamPlayers =
+            await getTeamPlayers(
+                winner
+            );
+
+        if (
+            !teamPlayers.length
+        ) {
+
+            console.warn(
+                "Не удалось найти игроков команды:",
+                winner
+            );
+
+            return;
+        }
+
+
+        const winsBefore =
+            await getTournamentTeamWins(
+                winner,
+                matchId
+            );
+
+
+        const coefficient =
+            getPRCoefficient(
+                winsBefore
+            );
+
+
+        const rewardPerPlayer =
+            basePR *
+            coefficient;
+
+
+        /*
+            Выдаём PR каждому игроку
+            команды.
+        */
+        for (
+            const player
+            of teamPlayers
+        ) {
+
+            await addPRToPlayer(
+                player,
+                rewardPerPlayer
+            );
+        }
+
+
+        /*
+            Сохраняем reward только
+            после успешного начисления.
+        */
+        await firebasePut(
+            `tournaments/${safeFirebaseKey(tourneyId)}/rewards/${safeFirebaseKey(matchId)}`,
+            {
+                winner,
+                team:
+                    winner,
+
+                format:
+                    tournamentFormat,
+
+                basePR,
+
+                winsBefore,
+
+                coefficient,
+
+                rewardPerPlayer,
+
+                players:
+                    teamPlayers,
+
+                time:
+                    new Date().toISOString()
+            }
+        );
+
+
+        console.log(
+            `PR: команда ${winner} получила ${rewardPerPlayer} PR каждому`
+        );
+    }
+}
+
+
+/* =========================================================
+   LANGUAGE
    ========================================================= */
 
 function applyTranslations() {
-    const l = dict[currentLang];
-    
-    document.getElementById("nav-back").innerText = l.back;
-    document.getElementById("lbl-org").innerText = l.org;
-    document.getElementById("lbl-format").innerText = l.format;
-    document.getElementById("lbl-system").innerText = l.system;
-    document.getElementById("lbl-slots").innerText = l.slots;
-    document.getElementById("lbl-prize").innerText = l.prize;
-    document.getElementById("lbl-desc").innerText = l.desc;
-    document.getElementById("lbl-members").innerText = l.members;
-    
-    document.getElementById("tab-btn-leaderboard").innerText = l.tabLb;
-    document.getElementById("tab-btn-bracket").innerText = l.tabBr;
-    document.getElementById("lbl-tab-lb").innerText = l.lbTitle;
-    document.getElementById("lbl-tab-br").innerText = l.brTitle;
-    
-    document.getElementById("chat-input").placeholder = l.chatPl;
-    document.getElementById("lbl-admin-panel").innerText = l.adminPanel;
-    document.getElementById("btn-save").innerText = l.saveBtn;
-    document.getElementById("btn-close").innerText = l.close;
 
-    // Перевод профиля
-    document.getElementById("prof-header").innerText = l.profTitle;
-    document.getElementById("prof-steam-lbl").innerText = l.pSteam;
-    document.getElementById("prof-lbl-kd").innerText = l.pKd;
-    document.getElementById("prof-lbl-win").innerText = l.pWin;
-    document.getElementById("prof-lbl-matches").innerText = l.pMat;
-    document.getElementById("btn-prof-close").innerText = l.close;
+    const l =
+        dict[currentLang];
+
+    document.getElementById(
+        "nav-back"
+    ).innerText =
+        l.back;
+
+    document.getElementById(
+        "lbl-org"
+    ).innerText =
+        l.org;
+
+    document.getElementById(
+        "lbl-format"
+    ).innerText =
+        l.format;
+
+    document.getElementById(
+        "lbl-system"
+    ).innerText =
+        l.system;
+
+    document.getElementById(
+        "lbl-slots"
+    ).innerText =
+        l.slots;
+
+    document.getElementById(
+        "lbl-prize"
+    ).innerText =
+        l.prize;
+
+    document.getElementById(
+        "lbl-desc"
+    ).innerText =
+        l.desc;
+
+    document.getElementById(
+        "lbl-members"
+    ).innerText =
+        l.members;
+
+    document.getElementById(
+        "tab-btn-leaderboard"
+    ).innerText =
+        l.tabLb;
+
+    document.getElementById(
+        "tab-btn-bracket"
+    ).innerText =
+        l.tabBr;
+
+    document.getElementById(
+        "lbl-tab-lb"
+    ).innerText =
+        l.lbTitle;
+
+    document.getElementById(
+        "lbl-tab-br"
+    ).innerText =
+        l.brTitle;
+
+    document.getElementById(
+        "chat-input"
+    ).placeholder =
+        l.chatPl;
+
+    document.getElementById(
+        "lbl-admin-panel"
+    ).innerText =
+        l.adminPanel;
+
+    document.getElementById(
+        "btn-save"
+    ).innerText =
+        l.saveBtn;
+
+    document.getElementById(
+        "btn-close"
+    ).innerText =
+        l.close;
+
+    document.getElementById(
+        "prof-header"
+    ).innerText =
+        l.profTitle;
+
+    document.getElementById(
+        "prof-steam-lbl"
+    ).innerText =
+        l.pSteam;
+
+    document.getElementById(
+        "prof-lbl-kd"
+    ).innerText =
+        l.pKd;
+
+    document.getElementById(
+        "prof-lbl-win"
+    ).innerText =
+        l.pWin;
+
+    document.getElementById(
+        "prof-lbl-matches"
+    ).innerText =
+        l.pMat;
+
+    document.getElementById(
+        "btn-prof-close"
+    ).innerText =
+        l.close;
 
     updateTournamentStatus();
     updateJoinButton();
 }
+
 
 function toggleLanguage() {
 
@@ -1779,136 +2541,418 @@ function toggleLanguage() {
 
     document.getElementById(
         "lang-toggle"
-    ).innerText = currentLang;
+    ).innerText =
+        currentLang;
 
     applyTranslations();
-    loadTournamentData(true);
+
+    loadTournamentData(
+        true
+    );
 }
 
 
 /* =========================================================
-   GLOBAL STATS (ГЛОБАЛЬНАЯ СТАТИСТИКА СО ВСЕХ ТУРНИРОВ)
+   GLOBAL STATS
    ========================================================= */
 
 let allTournamentsCache = null;
 let lastTournamentsFetch = 0;
 
-async function getGlobalStats(playerName) {
-    const now = Date.now();
-    
-    // Кэшируем все турниры на 15 секунд, чтобы не перегружать базу запросами
-    // При сохранении нового матча (saveMatchScore) мы будем сбрасывать этот кэш
-    if (!allTournamentsCache || now - lastTournamentsFetch > 15000) {
+
+async function getGlobalStats(
+    playerName
+) {
+
+    const now =
+        Date.now();
+
+    if (
+        !allTournamentsCache ||
+        now -
+            lastTournamentsFetch >
+            15000
+    ) {
+
         try {
-            const res = await firebaseGet("tournaments");
-            allTournamentsCache = res;
-            lastTournamentsFetch = now;
+
+            const res =
+                await firebaseGet(
+                    "tournaments"
+                );
+
+            allTournamentsCache =
+                res;
+
+            lastTournamentsFetch =
+                now;
+
         } catch (e) {
-            console.error("Ошибка загрузки всех турниров", e);
-            return { kd: "0.00", winrate: "0.0%", matches: 0 };
+
+            console.error(
+                "Ошибка загрузки всех турниров",
+                e
+            );
+
+            return {
+                kd: "0.00",
+                winrate: "0.0%",
+                matches: 0
+            };
         }
     }
 
+
     let totalKills = 0;
     let totalDeaths = 0;
+
     let matchesPlayed = 0;
     let matchesWon = 0;
 
-    if (allTournamentsCache) {
-        Object.values(allTournamentsCache).forEach(tourney => {
-            if (tourney.matches) {
-                Object.values(tourney.matches).forEach(match => {
-                    if (match && (match.p1 === playerName || match.p2 === playerName)) {
-                        
-                        // Парсим счёт, чтобы убедиться, что матч реально был сыгран (не тех. победа без очков)
-                        let s1 = parseInt(match.s1);
-                        let s2 = parseInt(match.s2);
 
-                        if (!isNaN(s1) && !isNaN(s2)) {
-                            matchesPlayed++;
-                            
-                            if (match.winner === playerName) {
-                                matchesWon++;
-                            }
+    if (
+        allTournamentsCache
+    ) {
 
-                            if (match.p1 === playerName) {
-                                totalKills += s1;
-                                totalDeaths += s2;
-                            } else {
-                                totalKills += s2;
-                                totalDeaths += s1;
+        Object.values(
+            allTournamentsCache
+        ).forEach(
+            tourney => {
+
+                if (
+                    tourney.matches
+                ) {
+
+                    Object.values(
+                        tourney.matches
+                    ).forEach(
+                        match => {
+
+                            if (
+                                match &&
+                                (
+                                    match.p1 ===
+                                        playerName ||
+                                    match.p2 ===
+                                        playerName
+                                )
+                            ) {
+
+                                const s1 =
+                                    parseInt(
+                                        match.s1
+                                    );
+
+                                const s2 =
+                                    parseInt(
+                                        match.s2
+                                    );
+
+
+                                if (
+                                    !isNaN(s1) &&
+                                    !isNaN(s2)
+                                ) {
+
+                                    matchesPlayed++;
+
+
+                                    if (
+                                        match.winner ===
+                                        playerName
+                                    ) {
+
+                                        matchesWon++;
+                                    }
+
+
+                                    if (
+                                        match.p1 ===
+                                        playerName
+                                    ) {
+
+                                        totalKills +=
+                                            s1;
+
+                                        totalDeaths +=
+                                            s2;
+
+                                    } else {
+
+                                        totalKills +=
+                                            s2;
+
+                                        totalDeaths +=
+                                            s1;
+                                    }
+                                }
                             }
                         }
-                    }
-                });
+                    );
+                }
             }
-        });
+        );
     }
 
-    let kd = totalDeaths === 0 ? (totalKills > 0 ? totalKills : 0) : (totalKills / totalDeaths);
-    let winrate = matchesPlayed === 0 ? 0 : (matchesWon / matchesPlayed) * 100;
+
+    const kd =
+        totalDeaths === 0
+            ? (
+                totalKills > 0
+                    ? totalKills
+                    : 0
+            )
+            : (
+                totalKills /
+                totalDeaths
+            );
+
+
+    const winrate =
+        matchesPlayed === 0
+            ? 0
+            : (
+                matchesWon /
+                matchesPlayed
+            ) *
+            100;
+
 
     return {
-        kd: kd.toFixed(2),
-        winrate: winrate.toFixed(1) + "%",
-        matches: matchesPlayed
+        kd:
+            kd.toFixed(2),
+
+        winrate:
+            winrate.toFixed(1) +
+            "%",
+
+        matches:
+            matchesPlayed
     };
 }
 
 
 /* =========================================================
-   PROFILE MODAL LOGIC (ТЕПЕРЬ С ГЛОБАЛЬНОЙ СТАТИСТИКОЙ)
+   PROFILE MODAL
    ========================================================= */
 
-async function openProfile(playerName) {
-    const l = dict[currentLang];
+async function openProfile(
+    playerName
+) {
 
-    // Сначала ставим загрузку, пока статистика считается
-    document.getElementById("prof-kd").innerText = "...";
-    document.getElementById("prof-winrate").innerText = "...";
-    document.getElementById("prof-matches").innerText = "...";
-    document.getElementById("prof-steam").innerText = "⏳...";
+    const l =
+        dict[currentLang];
 
-    // Показываем окно сразу, чтобы пользователь видел, что что-то происходит
-    document.getElementById("profileModal").style.display = "flex";
 
-    // Прямо сейчас скачиваем свежие данные профиля, чтобы SteamID был актуален на 100%
+    document.getElementById(
+        "prof-kd"
+    ).innerText =
+        "...";
+
+    document.getElementById(
+        "prof-winrate"
+    ).innerText =
+        "...";
+
+    document.getElementById(
+        "prof-matches"
+    ).innerText =
+        "...";
+
+    document.getElementById(
+        "prof-steam"
+    ).innerText =
+        "⏳...";
+
+
+    document.getElementById(
+        "profileModal"
+    ).style.display =
+        "flex";
+
+
     let user;
+
+
     try {
-        const res = await fetch(`https://retro-cup-51db5-default-rtdb.firebaseio.com/users/${encodeURIComponent(playerName)}.json`);
-        user = await res.json();
-        if (!user) user = { avatar: defaultAvatar, steamCode: null };
+
+        const res =
+            await fetch(
+                `${dbBase}users/${encodeURIComponent(playerName)}.json`
+            );
+
+        user =
+            await res.json();
+
+        if (!user) {
+
+            user = {
+                avatar:
+                    defaultAvatar,
+
+                steamCode:
+                    null,
+
+                pr:
+                    0,
+
+                level:
+                    1
+            };
+        }
+
     } catch (e) {
-        user = { avatar: defaultAvatar, steamCode: null };
+
+        user = {
+            avatar:
+                defaultAvatar,
+
+            steamCode:
+                null,
+
+            pr:
+                0,
+
+            level:
+                1
+        };
     }
 
-    document.getElementById("prof-avatar").src = user.avatar || defaultAvatar;
-    document.getElementById("prof-name").innerText = playerName;
-    
-    // ВЫВОДИМ STEAM CODE (или надпись "Не указан")
-    let stCode = user.steamCode;
-    if (typeof stCode === "string") stCode = stCode.trim();
-    
-    if (stCode && stCode !== "") {
-        document.getElementById("prof-steam").innerText = stCode;
+
+    document.getElementById(
+        "prof-avatar"
+    ).src =
+        user.avatar ||
+        defaultAvatar;
+
+
+    document.getElementById(
+        "prof-name"
+    ).innerText =
+        playerName;
+
+
+    let stCode =
+        user.steamCode;
+
+
+    if (
+        typeof stCode ===
+        "string"
+    ) {
+
+        stCode =
+            stCode.trim();
+    }
+
+
+    if (
+        stCode &&
+        stCode !== ""
+    ) {
+
+        document.getElementById(
+            "prof-steam"
+        ).innerText =
+            stCode;
+
     } else {
-        document.getElementById("prof-steam").innerText = l.notSet;
+
+        document.getElementById(
+            "prof-steam"
+        ).innerText =
+            l.notSet;
     }
 
-    // Высчитываем ГЛОБАЛЬНУЮ статистику
-    const stats = await getGlobalStats(playerName);
 
-    document.getElementById("prof-kd").innerText = stats.kd;
-    document.getElementById("prof-winrate").innerText = stats.winrate;
-    document.getElementById("prof-matches").innerText = stats.matches;
+    /*
+        PR + LEVEL
+    */
+
+    const pr =
+        Number(user.pr) || 0;
+
+
+    const level =
+        Number(user.level) ||
+        calculateLevel(pr);
+
+
+    /*
+        Сейчас элементы для LVL/PR
+        могут отсутствовать в старом
+        интерфейсе.
+
+        Поэтому ставим только если
+        они уже есть.
+    */
+
+    const profPR =
+        document.getElementById(
+            "prof-pr"
+        );
+
+    const profLevel =
+        document.getElementById(
+            "prof-level"
+        );
+
+
+    if (profPR) {
+
+        profPR.innerText =
+            Math.round(pr);
+    }
+
+
+    if (profLevel) {
+
+        profLevel.innerText =
+            level;
+    }
+
+
+    const stats =
+        await getGlobalStats(
+            playerName
+        );
+
+
+    document.getElementById(
+        "prof-kd"
+    ).innerText =
+        stats.kd;
+
+    document.getElementById(
+        "prof-winrate"
+    ).innerText =
+        stats.winrate;
+
+    document.getElementById(
+        "prof-matches"
+    ).innerText =
+        stats.matches;
 }
+
 
 function closeProfileModal() {
-    document.getElementById("profileModal").style.display = "none";
+
+    document.getElementById(
+        "profileModal"
+    ).style.display =
+        "none";
 }
 
-function handleProfileBackground(event) {
-    if (event.target.id === "profileModal") {
+
+function handleProfileBackground(
+    event
+) {
+
+    if (
+        event.target.id ===
+        "profileModal"
+    ) {
+
         closeProfileModal();
     }
 }
@@ -1918,34 +2962,48 @@ function handleProfileBackground(event) {
    TABS
    ========================================================= */
 
-function switchTab(tab) {
+function switchTab(
+    tab
+) {
 
-    currentTab = tab;
+    currentTab =
+        tab;
+
 
     const leaderboard =
         document.getElementById(
             "leaderboard-section"
         );
 
+
     const bracket =
         document.getElementById(
             "bracket-section"
         );
+
 
     const lbBtn =
         document.getElementById(
             "tab-btn-leaderboard"
         );
 
+
     const bracketBtn =
         document.getElementById(
             "tab-btn-bracket"
         );
 
-    if (tab === "leaderboard") {
 
-        leaderboard.style.display = "block";
-        bracket.style.display = "none";
+    if (
+        tab ===
+        "leaderboard"
+    ) {
+
+        leaderboard.style.display =
+            "block";
+
+        bracket.style.display =
+            "none";
 
         lbBtn.className =
             "tab-btn active";
@@ -1955,8 +3013,11 @@ function switchTab(tab) {
 
     } else {
 
-        leaderboard.style.display = "none";
-        bracket.style.display = "block";
+        leaderboard.style.display =
+            "none";
+
+        bracket.style.display =
+            "block";
 
         bracketBtn.className =
             "tab-btn active";
@@ -1971,178 +3032,423 @@ function switchTab(tab) {
    TOURNAMENT LOAD
    ========================================================= */
 
-async function loadTournamentData(force = false) {
-    if (loadingTournament && !force) {
+async function loadTournamentData(
+    force = false
+) {
+
+    if (
+        loadingTournament &&
+        !force
+    ) {
         return;
     }
 
-    loadingTournament = true;
+
+    loadingTournament =
+        true;
+
 
     try {
-        const data = await firebaseGet(`tournaments/${safeFirebaseKey(tourneyId)}`);
+
+        const data =
+            await firebaseGet(
+                `tournaments/${safeFirebaseKey(tourneyId)}`
+            );
+
 
         if (!data) {
-            showToast("Турнир не найден.", "error");
+
+            showToast(
+                "Турнир не найден.",
+                "error"
+            );
+
             return;
         }
 
-        const currString = JSON.stringify(data);
 
-        if (currString === cachedData && !force) {
+        const currString =
+            JSON.stringify(data);
+
+
+        if (
+            currString ===
+                cachedData &&
+            !force
+        ) {
+
             return;
         }
 
-        cachedData = currString;
 
-        tournamentFormat = data.format || "";
-        tournamentSystem = data.system || "";
-        maxLimit = parseInt(data.maxPlayers) || 8;
-        tStatus = data.status || "waiting";
-        matchResults = data.matches || {};
+        cachedData =
+            currString;
+
+
+        tournamentFormat =
+            data.format || "";
+
+        tournamentSystem =
+            data.system || "";
+
+        maxLimit =
+            parseInt(
+                data.maxPlayers
+            ) || 8;
+
+        tStatus =
+            data.status ||
+            "waiting";
+
+        matchResults =
+            data.matches ||
+            {};
+
 
         /* HEADER */
-        document.getElementById("t-game").innerText = data.game || "---";
-        document.getElementById("t-name").innerText = data.name || "---";
 
-        const author = document.getElementById("t-author");
-        if (data.author === ADMIN_USER) {
-            author.innerHTML = `<span style="color:#ffcc00;">👑 Retro Cup</span>`;
+        document.getElementById(
+            "t-game"
+        ).innerText =
+            data.game ||
+            "---";
+
+        document.getElementById(
+            "t-name"
+        ).innerText =
+            data.name ||
+            "---";
+
+
+        const author =
+            document.getElementById(
+                "t-author"
+            );
+
+
+        if (
+            data.author ===
+            ADMIN_USER
+        ) {
+
+            author.innerHTML =
+                `<span style="color:#ffcc00;">👑 Retro Cup</span>`;
+
         } else {
-            author.innerText = data.author || "---";
+
+            author.innerText =
+                data.author ||
+                "---";
         }
 
-        document.getElementById("t-format").innerText = data.format || "---";
-        document.getElementById("t-system").innerText = data.system || "---";
-        document.getElementById("t-max").innerText = maxLimit;
-        document.getElementById("t-prize").innerText = data.prize || "---";
-        document.getElementById("t-rules").innerText = data.rules || "---";
 
-        /* APPLY LANGUAGE */
+        document.getElementById(
+            "t-format"
+        ).innerText =
+            data.format ||
+            "---";
+
+
+        document.getElementById(
+            "t-system"
+        ).innerText =
+            data.system ||
+            "---";
+
+
+        document.getElementById(
+            "t-max"
+        ).innerText =
+            maxLimit;
+
+
+        document.getElementById(
+            "t-prize"
+        ).innerText =
+            data.prize ||
+            "---";
+
+
+        document.getElementById(
+            "t-rules"
+        ).innerText =
+            data.rules ||
+            "---";
+
+
         applyTranslations();
 
-        /* STATUS */
         updateTournamentStatus();
 
-        /* ADMIN */
         updateAdminControls();
 
-        /* ПРЕДЗАГРУЗКА АВАТАРОК И ЮЗЕРОВ ПЕРЕД ОТРИСОВКОЙ */
-        await preloadUsers(data);
 
-        /* PLAYERS */
-        const result = renderParticipants(data);
-        const validParticipants = result.validParticipants;
+        await preloadUsers(
+            data
+        );
 
-        /* SYSTEM */
-        if (tournamentSystem === "Спидран") {
-            document.getElementById("bracket-section").style.display = "none";
-            document.getElementById("tourney-tabs").style.display = "none";
-            document.getElementById("leaderboard-section").style.display = "none";
+
+        const result =
+            renderParticipants(
+                data
+            );
+
+
+        const validParticipants =
+            result.validParticipants;
+
+
+        if (
+            tournamentSystem ===
+            "Спидран"
+        ) {
+
+            document.getElementById(
+                "bracket-section"
+            ).style.display =
+                "none";
+
+            document.getElementById(
+                "tourney-tabs"
+            ).style.display =
+                "none";
+
+            document.getElementById(
+                "leaderboard-section"
+            ).style.display =
+                "none";
+
         } else {
-            if (tStatus === "finished") {
-                document.getElementById("tourney-tabs").style.display = "flex";
-                switchTab(currentTab);
+
+            if (
+                tStatus ===
+                "finished"
+            ) {
+
+                document.getElementById(
+                    "tourney-tabs"
+                ).style.display =
+                    "flex";
+
+                switchTab(
+                    currentTab
+                );
+
             } else {
-                document.getElementById("tourney-tabs").style.display = "none";
-                document.getElementById("leaderboard-section").style.display = "none";
-                document.getElementById("bracket-section").style.display = "block";
+
+                document.getElementById(
+                    "tourney-tabs"
+                ).style.display =
+                    "none";
+
+                document.getElementById(
+                    "leaderboard-section"
+                ).style.display =
+                    "none";
+
+                document.getElementById(
+                    "bracket-section"
+                ).style.display =
+                    "block";
             }
         }
 
-        /* BUTTON */
+
         updateJoinButton();
 
-        /* BRACKET */
-        if (tournamentSystem !== "Спидран") {
-            buildAndDrawBracket(validParticipants, maxLimit, matchResults);
+
+        if (
+            tournamentSystem !==
+            "Спидран"
+        ) {
+
+            buildAndDrawBracket(
+                validParticipants,
+                maxLimit,
+                matchResults
+            );
         }
 
     } catch (error) {
+
         console.error(error);
-        showToast("Не удалось загрузить данные турнира.", "error");
+
+        showToast(
+            "Не удалось загрузить данные турнира.",
+            "error"
+        );
+
     } finally {
-        loadingTournament = false;
+
+        loadingTournament =
+            false;
     }
 }
+
 
 /* =========================================================
    STATUS
    ========================================================= */
 
 function updateTournamentStatus() {
-    const badge = document.getElementById("tourney-status-badge");
-    badge.className = "status-badge";
-    
-    const l = dict[currentLang];
 
-    if (tStatus === "waiting" || tStatus === "registration") {
-        badge.innerText = l.statWait;
-    } else if (tStatus === "active") {
-        badge.innerText = l.statRun;
-        badge.classList.add("active");
-    } else if (tStatus === "finished") {
-        badge.innerText = l.statFin;
-        badge.classList.add("finished");
+    const badge =
+        document.getElementById(
+            "tourney-status-badge"
+        );
+
+    badge.className =
+        "status-badge";
+
+
+    const l =
+        dict[currentLang];
+
+
+    if (
+        tStatus === "waiting" ||
+        tStatus === "registration"
+    ) {
+
+        badge.innerText =
+            l.statWait;
+
+    } else if (
+        tStatus === "active"
+    ) {
+
+        badge.innerText =
+            l.statRun;
+
+        badge.classList.add(
+            "active"
+        );
+
+    } else if (
+        tStatus === "finished"
+    ) {
+
+        badge.innerText =
+            l.statFin;
+
+        badge.classList.add(
+            "finished"
+        );
+
     } else {
-        badge.innerText = tStatus;
+
+        badge.innerText =
+            tStatus;
     }
 }
+
 
 /* =========================================================
    ADMIN CONTROLS
    ========================================================= */
 
 function updateAdminControls() {
-    const box = document.getElementById("admin-controls");
-    if (!box) return; // Защита от ошибок
 
-    box.innerHTML = "";
+    const box =
+        document.getElementById(
+            "admin-controls"
+        );
+
+
+    if (!box) {
+        return;
+    }
+
+
+    box.innerHTML =
+        "";
+
 
     const isAdmin =
-        String(currentUser || "").trim().toLowerCase() ===
-        String(ADMIN_USER || "").trim().toLowerCase();
+        String(
+            currentUser || ""
+        )
+        .trim()
+        .toLowerCase() ===
+        String(
+            ADMIN_USER || ""
+        )
+        .trim()
+        .toLowerCase();
+
 
     if (!isAdmin) {
         return;
     }
 
-    if (tStatus === "waiting" || tStatus === "registration") {
+
+    if (
+        tStatus === "waiting" ||
+        tStatus === "registration"
+    ) {
+
         box.innerHTML = `
-            <button class="admin-start-btn" onclick="changeStatus('active')">
+            <button
+                class="admin-start-btn"
+                onclick="changeStatus('active')"
+            >
                 🚀 Запустить турнир
             </button>
         `;
-    } else if (tStatus === "active") {
+
+    } else if (
+        tStatus === "active"
+    ) {
+
         box.innerHTML = `
-            <button class="admin-stop-btn" onclick="changeStatus('finished')">
+            <button
+                class="admin-stop-btn"
+                onclick="changeStatus('finished')"
+            >
                 🏁 Завершить турнир
             </button>
         `;
-    } else if (tStatus === "finished") {
+
+    } else if (
+        tStatus === "finished"
+    ) {
+
         box.innerHTML = `
-            <button class="admin-start-btn" onclick="changeStatus('waiting')">
+            <button
+                class="admin-start-btn"
+                onclick="changeStatus('waiting')"
+            >
                 🔄 Открыть регистрацию
             </button>
         `;
     }
 }
 
+
 /* =========================================================
    PARTICIPANTS
    ========================================================= */
 
-function createTeamInvite(name) {
+function createTeamInvite(
+    name
+) {
+
     const inviteUrl =
         `${window.location.origin}${window.location.pathname}?id=${encodeURIComponent(tourneyId)}&team=${encodeURIComponent(name)}`;
 
-    navigator.clipboard.writeText(inviteUrl)
+
+    navigator.clipboard
+        .writeText(inviteUrl)
         .then(() => {
+
             showToast(
                 "Ссылка для вступления в команду скопирована!",
                 "success"
             );
+
         })
         .catch(() => {
+
             showToast(
                 "Не удалось скопировать ссылку.",
                 "error"
@@ -2150,204 +3456,495 @@ function createTeamInvite(name) {
         });
 }
 
-function renderParticipants(data) {
+
+function renderParticipants(
+    data
+) {
+
     const container =
         document.getElementById(
             "players-container"
         );
 
-    container.innerHTML = "";
 
-    isJoined = false;
-    myTeamName = "";
+    container.innerHTML =
+        "";
 
-    const validParticipants = [];
-    const speedrunParticipants = [];
+
+    isJoined =
+        false;
+
+    myTeamName =
+        "";
+
+
+    const validParticipants =
+        [];
+
+    const speedrunParticipants =
+        [];
+
 
     const isTeamTournament =
         tournamentFormat === "2v2" ||
         tournamentFormat === "5v5";
 
-    if (isTeamTournament) {
+
+    if (
+        isTeamTournament
+    ) {
+
         const requiredSize =
             tournamentFormat === "2v2"
                 ? 2
                 : 5;
 
-        if (data.teams) {
-            Object.keys(data.teams)
-                .forEach(teamName => {
+
+        if (
+            data.teams
+        ) {
+
+            Object.keys(
+                data.teams
+            )
+            .forEach(
+                teamName => {
+
                     const team =
-                        data.teams[teamName] || {};
+                        data.teams[
+                            teamName
+                        ] || {};
+
 
                     const players =
                         team.players
-                            ? Object.keys(team.players)
+                            ? Object.keys(
+                                team.players
+                            )
                             : [];
+
 
                     if (
                         players.includes(
                             currentUser
                         )
                     ) {
-                        isJoined = true;
-                        myTeamName = teamName;
+
+                        isJoined =
+                            true;
+
+                        myTeamName =
+                            teamName;
                     }
+
 
                     if (
                         tournamentSystem ===
                         "Спидран"
                     ) {
+
                         speedrunParticipants.push({
-                            name: teamName,
+                            name:
+                                teamName,
+
                             time:
                                 team.runTime ||
                                 "00:00:00",
-                            isTeam: true
+
+                            isTeam:
+                                true
                         });
 
                         return;
                     }
+
 
                     if (
                         players.length >=
                         requiredSize
                     ) {
+
                         validParticipants.push(
                             teamName
                         );
                     }
 
-                   let inviteBtnHTML = "";
 
-if (
-    players.includes(
-        currentUser
-    ) &&
-    players.length <
-        requiredSize
-) {
-    inviteBtnHTML = `
-        <button
-            class="invite-btn"
-            onclick="createTeamInvite(${JSON.stringify(teamName)})"
-            title="Скопировать ссылку для вступления"
-        >
-            🔗
-        </button>
-    `;
-}
+                    let inviteBtnHTML =
+                        "";
+
+
+                    if (
+                        players.includes(
+                            currentUser
+                        ) &&
+                        players.length <
+                            requiredSize
+                    ) {
+
+                        inviteBtnHTML = `
+                            <button
+                                class="invite-btn"
+                                onclick="createTeamInvite(${JSON.stringify(teamName)})"
+                                title="Скопировать ссылку для вступления"
+                            >
+                                🔗
+                            </button>
+                        `;
+                    }
+
 
                     let html = `
                         <div class="team-block">
+
                             <div class="team-name">
-                                <div style="display:flex; align-items:center; gap:8px;">
-                                    <span style="word-break:break-all;">${escapeHTML(teamName)}</span>
+
+                                <div
+                                    style="
+                                        display:flex;
+                                        align-items:center;
+                                        gap:8px;
+                                    "
+                                >
+
+                                    <span
+                                        style="
+                                            word-break:break-all;
+                                        "
+                                    >
+                                        ${escapeHTML(teamName)}
+                                    </span>
+
                                     ${inviteBtnHTML}
+
                                 </div>
+
                                 ${
-                                    players.length < requiredSize
+                                    players.length <
+                                    requiredSize
+
                                         ? `<span style="color:#ff3c64; font-size:10px; flex-shrink:0;">${players.length}/${requiredSize}</span>`
+
                                         : `<span style="color:#00ffcc; font-size:10px; flex-shrink:0;">${players.length}/${requiredSize}</span>`
                                 }
+
                             </div>
                     `;
 
-                    players.forEach(player => {
-                        const me = player === currentUser ? " me" : "";
-                        const avatarSrc = (usersCache[player] && usersCache[player].avatar) ? usersCache[player].avatar : defaultAvatar;
 
-                        // Добавлен клик для профиля
-                        html += `
-                            <div class="player-item${me}" onclick="openProfile('${escapeHTML(player)}')">
-                                <img src="${avatarSrc}" class="player-avatar-small" alt="">
-                                <span>${escapeHTML(player)}</span>
-                            </div>
-                        `;
-                    });
+                    players.forEach(
+                        player => {
 
-                    html += `</div>`;
+                            const me =
+                                player ===
+                                currentUser
+                                    ? " me"
+                                    : "";
 
-                    container.innerHTML += html;
-                });
+
+                            const avatarSrc =
+                                (
+                                    usersCache[
+                                        player
+                                    ] &&
+                                    usersCache[
+                                        player
+                                    ].avatar
+                                )
+                                    ? usersCache[
+                                        player
+                                    ].avatar
+                                    : defaultAvatar;
+
+
+                            html += `
+                                <div
+                                    class="player-item${me}"
+                                    onclick="openProfile('${escapeHTML(player)}')"
+                                >
+
+                                    <img
+                                        src="${avatarSrc}"
+                                        class="player-avatar-small"
+                                        alt=""
+                                    >
+
+                                    <span>
+                                        ${escapeHTML(player)}
+                                    </span>
+
+                                </div>
+                            `;
+                        }
+                    );
+
+
+                    html +=
+                        `</div>`;
+
+
+                    container.innerHTML +=
+                        html;
+                }
+            );
         }
+
     } else {
-        if (data.players) {
-            Object.keys(data.players)
-                .forEach(player => {
-                    if (player === currentUser) {
-                        isJoined = true;
+
+        if (
+            data.players
+        ) {
+
+            Object.keys(
+                data.players
+            )
+            .forEach(
+                player => {
+
+                    if (
+                        player ===
+                        currentUser
+                    ) {
+
+                        isJoined =
+                            true;
                     }
 
-                    if (tournamentSystem === "Спидран") {
+
+                    if (
+                        tournamentSystem ===
+                        "Спидран"
+                    ) {
+
                         speedrunParticipants.push({
-                            name: player,
-                            time: data.players[player]?.runTime || "00:00:00",
-                            isTeam: false
+                            name:
+                                player,
+
+                            time:
+                                data.players[
+                                    player
+                                ]?.runTime ||
+                                "00:00:00",
+
+                            isTeam:
+                                false
                         });
+
                         return;
                     }
 
-                    validParticipants.push(player);
 
-                    const me = player === currentUser ? " me" : "";
-                    const avatarSrc = (usersCache[player] && usersCache[player].avatar) ? usersCache[player].avatar : defaultAvatar;
+                    validParticipants.push(
+                        player
+                    );
 
-                    // Добавлен клик для профиля
+
+                    const me =
+                        player ===
+                        currentUser
+                            ? " me"
+                            : "";
+
+
+                    const avatarSrc =
+                        (
+                            usersCache[
+                                player
+                            ] &&
+                            usersCache[
+                                player
+                            ].avatar
+                        )
+                            ? usersCache[
+                                player
+                            ].avatar
+                            : defaultAvatar;
+
+
                     container.innerHTML += `
-                        <div class="player-item${me}" style="margin-bottom:5px;" onclick="openProfile('${escapeHTML(player)}')">
-                            <img src="${avatarSrc}" class="player-avatar-small" alt="">
-                            <span>${escapeHTML(player)}</span>
+                        <div
+                            class="player-item${me}"
+                            style="margin-bottom:5px;"
+                            onclick="openProfile('${escapeHTML(player)}')"
+                        >
+
+                            <img
+                                src="${avatarSrc}"
+                                class="player-avatar-small"
+                                alt=""
+                            >
+
+                            <span>
+                                ${escapeHTML(player)}
+                            </span>
+
                         </div>
                     `;
-                });
+                }
+            );
         }
     }
 
-    if (tournamentSystem === "Спидран") {
-        speedrunParticipants.sort((a, b) => {
-            return normalizeTime(a.time) - normalizeTime(b.time);
-        });
 
-        speedrunParticipants.forEach((player, index) => {
-            const hasTime = player.time !== "00:00:00";
-            const rank = hasTime ? index + 1 : "—";
-            const rankClass = rank === 1 ? "top1" : rank === 2 ? "top2" : rank === 3 ? "top3" : "";
+    if (
+        tournamentSystem ===
+        "Спидран"
+    ) {
 
-            let editButton = "";
-            if (currentUser === ADMIN_USER && tStatus === "active") {
-                editButton = `
-                    <button class="edit-time-btn" onclick='editSpeedrunTime(${JSON.stringify(player.name)}, ${player.isTeam})'>
-                        ⏱
-                    </button>
+        speedrunParticipants.sort(
+            (a, b) => {
+
+                return normalizeTime(
+                    a.time
+                ) -
+                normalizeTime(
+                    b.time
+                );
+            }
+        );
+
+
+        speedrunParticipants.forEach(
+            (
+                player,
+                index
+            ) => {
+
+                const hasTime =
+                    player.time !==
+                    "00:00:00";
+
+
+                const rank =
+                    hasTime
+                        ? index + 1
+                        : "—";
+
+
+                const rankClass =
+                    rank === 1
+                        ? "top1"
+                        : rank === 2
+                            ? "top2"
+                            : rank === 3
+                                ? "top3"
+                                : "";
+
+
+                let editButton =
+                    "";
+
+
+                if (
+                    currentUser ===
+                    ADMIN_USER &&
+                    tStatus ===
+                    "active"
+                ) {
+
+                    editButton = `
+                        <button
+                            class="edit-time-btn"
+                            onclick='editSpeedrunTime(${JSON.stringify(player.name)}, ${player.isTeam})'
+                        >
+                            ⏱
+                        </button>
+                    `;
+                }
+
+
+                let avatarHtml =
+                    !player.isTeam &&
+                    usersCache[
+                        player.name
+                    ] &&
+                    usersCache[
+                        player.name
+                    ].avatar
+
+                        ? `<img src="${usersCache[player.name].avatar}" class="player-avatar-small" alt="">`
+
+                        : "";
+
+
+                let clickAction =
+                    !player.isTeam
+                        ? `onclick="openProfile('${escapeHTML(player.name)}')"`
+                        : "";
+
+
+                let pointerClass =
+                    !player.isTeam
+                        ? `style="cursor:pointer;"`
+                        : "";
+
+
+                container.innerHTML += `
+                    <div class="speedrun-item">
+
+                        <div
+                            ${clickAction}
+                            ${pointerClass}
+                            style="
+                                display:flex;
+                                align-items:center;
+                                gap:8px;
+                                min-width:0;
+                            "
+                        >
+
+                            <div
+                                class="speedrun-rank ${rankClass}"
+                            >
+                                #${rank}
+                            </div>
+
+                            ${avatarHtml}
+
+                            <div
+                                style="
+                                    font-size:13px;
+                                    font-weight:800;
+                                    overflow:hidden;
+                                    text-overflow:ellipsis;
+                                    white-space:nowrap;
+                                "
+                            >
+                                ${escapeHTML(player.name)}
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            style="
+                                display:flex;
+                                align-items:center;
+                                flex-shrink:0;
+                            "
+                        >
+
+                            <div
+                                class="speedrun-time"
+                            >
+                                ${escapeHTML(player.time)}
+                            </div>
+
+                            ${editButton}
+
+                        </div>
+
+                    </div>
                 `;
             }
-
-            let avatarHtml = !player.isTeam && usersCache[player.name] && usersCache[player.name].avatar 
-                ? `<img src="${usersCache[player.name].avatar}" class="player-avatar-small" alt="">` : "";
-
-            let clickAction = !player.isTeam ? `onclick="openProfile('${escapeHTML(player.name)}')"` : "";
-            let pointerClass = !player.isTeam ? `style="cursor:pointer;"` : "";
-
-            container.innerHTML += `
-                <div class="speedrun-item">
-                    <div ${clickAction} ${pointerClass} style="display:flex; align-items:center; gap:8px; min-width:0;">
-                        <div class="speedrun-rank ${rankClass}">#${rank}</div>
-                        ${avatarHtml}
-                        <div style="font-size:13px; font-weight:800; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
-                            ${escapeHTML(player.name)}
-                        </div>
-                    </div>
-                    <div style="display:flex; align-items:center; flex-shrink:0;">
-                        <div class="speedrun-time">${escapeHTML(player.time)}</div>
-                        ${editButton}
-                    </div>
-                </div>
-            `;
-        });
+        );
     }
 
-    if (!container.innerHTML.trim()) {
+
+    if (
+        !container.innerHTML.trim()
+    ) {
+
         container.innerHTML = `
             <div class="empty-state">
                 ...
@@ -2355,21 +3952,36 @@ if (
         `;
     }
 
-    return { validParticipants };
+
+    return {
+        validParticipants
+    };
 }
+
 
 /* =========================================================
    TIME
    ========================================================= */
 
-function normalizeTime(time) {
+function normalizeTime(
+    time
+) {
 
-    if (!/^\d{2}:\d{2}:\d{2}$/.test(time)) {
+    if (
+        !/^\d{2}:\d{2}:\d{2}$/.test(
+            time
+        )
+    ) {
+
         return Infinity;
     }
 
+
     const parts =
-        time.split(":").map(Number);
+        time
+            .split(":")
+            .map(Number);
+
 
     return (
         parts[0] * 3600 +
@@ -2390,12 +4002,15 @@ function updateJoinButton() {
             "action-btn"
         );
 
+
     const status =
         document.getElementById(
             "join-status"
         );
-        
-    const l = dict[currentLang];
+
+
+    const l =
+        dict[currentLang];
 
 
     if (
@@ -2403,29 +4018,38 @@ function updateJoinButton() {
         tStatus === "finished"
     ) {
 
-        button.disabled = true;
+        button.disabled =
+            true;
+
         button.className =
             "wg-btn locked";
+
 
         button.innerText =
             tStatus === "active"
                 ? l.btnRun
                 : l.btnFin;
 
+
         status.innerText =
             l.joinClosed;
 
+
         status.style.color =
             "#ff3c64";
+
 
         return;
     }
 
 
-    button.disabled = false;
+    button.disabled =
+        false;
 
 
-    if (isJoined) {
+    if (
+        isJoined
+    ) {
 
         button.innerText =
             l.btnLeave;
@@ -2460,13 +4084,39 @@ function updateJoinButton() {
    BRACKET
    ========================================================= */
 
-function getAvatarImgHTML(name) {
-    if (!name || name === "---" || name === "TBD") return "";
-    if (usersCache[name] && usersCache[name].avatar) {
-        return `<img src="${usersCache[name].avatar}" class="player-avatar-small" style="margin-right:6px;" alt="">`;
+function getAvatarImgHTML(
+    name
+) {
+
+    if (
+        !name ||
+        name === "---" ||
+        name === "TBD"
+    ) {
+
+        return "";
     }
+
+
+    if (
+        usersCache[name] &&
+        usersCache[name].avatar
+    ) {
+
+        return `
+            <img
+                src="${usersCache[name].avatar}"
+                class="player-avatar-small"
+                style="margin-right:6px;"
+                alt=""
+            >
+        `;
+    }
+
+
     return "";
 }
+
 
 function generateMatchHTML(
     matchObj,
@@ -2474,76 +4124,267 @@ function generateMatchHTML(
     resultsDB
 ) {
 
-    const p1Display = matchObj.p1 == null ? "---" : matchObj.p1;
-    const p2Display = matchObj.p2 == null ? "---" : matchObj.p2;
+    const p1Display =
+        matchObj.p1 == null
+            ? "---"
+            : matchObj.p1;
 
-    const result = resultsDB[id];
+
+    const p2Display =
+        matchObj.p2 == null
+            ? "---"
+            : matchObj.p2;
+
+
+    const result =
+        resultsDB[id];
+
 
     let s1HTML = "";
     let s2HTML = "";
+
     let p1Class = "";
     let p2Class = "";
 
-    if (result) {
-        s1HTML = `<span class="match-score">${escapeHTML(result.s1)}</span>`;
-        s2HTML = `<span class="match-score">${escapeHTML(result.s2)}</span>`;
 
-        if (result.winner === matchObj.p1) { p1Class = "winner"; p2Class = "loser"; }
-        if (result.winner === matchObj.p2) { p2Class = "winner"; p1Class = "loser"; }
-    } else if (matchObj.p1 && !matchObj.p2 && matchObj.winner === matchObj.p1) {
-        p1Class = "winner";
-        s1HTML = `<span class="score-auto">AUTO</span>`;
-    } else if (matchObj.p2 && !matchObj.p1 && matchObj.winner === matchObj.p2) {
-        p2Class = "winner";
-        s2HTML = `<span class="score-auto">AUTO</span>`;
+    if (
+        result
+    ) {
+
+        s1HTML =
+            `<span class="match-score">${escapeHTML(result.s1)}</span>`;
+
+        s2HTML =
+            `<span class="match-score">${escapeHTML(result.s2)}</span>`;
+
+
+        if (
+            result.winner ===
+            matchObj.p1
+        ) {
+
+            p1Class =
+                "winner";
+
+            p2Class =
+                "loser";
+        }
+
+
+        if (
+            result.winner ===
+            matchObj.p2
+        ) {
+
+            p2Class =
+                "winner";
+
+            p1Class =
+                "loser";
+        }
+
+    } else if (
+        matchObj.p1 &&
+        !matchObj.p2 &&
+        matchObj.winner ===
+            matchObj.p1
+    ) {
+
+        p1Class =
+            "winner";
+
+        s1HTML =
+            `<span class="score-auto">AUTO</span>`;
+
+    } else if (
+        matchObj.p2 &&
+        !matchObj.p1 &&
+        matchObj.winner ===
+            matchObj.p2
+    ) {
+
+        p2Class =
+            "winner";
+
+        s2HTML =
+            `<span class="score-auto">AUTO</span>`;
     }
 
-    const isP1 = matchObj.p1 && matchObj.p1 !== "---" && (currentUser === matchObj.p1 || myTeamName === matchObj.p1);
-    const isP2 = matchObj.p2 && matchObj.p2 !== "---" && (currentUser === matchObj.p2 || myTeamName === matchObj.p2);
-    const isAdmin = currentUser === ADMIN_USER;
-    const canOpen = tStatus === "active" && matchObj.p1 && matchObj.p2 && matchObj.p1 !== "TBD" && matchObj.p2 !== "TBD" && (isP1 || isP2 || isAdmin);
 
-    let clickableClass = "";
-    let clickAction = "";
+    const isP1 =
+        matchObj.p1 &&
+        matchObj.p1 !== "---" &&
+        (
+            currentUser ===
+                matchObj.p1 ||
+            myTeamName ===
+                matchObj.p1
+        );
 
-    if (canOpen) {
-        clickableClass = "match-clickable";
-        clickAction = `onclick='openMatchModal(${JSON.stringify(id)}, ${JSON.stringify(String(matchObj.p1))}, ${JSON.stringify(String(matchObj.p2))})'`;
+
+    const isP2 =
+        matchObj.p2 &&
+        matchObj.p2 !== "---" &&
+        (
+            currentUser ===
+                matchObj.p2 ||
+            myTeamName ===
+                matchObj.p2
+        );
+
+
+    const isAdmin =
+        currentUser ===
+        ADMIN_USER;
+
+
+    const canOpen =
+        tStatus ===
+            "active" &&
+        matchObj.p1 &&
+        matchObj.p2 &&
+        matchObj.p1 !==
+            "TBD" &&
+        matchObj.p2 !==
+            "TBD" &&
+        (
+            isP1 ||
+            isP2 ||
+            isAdmin
+        );
+
+
+    let clickableClass =
+        "";
+
+    let clickAction =
+        "";
+
+
+    if (
+        canOpen
+    ) {
+
+        clickableClass =
+            "match-clickable";
+
+
+        clickAction =
+            `onclick='openMatchModal(${JSON.stringify(id)}, ${JSON.stringify(String(matchObj.p1))}, ${JSON.stringify(String(matchObj.p2))})'`;
     }
 
-    let p1Avatar = getAvatarImgHTML(p1Display);
-    let p2Avatar = getAvatarImgHTML(p2Display);
 
-    // Добавляем клики на имена для открытия профиля (останавливаем всплытие, чтобы не открыть чат матча случайно)
-    let p1Click = (matchObj.p1 && matchObj.p1 !== "---" && matchObj.p1 !== "TBD" && tournamentFormat === "1v1") 
-        ? `onclick="event.stopPropagation(); openProfile('${escapeHTML(matchObj.p1)}');" style="cursor:pointer;"` 
-        : "";
-    
-    let p2Click = (matchObj.p2 && matchObj.p2 !== "---" && matchObj.p2 !== "TBD" && tournamentFormat === "1v1") 
-        ? `onclick="event.stopPropagation(); openProfile('${escapeHTML(matchObj.p2)}');" style="cursor:pointer;"` 
-        : "";
+    const p1Avatar =
+        getAvatarImgHTML(
+            p1Display
+        );
+
+
+    const p2Avatar =
+        getAvatarImgHTML(
+            p2Display
+        );
+
+
+    let p1Click =
+        (
+            matchObj.p1 &&
+            matchObj.p1 !== "---" &&
+            matchObj.p1 !== "TBD" &&
+            tournamentFormat ===
+                "1v1"
+        )
+
+            ? `onclick="event.stopPropagation(); openProfile('${escapeHTML(matchObj.p1)}');" style="cursor:pointer;"`
+
+            : "";
+
+
+    let p2Click =
+        (
+            matchObj.p2 &&
+            matchObj.p2 !== "---" &&
+            matchObj.p2 !== "TBD" &&
+            tournamentFormat ===
+                "1v1"
+        )
+
+            ? `onclick="event.stopPropagation(); openProfile('${escapeHTML(matchObj.p2)}');" style="cursor:pointer;"`
+
+            : "";
+
 
     return `
-        <div class="match ${clickableClass}" ${clickAction}>
-            <div class="match-team ${p1Class}">
-                <div ${p1Click} style="display:flex; align-items:center; min-width:0; overflow:hidden;">
+        <div
+            class="match ${clickableClass}"
+            ${clickAction}
+        >
+
+            <div
+                class="match-team ${p1Class}"
+            >
+
+                <div
+                    ${p1Click}
+                    style="
+                        display:flex;
+                        align-items:center;
+                        min-width:0;
+                        overflow:hidden;
+                    "
+                >
+
                     ${p1Avatar}
-                    <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+
+                    <span
+                        style="
+                            overflow:hidden;
+                            text-overflow:ellipsis;
+                            white-space:nowrap;
+                        "
+                    >
                         ${escapeHTML(p1Display)}
                     </span>
+
                 </div>
+
                 ${s1HTML}
+
             </div>
 
-            <div class="match-team ${p2Class}">
-                <div ${p2Click} style="display:flex; align-items:center; min-width:0; overflow:hidden;">
+
+            <div
+                class="match-team ${p2Class}"
+            >
+
+                <div
+                    ${p2Click}
+                    style="
+                        display:flex;
+                        align-items:center;
+                        min-width:0;
+                        overflow:hidden;
+                    "
+                >
+
                     ${p2Avatar}
-                    <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+
+                    <span
+                        style="
+                            overflow:hidden;
+                            text-overflow:ellipsis;
+                            white-space:nowrap;
+                        "
+                    >
                         ${escapeHTML(p2Display)}
                     </span>
+
                 </div>
+
                 ${s2HTML}
+
             </div>
+
         </div>
     `;
 }
@@ -2564,7 +4405,9 @@ function buildAndDrawBracket(
             "bracket-container"
         );
 
-    container.innerHTML = "";
+
+    container.innerHTML =
+        "";
 
 
     if (
@@ -2590,6 +4433,7 @@ function buildAndDrawBracket(
     }
 }
 
+
 /* =========================================================
    SINGLE ELIMINATION
    ========================================================= */
@@ -2600,89 +4444,263 @@ function renderSingleElimination(
     resultsDB,
     container
 ) {
-    const seeds4 = [1, 4, 2, 3];
-    const seeds8 = [1, 8, 4, 5, 2, 7, 3, 6];
-    const seeds16 = [1,16,8,9, 4,13,5,12, 2,15,7,10, 3,14,6,11];
+
+    const seeds4 =
+        [1, 4, 2, 3];
+
+    const seeds8 =
+        [1, 8, 4, 5, 2, 7, 3, 6];
+
+    const seeds16 =
+        [
+            1,16,8,9,
+            4,13,5,12,
+            2,15,7,10,
+            3,14,6,11
+        ];
+
 
     let seeds;
-    if (max === 4) {
-        seeds = seeds4;
-    } else if (max === 16) {
-        seeds = seeds16;
+
+
+    if (
+        max === 4
+    ) {
+
+        seeds =
+            seeds4;
+
+    } else if (
+        max === 16
+    ) {
+
+        seeds =
+            seeds16;
+
     } else {
-        seeds = seeds8;
+
+        seeds =
+            seeds8;
     }
 
-    const numRounds = Math.log2(max);
-    const dynamicBracket = [];
-    const firstRound = [];
 
-    for (let i = 0; i < seeds.length; i += 2) {
+    const numRounds =
+        Math.log2(max);
+
+
+    const dynamicBracket =
+        [];
+
+    const firstRound =
+        [];
+
+
+    for (
+        let i = 0;
+        i < seeds.length;
+        i += 2
+    ) {
+
         firstRound.push({
-            p1: participants[seeds[i] - 1] || null,
-            p2: participants[seeds[i + 1] - 1] || null
+            p1:
+                participants[
+                    seeds[i] - 1
+                ] || null,
+
+            p2:
+                participants[
+                    seeds[i + 1] - 1
+                ] || null
         });
     }
 
-    dynamicBracket.push(firstRound);
 
-    let html = `<div style="display:flex; gap:45px;">`;
+    dynamicBracket.push(
+        firstRound
+    );
 
-    for (let r = 0; r < numRounds; r++) {
-        html += `<div class="round">`;
-        const nextRound = [];
 
-        for (let m = 0; m < dynamicBracket[r].length; m++) {
-            const match = dynamicBracket[r][m];
-            const matchId = `r${r}_m${m}`;
-            const result = resultsDB[matchId];
+    let html =
+        `<div style="display:flex; gap:45px;">`;
 
-            let winner = null;
 
-            if (result) {
-                winner = result.winner;
-            } else if (match.p1 && !match.p2 && r === 0) {
-                winner = match.p1;
-            } else if (match.p2 && !match.p1 && r === 0) {
-                winner = match.p2;
+    for (
+        let r = 0;
+        r < numRounds;
+        r++
+    ) {
+
+        html +=
+            `<div class="round">`;
+
+
+        const nextRound =
+            [];
+
+
+        for (
+            let m = 0;
+            m <
+                dynamicBracket[r].length;
+            m++
+        ) {
+
+            const match =
+                dynamicBracket[r][m];
+
+
+            const matchId =
+                `r${r}_m${m}`;
+
+
+            const result =
+                resultsDB[
+                    matchId
+                ];
+
+
+            let winner =
+                null;
+
+
+            if (
+                result
+            ) {
+
+                winner =
+                    result.winner;
+
+            } else if (
+                match.p1 &&
+                !match.p2 &&
+                r === 0
+            ) {
+
+                winner =
+                    match.p1;
+
+            } else if (
+                match.p2 &&
+                !match.p1 &&
+                r === 0
+            ) {
+
+                winner =
+                    match.p2;
             }
 
-            const matchObj = { p1: match.p1, p2: match.p2, winner };
 
-            html += generateMatchHTML(matchObj, matchId, resultsDB);
+            const matchObj = {
+                p1:
+                    match.p1,
 
-            if (m % 2 === 1) {
-                const previous = dynamicBracket[r][m - 1];
-                const previousId = `r${r}_m${m - 1}`;
-                const previousResult = resultsDB[previousId];
+                p2:
+                    match.p2,
 
-                let previousWinner = null;
+                winner
+            };
 
-                if (previousResult) {
-                    previousWinner = previousResult.winner;
-                } else if (previous.p1 && !previous.p2 && r === 0) {
-                    previousWinner = previous.p1;
-                } else if (previous.p2 && !previous.p1 && r === 0) {
-                    previousWinner = previous.p2;
+
+            html +=
+                generateMatchHTML(
+                    matchObj,
+                    matchId,
+                    resultsDB
+                );
+
+
+            if (
+                m % 2 ===
+                1
+            ) {
+
+                const previous =
+                    dynamicBracket[r][
+                        m - 1
+                    ];
+
+
+                const previousId =
+                    `r${r}_m${m - 1}`;
+
+
+                const previousResult =
+                    resultsDB[
+                        previousId
+                    ];
+
+
+                let previousWinner =
+                    null;
+
+
+                if (
+                    previousResult
+                ) {
+
+                    previousWinner =
+                        previousResult.winner;
+
+                } else if (
+                    previous.p1 &&
+                    !previous.p2 &&
+                    r === 0
+                ) {
+
+                    previousWinner =
+                        previous.p1;
+
+                } else if (
+                    previous.p2 &&
+                    !previous.p1 &&
+                    r === 0
+                ) {
+
+                    previousWinner =
+                        previous.p2;
                 }
 
+
                 nextRound.push({
-                    p1: previousWinner,
-                    p2: winner
+                    p1:
+                        previousWinner,
+
+                    p2:
+                        winner
                 });
             }
         }
 
-        html += `</div>`;
-        if (nextRound.length) {
-            dynamicBracket.push(nextRound);
+
+        html +=
+            `</div>`;
+
+
+        if (
+            nextRound.length
+        ) {
+
+            dynamicBracket.push(
+                nextRound
+            );
         }
     }
 
-    html += `</div>`;
-    container.innerHTML = html;
 
-    generateLeaderboardSE(dynamicBracket, numRounds, resultsDB, participants);
+    html +=
+        `</div>`;
+
+
+    container.innerHTML =
+        html;
+
+
+    generateLeaderboardSE(
+        dynamicBracket,
+        numRounds,
+        resultsDB,
+        participants
+    );
 }
 
 
@@ -2698,18 +4716,22 @@ function generateLeaderboardSE(
 ) {
 
     if (
-        tStatus !== "finished"
+        tStatus !==
+        "finished"
     ) {
         return;
     }
 
 
-    const farthest = {};
+    const farthest =
+        {};
 
 
     participants.forEach(
         player => {
-            farthest[player] = 0;
+
+            farthest[player] =
+                0;
         }
     );
 
@@ -2722,7 +4744,8 @@ function generateLeaderboardSE(
 
         for (
             let m = 0;
-            m < bracket[r].length;
+            m <
+                bracket[r].length;
             m++
         ) {
 
@@ -2732,23 +4755,37 @@ function generateLeaderboardSE(
 
             if (
                 match.p1 &&
-                match.p1 !== "TBD"
+                match.p1 !==
+                    "TBD"
             ) {
-                farthest[match.p1] = Math.max(
-                    farthest[match.p1] || 0,
-                    r
-                );
+
+                farthest[
+                    match.p1
+                ] =
+                    Math.max(
+                        farthest[
+                            match.p1
+                        ] || 0,
+                        r
+                    );
             }
 
 
             if (
                 match.p2 &&
-                match.p2 !== "TBD"
+                match.p2 !==
+                    "TBD"
             ) {
-                farthest[match.p2] = Math.max(
-                    farthest[match.p2] || 0,
-                    r
-                );
+
+                farthest[
+                    match.p2
+                ] =
+                    Math.max(
+                        farthest[
+                            match.p2
+                        ] || 0,
+                        r
+                    );
             }
         }
     }
@@ -2759,22 +4796,33 @@ function generateLeaderboardSE(
 
 
     const finalResult =
-        resultsDB[finalId];
+        resultsDB[
+            finalId
+        ];
 
 
-    if (finalResult) {
+    if (
+        finalResult
+    ) {
 
         farthest[
             finalResult.winner
-        ] = numRounds;
+        ] =
+            numRounds;
     }
 
 
     const sorted =
         [...participants].sort(
             (a, b) =>
-                (farthest[b] || 0) -
-                (farthest[a] || 0)
+                (
+                    farthest[b] ||
+                    0
+                ) -
+                (
+                    farthest[a] ||
+                    0
+                )
         );
 
 
@@ -2784,34 +4832,44 @@ function generateLeaderboardSE(
         );
 
 
-    container.innerHTML = "";
+    container.innerHTML =
+        "";
 
 
     sorted.forEach(
-        (player, index) => {
+        (
+            player,
+            index
+        ) => {
 
             const score =
-                farthest[player] || 0;
+                farthest[
+                    player
+                ] || 0;
 
 
             let phase;
 
+
             if (
-                score === numRounds
+                score ===
+                numRounds
             ) {
 
                 phase =
                     "🏆 Победитель";
 
             } else if (
-                score === numRounds - 1
+                score ===
+                numRounds - 1
             ) {
 
                 phase =
                     "🥈 Финалист";
 
             } else if (
-                score === numRounds - 2
+                score ===
+                numRounds - 2
             ) {
 
                 phase =
@@ -2837,8 +4895,14 @@ function generateLeaderboardSE(
                             ? "top3"
                             : "";
 
-            let avatarHtml = usersCache[player] && usersCache[player].avatar
-                ? `<img src="${usersCache[player].avatar}" class="player-avatar-small" alt="">` : "";
+
+            let avatarHtml =
+                usersCache[player] &&
+                usersCache[player].avatar
+
+                    ? `<img src="${usersCache[player].avatar}" class="player-avatar-small" alt="">`
+
+                    : "";
 
 
             container.innerHTML += `
@@ -2878,6 +4942,7 @@ function generateLeaderboardSE(
 
                     </div>
 
+
                     <div
                         style="
                             color:#858592;
@@ -2906,160 +4971,689 @@ function renderDoubleElimination(
     resultsDB,
     container
 ) {
-    const matches = {};
-    const W_rounds = Math.log2(max);
-    const lRoundCount = W_rounds > 1 ? 2 * W_rounds - 2 : 0;
 
-    for (let r = 0; r < W_rounds; r++) {
-        const count = max / Math.pow(2, r + 1);
-        for (let m = 0; m < count; m++) {
-            matches[`W_${r}_${m}`] = { p1: null, p2: null, type: "W", r, m };
+    const matches =
+        {};
+
+
+    const W_rounds =
+        Math.log2(max);
+
+
+    const lRoundCount =
+        W_rounds > 1
+            ? 2 * W_rounds - 2
+            : 0;
+
+
+    for (
+        let r = 0;
+        r < W_rounds;
+        r++
+    ) {
+
+        const count =
+            max /
+            Math.pow(
+                2,
+                r + 1
+            );
+
+
+        for (
+            let m = 0;
+            m < count;
+            m++
+        ) {
+
+            matches[
+                `W_${r}_${m}`
+            ] = {
+
+                p1:
+                    null,
+
+                p2:
+                    null,
+
+                type:
+                    "W",
+
+                r,
+
+                m
+            };
         }
     }
 
-    let currentLSize = max / 4;
-    for (let lr = 0; lr < lRoundCount; lr++) {
-        for (let m = 0; m < currentLSize; m++) {
-            matches[`L_${lr}_${m}`] = { p1: null, p2: null, type: "L", r: lr, m };
+
+    let currentLSize =
+        max / 4;
+
+
+    for (
+        let lr = 0;
+        lr < lRoundCount;
+        lr++
+    ) {
+
+        for (
+            let m = 0;
+            m < currentLSize;
+            m++
+        ) {
+
+            matches[
+                `L_${lr}_${m}`
+            ] = {
+
+                p1:
+                    null,
+
+                p2:
+                    null,
+
+                type:
+                    "L",
+
+                r:
+                    lr,
+
+                m
+            };
         }
-        if (lr % 2 === 1) {
-            currentLSize /= 2;
+
+
+        if (
+            lr % 2 ===
+            1
+        ) {
+
+            currentLSize /=
+                2;
         }
     }
 
-    matches.GF = { p1: null, p2: null, type: "GF" };
 
-    const seeds4 = [1,4,2,3];
-    const seeds8 = [1,8,4,5,2,7,3,6];
-    const seeds16 = [1,16,8,9, 4,13,5,12, 2,15,7,10, 3,14,6,11];
+    matches.GF = {
 
-    const seeds = max === 4 ? seeds4 : max === 16 ? seeds16 : seeds8;
+        p1:
+            null,
 
-    for (let i = 0; i < max; i += 2) {
-        const m = Math.floor(i / 2);
-        matches[`W_0_${m}`].p1 = participants[seeds[i] - 1] || null;
-        matches[`W_0_${m}`].p2 = participants[seeds[i + 1] - 1] || null;
+        p2:
+            null,
+
+        type:
+            "GF"
+    };
+
+
+    const seeds4 =
+        [1,4,2,3];
+
+    const seeds8 =
+        [1,8,4,5,2,7,3,6];
+
+    const seeds16 =
+        [
+            1,16,8,9,
+            4,13,5,12,
+            2,15,7,10,
+            3,14,6,11
+        ];
+
+
+    const seeds =
+        max === 4
+            ? seeds4
+            : max === 16
+                ? seeds16
+                : seeds8;
+
+
+    for (
+        let i = 0;
+        i < max;
+        i += 2
+    ) {
+
+        const m =
+            Math.floor(
+                i / 2
+            );
+
+
+        matches[
+            `W_0_${m}`
+        ].p1 =
+            participants[
+                seeds[i] - 1
+            ] || null;
+
+
+        matches[
+            `W_0_${m}`
+        ].p2 =
+            participants[
+                seeds[i + 1] - 1
+            ] || null;
     }
 
-    let changed = true;
-    let safety = 0;
 
-    while (changed && safety < 100) {
+    let changed =
+        true;
+
+    let safety =
+        0;
+
+
+    while (
+        changed &&
+        safety < 100
+    ) {
+
         safety++;
-        changed = false;
 
-        for (const id in matches) {
-            const match = matches[id];
-            if (match.processed) continue;
+        changed =
+            false;
 
-            const result = resultsDB[id];
-            let winner = null;
-            let loser = null;
 
-            if (result) {
-                winner = result.winner;
-                loser = winner === match.p1 ? match.p2 : match.p1;
-            } else if (match.p1 && !match.p2 && match.type === "W" && match.r === 0) {
-                winner = match.p1;
-            } else if (match.p2 && !match.p1 && match.type === "W" && match.r === 0) {
-                winner = match.p2;
+        for (
+            const id in matches
+        ) {
+
+            const match =
+                matches[id];
+
+
+            if (
+                match.processed
+            ) {
+                continue;
             }
 
-            if (!winner) continue;
 
-            match.winner = winner;
-            match.loser = loser;
-            match.processed = true;
-            changed = true;
+            const result =
+                resultsDB[id];
 
-            if (match.type === "W") {
-                const nextW = match.r === W_rounds - 1 ? "GF" : `W_${match.r + 1}_${Math.floor(match.m / 2)}`;
-                const nextL = match.r === 0 ? `L_0_${Math.floor(match.m / 2)}` : `L_${match.r * 2 - 1}_${match.m}`;
 
-                const wMatch = matches[nextW];
-                if (wMatch) {
-                    if (!wMatch.p1) wMatch.p1 = winner;
-                    else if (!wMatch.p2 && wMatch.p1 !== winner) wMatch.p2 = winner;
+            let winner =
+                null;
+
+            let loser =
+                null;
+
+
+            if (
+                result
+            ) {
+
+                winner =
+                    result.winner;
+
+                loser =
+                    winner ===
+                        match.p1
+                            ? match.p2
+                            : match.p1;
+
+            } else if (
+                match.p1 &&
+                !match.p2 &&
+                match.type ===
+                    "W" &&
+                match.r ===
+                    0
+            ) {
+
+                winner =
+                    match.p1;
+
+            } else if (
+                match.p2 &&
+                !match.p1 &&
+                match.type ===
+                    "W" &&
+                match.r ===
+                    0
+            ) {
+
+                winner =
+                    match.p2;
+            }
+
+
+            if (!winner) {
+                continue;
+            }
+
+
+            match.winner =
+                winner;
+
+            match.loser =
+                loser;
+
+            match.processed =
+                true;
+
+            changed =
+                true;
+
+
+            if (
+                match.type ===
+                "W"
+            ) {
+
+                const nextW =
+                    match.r ===
+                        W_rounds - 1
+
+                        ? "GF"
+
+                        : `W_${match.r + 1}_${Math.floor(match.m / 2)}`;
+
+
+                const nextL =
+                    match.r ===
+                        0
+
+                        ? `L_0_${Math.floor(match.m / 2)}`
+
+                        : `L_${match.r * 2 - 1}_${match.m}`;
+
+
+                const wMatch =
+                    matches[
+                        nextW
+                    ];
+
+
+                if (
+                    wMatch
+                ) {
+
+                    if (
+                        !wMatch.p1
+                    ) {
+
+                        wMatch.p1 =
+                            winner;
+
+                    } else if (
+                        !wMatch.p2 &&
+                        wMatch.p1 !==
+                            winner
+                    ) {
+
+                        wMatch.p2 =
+                            winner;
+                    }
                 }
 
-                const lMatch = matches[nextL];
-                if (lMatch && loser) {
-                    if (!lMatch.p1) lMatch.p1 = loser;
-                    else if (!lMatch.p2 && lMatch.p1 !== loser) lMatch.p2 = loser;
+
+                const lMatch =
+                    matches[
+                        nextL
+                    ];
+
+
+                if (
+                    lMatch &&
+                    loser
+                ) {
+
+                    if (
+                        !lMatch.p1
+                    ) {
+
+                        lMatch.p1 =
+                            loser;
+
+                    } else if (
+                        !lMatch.p2 &&
+                        lMatch.p1 !==
+                            loser
+                    ) {
+
+                        lMatch.p2 =
+                            loser;
+                    }
                 }
 
-            } else if (match.type === "L") {
-                const nextL = match.r === lRoundCount - 1 ? "GF" 
-                    : (match.r % 2 === 0 ? `L_${match.r + 1}_${match.m}` : `L_${match.r + 1}_${Math.floor(match.m / 2)}`);
+            } else if (
+                match.type ===
+                "L"
+            ) {
 
-                const lMatch = matches[nextL];
-                if (lMatch) {
-                    if (!lMatch.p1) lMatch.p1 = winner;
-                    else if (!lMatch.p2 && lMatch.p1 !== winner) lMatch.p2 = winner;
+                const nextL =
+                    match.r ===
+                        lRoundCount - 1
+
+                        ? "GF"
+
+                        : (
+                            match.r %
+                                2 ===
+                                0
+
+                                ? `L_${match.r + 1}_${match.m}`
+
+                                : `L_${match.r + 1}_${Math.floor(match.m / 2)}`
+                        );
+
+
+                const lMatch =
+                    matches[
+                        nextL
+                    ];
+
+
+                if (
+                    lMatch
+                ) {
+
+                    if (
+                        !lMatch.p1
+                    ) {
+
+                        lMatch.p1 =
+                            winner;
+
+                    } else if (
+                        !lMatch.p2 &&
+                        lMatch.p1 !==
+                            winner
+                    ) {
+
+                        lMatch.p2 =
+                            winner;
+                    }
                 }
             }
         }
     }
 
-    let html = `<div style="width:100%; display:flex; flex-direction:column;">
-        <h3 style="color:#a67cff; margin:0 0 10px; font-size:13px;">ВЕРХНЯЯ СЕТКА</h3>
-        <div class="bracket" style="margin-bottom:30px;">`;
 
-    for (let r = 0; r < W_rounds; r++) {
-        html += `<div class="round">`;
-        const count = max / Math.pow(2, r + 1);
-        for (let m = 0; m < count; m++) {
-            const id = `W_${r}_${m}`;
-            html += generateMatchHTML(matches[id], id, resultsDB);
+    let html =
+        `
+        <div
+            style="
+                width:100%;
+                display:flex;
+                flex-direction:column;
+            "
+        >
+
+            <h3
+                style="
+                    color:#a67cff;
+                    margin:0 0 10px;
+                    font-size:13px;
+                "
+            >
+                ВЕРХНЯЯ СЕТКА
+            </h3>
+
+            <div
+                class="bracket"
+                style="margin-bottom:30px;"
+            >
+        `;
+
+
+    for (
+        let r = 0;
+        r < W_rounds;
+        r++
+    ) {
+
+        html +=
+            `<div class="round">`;
+
+
+        const count =
+            max /
+            Math.pow(
+                2,
+                r + 1
+            );
+
+
+        for (
+            let m = 0;
+            m < count;
+            m++
+        ) {
+
+            const id =
+                `W_${r}_${m}`;
+
+
+            html +=
+                generateMatchHTML(
+                    matches[id],
+                    id,
+                    resultsDB
+                );
         }
-        html += `</div>`;
-    }
-    html += `</div>`;
 
-    if (lRoundCount > 0) {
-        html += `<h3 style="color:#ff3c64; margin:0 0 10px; font-size:13px;">НИЖНЯЯ СЕТКА</h3>
-        <div class="bracket" style="margin-bottom:30px;">`;
-        currentLSize = max / 4;
-        for (let lr = 0; lr < lRoundCount; lr++) {
-            html += `<div class="round">`;
-            for (let m = 0; m < currentLSize; m++) {
-                const id = `L_${lr}_${m}`;
-                html += generateMatchHTML(matches[id], id, resultsDB);
+
+        html +=
+            `</div>`;
+    }
+
+
+    html +=
+        `</div>`;
+
+
+    if (
+        lRoundCount > 0
+    ) {
+
+        html +=
+            `
+            <h3
+                style="
+                    color:#ff3c64;
+                    margin:0 0 10px;
+                    font-size:13px;
+                "
+            >
+                НИЖНЯЯ СЕТКА
+            </h3>
+
+            <div
+                class="bracket"
+                style="margin-bottom:30px;"
+            >
+            `;
+
+
+        currentLSize =
+            max / 4;
+
+
+        for (
+            let lr = 0;
+            lr < lRoundCount;
+            lr++
+        ) {
+
+            html +=
+                `<div class="round">`;
+
+
+            for (
+                let m = 0;
+                m < currentLSize;
+                m++
+            ) {
+
+                const id =
+                    `L_${lr}_${m}`;
+
+
+                html +=
+                    generateMatchHTML(
+                        matches[id],
+                        id,
+                        resultsDB
+                    );
             }
-            html += `</div>`;
-            if (lr % 2 === 1) currentLSize /= 2;
+
+
+            html +=
+                `</div>`;
+
+
+            if (
+                lr % 2 ===
+                1
+            ) {
+
+                currentLSize /=
+                    2;
+            }
         }
-        html += `</div>`;
+
+
+        html +=
+            `</div>`;
     }
 
-    let gfAvatar = matches.GF.winner && usersCache[matches.GF.winner] && usersCache[matches.GF.winner].avatar ? `<img src="${usersCache[matches.GF.winner].avatar}" class="player-avatar-small" alt="">` : "";
 
-    html += `<h3 style="color:#ffcc00; margin:0 0 10px; font-size:13px;">ГРАНД-ФИНАЛ</h3>
+    const gfAvatar =
+        matches.GF.winner &&
+        usersCache[
+            matches.GF.winner
+        ] &&
+        usersCache[
+            matches.GF.winner
+        ].avatar
+
+            ? `<img src="${usersCache[matches.GF.winner].avatar}" class="player-avatar-small" alt="">`
+
+            : "";
+
+
+    html +=
+        `
+        <h3
+            style="
+                color:#ffcc00;
+                margin:0 0 10px;
+                font-size:13px;
+            "
+        >
+            ГРАНД-ФИНАЛ
+        </h3>
+
         <div class="bracket">
-            <div class="round">${generateMatchHTML(matches.GF, "GF", resultsDB)}</div>
+
+            <div class="round">
+
+                ${generateMatchHTML(
+                    matches.GF,
+                    "GF",
+                    resultsDB
+                )}
+
+            </div>
+
         </div>
-    </div>`;
 
-    container.innerHTML = html;
+        </div>
+        `;
 
-    if (tStatus === "finished") {
-        const lb = document.getElementById("final-leaderboard-container");
-        if (matches.GF.winner) {
-            lb.innerHTML = `
-                <div class="speedrun-item">
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <div class="speedrun-rank top1">#1</div>
+
+    container.innerHTML =
+        html;
+
+
+    if (
+        tStatus ===
+        "finished"
+    ) {
+
+        const lb =
+            document.getElementById(
+                "final-leaderboard-container"
+            );
+
+
+        if (
+            matches.GF.winner
+        ) {
+
+            lb.innerHTML =
+                `
+                <div
+                    class="speedrun-item"
+                >
+
+                    <div
+                        style="
+                            display:flex;
+                            align-items:center;
+                            gap:10px;
+                        "
+                    >
+
+                        <div
+                            class="
+                                speedrun-rank
+                                top1
+                            "
+                        >
+                            #1
+                        </div>
+
                         ${gfAvatar}
-                        <div style="font-size:13px; font-weight:800;">${escapeHTML(matches.GF.winner)}</div>
+
+                        <div
+                            style="
+                                font-size:13px;
+                                font-weight:800;
+                            "
+                        >
+                            ${escapeHTML(
+                                matches.GF.winner
+                            )}
+                        </div>
+
                     </div>
-                    <div style="color:#858592; font-size:10px; font-weight:800;">🏆 Победитель</div>
+
+
+                    <div
+                        style="
+                            color:#858592;
+                            font-size:10px;
+                            font-weight:800;
+                        "
+                    >
+                        🏆 Победитель
+                    </div>
+
                 </div>
             `;
+
         } else {
-            lb.innerHTML = `<div class="empty-state">Лидерборд формируется...</div>`;
+
+            lb.innerHTML =
+                `
+                <div
+                    class="empty-state"
+                >
+                    Лидерборд формируется...
+                </div>
+            `;
         }
     }
 }
+
 
 /* =========================================================
    MATCH MODAL
@@ -3109,18 +5703,21 @@ function openMatchModal(
 
     document.getElementById(
         "score-p1-val"
-    ).value = "1";
+    ).value =
+        "1";
 
 
     document.getElementById(
         "score-p2-val"
-    ).value = "0";
+    ).value =
+        "0";
 
 
     document.getElementById(
         "admin-score-section"
     ).style.display =
-        currentUser === ADMIN_USER
+        currentUser ===
+        ADMIN_USER
             ? "block"
             : "none";
 
@@ -3131,7 +5728,9 @@ function openMatchModal(
         "flex";
 
 
-    loadChat(matchId);
+    loadChat(
+        matchId
+    );
 
 
     if (
@@ -3146,18 +5745,24 @@ function openMatchModal(
 
     activeMatchChatInterval =
         setInterval(
-            () => loadChat(matchId),
+            () =>
+                loadChat(
+                    matchId
+                ),
             2500
         );
 
 
-    setTimeout(() => {
+    setTimeout(
+        () => {
 
-        document.getElementById(
-            "chat-input"
-        ).focus();
+            document.getElementById(
+                "chat-input"
+            ).focus();
 
-    }, 100);
+        },
+        100
+    );
 }
 
 
@@ -3183,12 +5788,15 @@ function closeMatchModal() {
 }
 
 
-function handleModalBackground(event) {
+function handleModalBackground(
+    event
+) {
 
     if (
         event.target.id ===
         "matchModal"
     ) {
+
         closeMatchModal();
     }
 }
@@ -3198,7 +5806,9 @@ function handleModalBackground(event) {
    CHAT
    ========================================================= */
 
-async function loadChat(matchId) {
+async function loadChat(
+    matchId
+) {
 
     try {
 
@@ -3214,12 +5824,14 @@ async function loadChat(matchId) {
             );
 
 
-        chatBox.innerHTML = "";
+        chatBox.innerHTML =
+            "";
 
 
         if (!data) {
 
-            chatBox.innerHTML = `
+            chatBox.innerHTML =
+                `
                 <div
                     style="
                         text-align:center;
@@ -3237,16 +5849,21 @@ async function loadChat(matchId) {
         }
 
 
-        Object.keys(data)
-            .sort()
-            .forEach(key => {
+        Object.keys(
+            data
+        )
+        .sort()
+        .forEach(
+            key => {
 
                 const msg =
-                    data[key] || {};
+                    data[key] ||
+                    {};
 
 
                 const isMe =
-                    msg.author === currentUser;
+                    msg.author ===
+                    currentUser;
 
 
                 const align =
@@ -3265,7 +5882,9 @@ async function loadChat(matchId) {
                     msg.author ===
                     ADMIN_USER
                 ) {
-                    color = "#ff3c64";
+
+                    color =
+                        "#ff3c64";
                 }
 
 
@@ -3296,7 +5915,8 @@ async function loadChat(matchId) {
                     "900";
 
                 author.innerText =
-                    msg.author || "User";
+                    msg.author ||
+                    "User";
 
 
                 const bubble =
@@ -3309,7 +5929,8 @@ async function loadChat(matchId) {
                     "chat-bubble";
 
                 bubble.innerText =
-                    msg.text || "";
+                    msg.text ||
+                    "";
 
 
                 const time =
@@ -3322,7 +5943,8 @@ async function loadChat(matchId) {
                     "chat-time";
 
                 time.innerText =
-                    msg.time || "";
+                    msg.time ||
+                    "";
 
 
                 row.appendChild(
@@ -3341,7 +5963,8 @@ async function loadChat(matchId) {
                 chatBox.appendChild(
                     row
                 );
-            });
+            }
+        );
 
 
         chatBox.scrollTop =
@@ -3378,7 +6001,10 @@ async function sendChatMessage() {
     }
 
 
-    if (text.length > 1000) {
+    if (
+        text.length >
+        1000
+    ) {
 
         showToast(
             "Сообщение слишком длинное.",
@@ -3403,8 +6029,12 @@ async function sendChatMessage() {
     try {
 
         const msgData = {
-            author: currentUser,
+
+            author:
+                currentUser,
+
             text,
+
             time:
                 new Date()
                     .toLocaleTimeString()
@@ -3414,19 +6044,31 @@ async function sendChatMessage() {
         await firebaseRequest(
             `tournaments/${safeFirebaseKey(tourneyId)}/chats/${safeFirebaseKey(matchId)}`,
             {
-                method: "POST",
-                body: JSON.stringify(msgData)
+                method:
+                    "POST",
+
+                body:
+                    JSON.stringify(
+                        msgData
+                    )
             }
         );
 
 
-        input.value = "";
+        input.value =
+            "";
 
-        await loadChat(matchId);
+
+        await loadChat(
+            matchId
+        );
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            error
+        );
+
 
         showToast(
             "Не удалось отправить сообщение.",
@@ -3443,7 +6085,8 @@ async function sendChatMessage() {
 async function saveMatchScore() {
 
     if (
-        currentUser !== ADMIN_USER
+        currentUser !==
+        ADMIN_USER
     ) {
 
         showToast(
@@ -3525,15 +6168,24 @@ async function saveMatchScore() {
 
 
     const matchData = {
+
         p1,
+
         p2,
+
         s1,
+
         s2,
+
         winner
     };
 
 
     try {
+
+        /*
+            Сохраняем результат матча.
+        */
 
         await firebasePut(
             `tournaments/${safeFirebaseKey(tourneyId)}/matches/${safeFirebaseKey(matchId)}`,
@@ -3541,12 +6193,63 @@ async function saveMatchScore() {
         );
 
 
+        /*
+            ==============================================
+            PR REWARD
+            ==============================================
+
+            ВАЖНО:
+
+            Награда выдаётся только здесь,
+            после реального результата.
+
+            Поэтому AUTO-проходы PR не получают.
+        */
+
+        try {
+
+            await awardMatchPR(
+                matchId,
+                p1,
+                p2,
+                winner
+            );
+
+        } catch (
+            rewardError
+        ) {
+
+            /*
+                Если матч сохранился,
+                но выдача PR почему-то
+                произошла с ошибкой —
+                матч НЕ откатываем.
+
+                Ошибка будет видна в консоли.
+            */
+
+            console.error(
+                "Ошибка начисления PR:",
+                rewardError
+            );
+
+            showToast(
+                "Результат сохранён, но PR не удалось начислить.",
+                "error"
+            );
+        }
+
+
         closeMatchModal();
 
-        cachedData = "";
-        
-        // СБРАСЫВАЕМ КЭШ ВСЕХ ТУРНИРОВ, ЧТОБЫ СТАТИСТИКА ОБНОВИЛАСЬ МГНОВЕННО
-        lastTournamentsFetch = 0;
+
+        cachedData =
+            "";
+
+
+        lastTournamentsFetch =
+            0;
+
 
         await loadTournamentData(
             true
@@ -3560,7 +6263,10 @@ async function saveMatchScore() {
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            error
+        );
+
 
         showToast(
             "Не удалось сохранить результат.",
@@ -3580,7 +6286,8 @@ async function editSpeedrunTime(
 ) {
 
     if (
-        currentUser !== ADMIN_USER
+        currentUser !==
+        ADMIN_USER
     ) {
 
         return;
@@ -3595,8 +6302,10 @@ async function editSpeedrunTime(
 
 
     if (
-        newTime === null
+        newTime ===
+        null
     ) {
+
         return;
     }
 
@@ -3606,7 +6315,9 @@ async function editSpeedrunTime(
 
 
     if (
-        !/^\d{2}:\d{2}:\d{2}$/.test(time)
+        !/^\d{2}:\d{2}:\d{2}$/.test(
+            time
+        )
     ) {
 
         showToast(
@@ -3619,13 +6330,16 @@ async function editSpeedrunTime(
 
 
     const parts =
-        time.split(":")
+        time
+            .split(":")
             .map(Number);
 
 
     if (
-        parts[1] > 59 ||
-        parts[2] > 59
+        parts[1] >
+            59 ||
+        parts[2] >
+            59
     ) {
 
         showToast(
@@ -3641,19 +6355,24 @@ async function editSpeedrunTime(
 
         const path =
             isTeam
+
                 ? `teams/${safeFirebaseKey(name)}`
+
                 : `players/${safeFirebaseKey(name)}`;
 
 
         await firebasePatch(
             `tournaments/${safeFirebaseKey(tourneyId)}/${path}`,
             {
-                runTime: time
+                runTime:
+                    time
             }
         );
 
 
-        cachedData = "";
+        cachedData =
+            "";
+
 
         await loadTournamentData(
             true
@@ -3667,7 +6386,10 @@ async function editSpeedrunTime(
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            error
+        );
+
 
         showToast(
             "Не удалось обновить время.",
@@ -3686,7 +6408,8 @@ async function changeStatus(
 ) {
 
     if (
-        currentUser !== ADMIN_USER
+        currentUser !==
+        ADMIN_USER
     ) {
 
         return;
@@ -3697,7 +6420,8 @@ async function changeStatus(
 
 
     if (
-        newStatus === "active"
+        newStatus ===
+        "active"
     ) {
 
         message =
@@ -3710,7 +6434,12 @@ async function changeStatus(
     }
 
 
-    if (!confirm(message)) {
+    if (
+        !confirm(
+            message
+        )
+    ) {
+
         return;
     }
 
@@ -3720,12 +6449,15 @@ async function changeStatus(
         await firebasePatch(
             `tournaments/${safeFirebaseKey(tourneyId)}`,
             {
-                status: newStatus
+                status:
+                    newStatus
             }
         );
 
 
-        cachedData = "";
+        cachedData =
+            "";
+
 
         await loadTournamentData(
             true
@@ -3733,15 +6465,22 @@ async function changeStatus(
 
 
         showToast(
-            newStatus === "active"
+            newStatus ===
+                "active"
+
                 ? "Турнир запущен!"
+
                 : "Турнир завершён.",
+
             "success"
         );
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            error
+        );
+
 
         showToast(
             "Не удалось изменить статус.",
@@ -3756,114 +6495,342 @@ async function changeStatus(
    ========================================================= */
 
 async function handleJoinClick() {
-    // 1. Пропускаем клик, если турнир уже идет или закончен
-    if (tStatus === "active" || tStatus === "finished" || tStatus === "running") { 
-        return; 
+
+    if (
+        tStatus === "active" ||
+        tStatus === "finished" ||
+        tStatus === "running"
+    ) {
+
+        return;
     }
 
-    const button = document.getElementById("action-btn");
-    button.disabled = true;
-    button.innerText = "⏳ Загрузка..."; 
+
+    const button =
+        document.getElementById(
+            "action-btn"
+        );
+
+
+    button.disabled =
+        true;
+
+    button.innerText =
+        "⏳ Загрузка...";
+
 
     try {
-        if (isJoined) {
-            // === ЛОГИКА ВЫХОДА ИЗ ТУРНИРА ===
-            if (tournamentFormat === "2v2" || tournamentFormat === "5v5") {
-                await firebaseDelete(`tournaments/${safeFirebaseKey(tourneyId)}/teams/${safeFirebaseKey(myTeamName)}/players/${safeFirebaseKey(currentUser)}`);
+
+        if (
+            isJoined
+        ) {
+
+            /*
+                ВЫХОД
+            */
+
+            if (
+                tournamentFormat ===
+                    "2v2" ||
+                tournamentFormat ===
+                    "5v5"
+            ) {
+
+                await firebaseDelete(
+                    `tournaments/${safeFirebaseKey(tourneyId)}/teams/${safeFirebaseKey(myTeamName)}/players/${safeFirebaseKey(currentUser)}`
+                );
+
             } else {
-                await firebaseDelete(`tournaments/${safeFirebaseKey(tourneyId)}/players/${safeFirebaseKey(currentUser)}`);
+
+                await firebaseDelete(
+                    `tournaments/${safeFirebaseKey(tourneyId)}/players/${safeFirebaseKey(currentUser)}`
+                );
             }
-            showToast("Вы вышли из турнира.", "success");
+
+
+            showToast(
+                "Вы вышли из турнира.",
+                "success"
+            );
 
         } else {
-            // === ЛОГИКА ВХОДА В ТУРНИР ===
-            if (tournamentFormat === "2v2" || tournamentFormat === "5v5") {
-               const inviteTeam = urlParams.get("team");
 
-const teamName = inviteTeam
-    ? decodeURIComponent(inviteTeam)
-    : prompt("Введите название команды:");
-                
-                if (!teamName || !teamName.trim()) {
-                    button.disabled = false;
-                    updateJoinButton(); 
-                    return;
-                }
+            /*
+                ВХОД
+            */
 
-                const cleanTeamName = teamName.trim();
-                if (cleanTeamName.length > 30) {
-                    showToast("Название команды слишком длинное.", "error");
-                    button.disabled = false;
+            if (
+                tournamentFormat ===
+                    "2v2" ||
+                tournamentFormat ===
+                    "5v5"
+            ) {
+
+                const inviteTeam =
+                    urlParams.get(
+                        "team"
+                    );
+
+
+                const teamName =
+                    inviteTeam
+
+                        ? decodeURIComponent(
+                            inviteTeam
+                        )
+
+                        : prompt(
+                            "Введите название команды:"
+                        );
+
+
+                if (
+                    !teamName ||
+                    !teamName.trim()
+                ) {
+
+                    button.disabled =
+                        false;
+
                     updateJoinButton();
+
                     return;
                 }
 
-                // Проверка команды
-                const existingTeam = await firebaseGet(`tournaments/${safeFirebaseKey(tourneyId)}/teams/${safeFirebaseKey(cleanTeamName)}`);
 
-                if (existingTeam && existingTeam.players) {
-                    let currentPlayers = Object.keys(existingTeam.players).length;
-                    let maxTeamSize = (tournamentFormat === "2v2") ? 2 : 5;
+                const cleanTeamName =
+                    teamName.trim();
 
-                    if (currentPlayers >= maxTeamSize) {
-                        showToast("В этой команде уже нет свободных мест.", "error");
-                        button.disabled = false;
+
+                if (
+                    cleanTeamName.length >
+                    30
+                ) {
+
+                    showToast(
+                        "Название команды слишком длинное.",
+                        "error"
+                    );
+
+                    button.disabled =
+                        false;
+
+                    updateJoinButton();
+
+                    return;
+                }
+
+
+                const existingTeam =
+                    await firebaseGet(
+                        `tournaments/${safeFirebaseKey(tourneyId)}/teams/${safeFirebaseKey(cleanTeamName)}`
+                    );
+
+
+                if (
+                    existingTeam &&
+                    existingTeam.players
+                ) {
+
+                    const currentPlayers =
+                        Object.keys(
+                            existingTeam.players
+                        ).length;
+
+
+                    const maxTeamSize =
+                        tournamentFormat ===
+                            "2v2"
+                            ? 2
+                            : 5;
+
+
+                    if (
+                        currentPlayers >=
+                        maxTeamSize
+                    ) {
+
+                        showToast(
+                            "В этой команде уже нет свободных мест.",
+                            "error"
+                        );
+
+                        button.disabled =
+                            false;
+
                         updateJoinButton();
+
                         return;
                     }
 
-                    if (existingTeam.players[currentUser]) {
-                        showToast("Вы уже состоите в этой команде.", "error");
-                        button.disabled = false;
+
+                    if (
+                        existingTeam.players[
+                            currentUser
+                        ]
+                    ) {
+
+                        showToast(
+                            "Вы уже состоите в этой команде.",
+                            "error"
+                        );
+
+                        button.disabled =
+                            false;
+
                         updateJoinButton();
+
                         return;
                     }
                 }
 
-                const initialData = { time: new Date().toLocaleTimeString() };
-                if (tournamentSystem === "Спидран") initialData.runTime = "00:00:00";
 
-                if (!existingTeam && tournamentSystem === "Спидран") {
-                    await firebasePatch(`tournaments/${safeFirebaseKey(tourneyId)}/teams/${safeFirebaseKey(cleanTeamName)}`, { runTime: "00:00:00" });
+                const initialData = {
+
+                    time:
+                        new Date()
+                            .toLocaleTimeString()
+                };
+
+
+                if (
+                    tournamentSystem ===
+                    "Спидран"
+                ) {
+
+                    initialData.runTime =
+                        "00:00:00";
                 }
 
-                await firebasePut(`tournaments/${safeFirebaseKey(tourneyId)}/teams/${safeFirebaseKey(cleanTeamName)}/players/${safeFirebaseKey(currentUser)}`, initialData);
-                showToast("Вы успешно зарегистрированы в команду!", "success");
+
+                if (
+                    !existingTeam &&
+                    tournamentSystem ===
+                        "Спидран"
+                ) {
+
+                    await firebasePatch(
+                        `tournaments/${safeFirebaseKey(tourneyId)}/teams/${safeFirebaseKey(cleanTeamName)}`,
+                        {
+                            runTime:
+                                "00:00:00"
+                        }
+                    );
+                }
+
+
+                await firebasePut(
+                    `tournaments/${safeFirebaseKey(tourneyId)}/teams/${safeFirebaseKey(cleanTeamName)}/players/${safeFirebaseKey(currentUser)}`,
+                    initialData
+                );
+
+
+                showToast(
+                    "Вы успешно зарегистрированы в команду!",
+                    "success"
+                );
 
             } else {
-                // === СОЛО ЛОГИКА (1v1) ===
-                const players = await firebaseGet(`tournaments/${safeFirebaseKey(tourneyId)}/players`);
-                const playerCount = players ? Object.keys(players).length : 0;
 
-                if (playerCount >= maxLimit) {
-                    showToast("Все места уже заняты. Турнир заполнен!", "error");
-                    button.disabled = false;
+                /*
+                    1v1
+                */
+
+                const players =
+                    await firebaseGet(
+                        `tournaments/${safeFirebaseKey(tourneyId)}/players`
+                    );
+
+
+                const playerCount =
+                    players
+                        ? Object.keys(
+                            players
+                        ).length
+                        : 0;
+
+
+                if (
+                    playerCount >=
+                    maxLimit
+                ) {
+
+                    showToast(
+                        "Все места уже заняты. Турнир заполнен!",
+                        "error"
+                    );
+
+                    button.disabled =
+                        false;
+
                     updateJoinButton();
+
                     return;
                 }
 
-                const initialData = { time: new Date().toLocaleTimeString() };
-                if (tournamentSystem === "Спидран") initialData.runTime = "00:00:00";
 
-                await firebasePut(`tournaments/${safeFirebaseKey(tourneyId)}/players/${safeFirebaseKey(currentUser)}`, initialData);
-                showToast("Вы успешно зарегистрированы!", "success");
+                const initialData = {
+
+                    time:
+                        new Date()
+                            .toLocaleTimeString()
+                };
+
+
+                if (
+                    tournamentSystem ===
+                    "Спидран"
+                ) {
+
+                    initialData.runTime =
+                        "00:00:00";
+                }
+
+
+                await firebasePut(
+                    `tournaments/${safeFirebaseKey(tourneyId)}/players/${safeFirebaseKey(currentUser)}`,
+                    initialData
+                );
+
+
+                showToast(
+                    "Вы успешно зарегистрированы!",
+                    "success"
+                );
             }
         }
 
-        // Обновляем данные на странице
-        cachedData = "";
-        await loadTournamentData(true); 
+
+        cachedData =
+            "";
+
+
+        await loadTournamentData(
+            true
+        );
 
     } catch (error) {
-        console.error("Ошибка при клике:", error);
-        showToast("Произошла ошибка соединения с базой.", "error");
-        
+
+        console.error(
+            "Ошибка при клике:",
+            error
+        );
+
+
+        showToast(
+            "Произошла ошибка соединения с базой.",
+            "error"
+        );
+
     } finally {
-        // Возвращаем кнопку в нормальное состояние в любом случае
-        button.disabled = false;
+
+        button.disabled =
+            false;
+
         updateJoinButton();
     }
 }
+
 
 /* =========================================================
    KEYBOARD
@@ -3874,18 +6841,21 @@ document.addEventListener(
     event => {
 
         if (
-            event.key === "Escape"
+            event.key ===
+            "Escape"
         ) {
 
             closeMatchModal();
+
             closeProfileModal();
         }
 
 
         if (
-            event.key === "Enter" &&
+            event.key ===
+                "Enter" &&
             document.activeElement?.id ===
-            "chat-input"
+                "chat-input"
         ) {
 
             event.preventDefault();
@@ -3906,8 +6876,8 @@ document.getElementById(
     currentLang;
 
 
-// Сразу при загрузке применяем перевод, если стоит EN
 applyTranslations();
+
 
 loadTournamentData(
     true
@@ -3915,17 +6885,16 @@ loadTournamentData(
 
 
 /*
-    Обновляем страницу каждые 3 секунды,
-    но сами DOM-элементы не перерисовываем,
-    если данные Firebase не изменились.
+    Обновление страницы
+    каждые 3 секунды.
 */
 
 setInterval(
-    () => loadTournamentData(),
+    () =>
+        loadTournamentData(),
     3000
 );
 
 </script>
-
 </body>
 </html>
