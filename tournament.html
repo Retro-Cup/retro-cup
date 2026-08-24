@@ -1534,7 +1534,7 @@ let currentLang =
 */
 
 const PR_REWARD_BASE = {
-    "1v1": 1000,
+    "1v1": 10,
     "2v2": 20,
     "5v5": 25
 };
@@ -1962,7 +1962,7 @@ function getPRCoefficient(
 ) {
 
     return 1 +
-        (winsBefore * 0.5);
+        (winsBefore * 1000);
 }
 
 
