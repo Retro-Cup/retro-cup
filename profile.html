@@ -476,225 +476,37 @@
            LEVEL COLORS
         ========================================== */
 
-        .level-1 {
+               /* ==========================================
+           LEVEL COLORS (15 Уровней)
+        ========================================== */
 
-            color: #b8b8c2;
-
-            border-color: #777783;
-
-            box-shadow:
-                0 0 20px rgba(
-                    150,
-                    150,
-                    160,
-                    0.12
-                );
-
+        .level-1 { color: #b8b8c2; border-color: #777783; box-shadow: 0 0 20px rgba(150,150,160,0.12); }
+        .level-2 { color: #ffffff; border-color: #ffffff; box-shadow: 0 0 22px rgba(255,255,255,0.18); }
+        .level-3 { color: #85e085; border-color: #85e085; box-shadow: 0 0 25px rgba(133,224,133,0.2); } /* Салатовый */
+        .level-4 { color: #33cc33; border-color: #33cc33; box-shadow: 0 0 25px rgba(51,204,51,0.25); }   /* Зеленый */
+        .level-5 { color: #5aa9ff; border-color: #5aa9ff; box-shadow: 0 0 25px rgba(90,169,255,0.22); }   /* Голубой */
+        .level-6 { color: #00ffff; border-color: #00ffff; box-shadow: 0 0 28px rgba(0,255,255,0.25); }    /* Циан */
+        .level-7 { color: #4d4dff; border-color: #4d4dff; box-shadow: 0 0 30px rgba(77,77,255,0.3); }     /* Синий */
+        .level-8 { color: #a67cff; border-color: #a67cff; box-shadow: 0 0 30px rgba(166,124,255,0.3); }   /* Фиолетовый */
+        .level-9 { color: #ff4dff; border-color: #ff4dff; box-shadow: 0 0 32px rgba(255,77,255,0.32); }   /* Маджента */
+        .level-10 { color: #ff5c8a; border-color: #ff5c8a; box-shadow: 0 0 35px rgba(255,92,138,0.35); }  /* Розовый */
+        .level-11 { color: #ff7a45; border-color: #ff7a45; box-shadow: 0 0 35px rgba(255,122,69,0.35); }  /* Оранжевый */
+        .level-12 { color: #ffd84d; border-color: #ffd84d; box-shadow: 0 0 38px rgba(255,216,77,0.4); }   /* Золотой */
+        .level-13 { color: #ff3333; border-color: #ff3333; box-shadow: 0 0 40px rgba(255,51,51,0.45); }   /* Красный */
+        .level-14 { color: #cc0000; border-color: #cc0000; box-shadow: 0 0 45px rgba(204,0,0,0.5); }      /* Темно-красный */
+        
+        /* 15 Уровень - Анимация Бриллиант/Неон */
+        .level-15 {
+            color: #e6ffff;
+            border-color: #e6ffff;
+            box-shadow: 0 0 20px rgba(230,255,255,0.4), 0 0 45px rgba(0,255,255,0.4);
+            animation: level15Glow 2s infinite alternate;
         }
 
-
-        .level-2 {
-
-            color: #ffffff;
-
-            border-color: #ffffff;
-
-            box-shadow:
-                0 0 22px rgba(
-                    255,
-                    255,
-                    255,
-                    0.18
-                );
-
+        @keyframes level15Glow {
+            from { box-shadow: 0 0 20px rgba(230,255,255,0.35), 0 0 40px rgba(0,255,255,0.25); }
+            to { box-shadow: 0 0 30px rgba(230,255,255,0.7), 0 0 60px rgba(0,255,255,0.6); }
         }
-
-
-        .level-3 {
-
-            color: #5aa9ff;
-
-            border-color: #5aa9ff;
-
-            box-shadow:
-                0 0 25px rgba(
-                    90,
-                    169,
-                    255,
-                    0.22
-                );
-
-        }
-
-
-        .level-4 {
-
-            color: #48e0ff;
-
-            border-color: #48e0ff;
-
-            box-shadow:
-                0 0 25px rgba(
-                    72,
-                    224,
-                    255,
-                    0.25
-                );
-
-        }
-
-
-        .level-5 {
-
-            color: #a67cff;
-
-            border-color: #a67cff;
-
-            box-shadow:
-                0 0 28px rgba(
-                    166,
-                    124,
-                    255,
-                    0.28
-                );
-
-        }
-
-
-        .level-6 {
-
-            color: #d16cff;
-
-            border-color: #d16cff;
-
-            box-shadow:
-                0 0 30px rgba(
-                    209,
-                    108,
-                    255,
-                    0.3
-                );
-
-        }
-
-
-        .level-7 {
-
-            color: #ff5c8a;
-
-            border-color: #ff5c8a;
-
-            box-shadow:
-                0 0 30px rgba(
-                    255,
-                    92,
-                    138,
-                    0.3
-                );
-
-        }
-
-
-        .level-8 {
-
-            color: #ff7a45;
-
-            border-color: #ff7a45;
-
-            box-shadow:
-                0 0 32px rgba(
-                    255,
-                    122,
-                    69,
-                    0.32
-                );
-
-        }
-
-
-        .level-9 {
-
-            color: #ffd84d;
-
-            border-color: #ffd84d;
-
-            box-shadow:
-                0 0 35px rgba(
-                    255,
-                    216,
-                    77,
-                    0.35
-                );
-
-        }
-
-
-        .level-10 {
-
-            color: #ffffff;
-
-            border-color: #ffffff;
-
-            box-shadow:
-                0 0 20px rgba(
-                    255,
-                    255,
-                    255,
-                    0.4
-                ),
-                0 0 45px rgba(
-                    166,
-                    124,
-                    255,
-                    0.35
-                );
-
-            animation:
-                level10Glow 2s infinite alternate;
-
-        }
-
-
-        @keyframes level10Glow {
-
-            from {
-
-                box-shadow:
-                    0 0 20px rgba(
-                        255,
-                        255,
-                        255,
-                        0.35
-                    ),
-                    0 0 40px rgba(
-                        166,
-                        124,
-                        255,
-                        0.25
-                    );
-
-            }
-
-            to {
-
-                box-shadow:
-                    0 0 30px rgba(
-                        255,
-                        255,
-                        255,
-                        0.6
-                    ),
-                    0 0 60px rgba(
-                        166,
-                        124,
-                        255,
-                        0.45
-                    );
-
-            }
-
-        }
-
 
         /* ==========================================
            ИНФОРМАЦИЯ УРОВНЯ
@@ -1643,86 +1455,65 @@
      МОДАЛЬНОЕ ОКНО LEVEL
 ========================================== -->
 
+<!-- ==========================================
+     МОДАЛЬНОЕ ОКНО LEVEL
+========================================== -->
 <div
     id="levelModal"
     class="modal-overlay"
     onclick="handleLevelModalBackground(event)"
 >
-
-
     <div class="modal-box">
-
-
         <h3>
-            Изменить уровень
+            Управление PR (Админ)
         </h3>
-
-
         <p class="modal-description">
-
-            Выбери уровень,
-            который будет установлен
-            твоему аккаунту.
-
+            Введи точное количество PR. Уровень рассчитается автоматически.
         </p>
 
-
-        <select
-            id="levelInput"
+        <!-- ТЕПЕРЬ ТУТ ПОЛЕ ВВОДА ЧИСЛА, А НЕ СПИСОК -->
+        <input
+            id="prInput"
             class="modal-input"
+            type="number"
+            placeholder="Введите количество PR"
         >
 
-
-            <option value="1">
-                Level 1 — 1 PR
-            </option>
-
-
-            <option value="2">
-                Level 2 — 20 PR
-            </option>
-
-
-            <option value="3">
-                Level 3 — 50 PR
-            </option>
-
-
-            <option value="4">
-                Level 4 — 100 PR
-            </option>
+        <div class="modal-buttons">
+            <button
+                class="btn-cancel"
+                onclick="closeLevelModal()"
+            >
+                Отмена
+            </button>
+            <button
+                id="saveLevelBtn"
+                class="btn-save"
+                onclick="confirmLevelChange()"
+            >
+                Сохранить
+            </button>
+        </div>
+    </div>
+</div>
 
 
-            <option value="5">
-                Level 5 — 150 PR
-            </option>
-
-
-            <option value="6">
-                Level 6 — 250 PR
-            </option>
-
-
-            <option value="7">
-                Level 7 — 400 PR
-            </option>
-
-
-            <option value="8">
-                Level 8 — 600 PR
-            </option>
-
-
-            <option value="9">
-                Level 9 — 800 PR
-            </option>
-
-
-            <option value="10">
-                Level 10 — 1000 PR
-            </option>
-
-
+             <select id="levelInput" class="modal-input">
+            <option value="1">Level 1 — 1 PR</option>
+            <option value="2">Level 2 — 25 PR</option>
+            <option value="3">Level 3 — 50 PR</option>
+            <option value="4">Level 4 — 100 PR</option>
+            <option value="5">Level 5 — 175 PR</option>
+            <option value="6">Level 6 — 250 PR</option>
+            <option value="7">Level 7 — 350 PR</option>
+            <option value="8">Level 8 — 450 PR</option>
+            <option value="9">Level 9 — 600 PR</option>
+            <option value="10">Level 10 — 800 PR</option>
+            <option value="11">Level 11 — 1000 PR</option>
+            <option value="12">Level 12 — 1250 PR</option>
+            <option value="13">Level 13 — 1500 PR</option>
+            <option value="14">Level 14 — 1750 PR</option>
+            <option value="15">Level 15 — 2000 PR</option>
         </select>
 
 
@@ -1784,19 +1575,8 @@
        RETRO CUP LEVEL SYSTEM
     ========================================== */
 
-    const LEVEL_THRESHOLDS = [
-
-        1,
-        20,
-        50,
-        100,
-        150,
-        250,
-        400,
-        600,
-        800,
-        1000
-
+     const LEVEL_THRESHOLDS = [
+        1, 25, 50, 100, 175, 250, 350, 450, 600, 800, 1000, 1250, 1500, 1750, 2000
     ];
 
 
@@ -2002,33 +1782,16 @@
             "level-circle level-" +
             level;
 
-
-        /* ======================================
-           LEVEL 10
+                /* ======================================
+           LEVEL 15 (MAX)
         ====================================== */
-
-        if (
-            level >= 10
-        ) {
-
-            nextText.innerText =
-                "MAX LEVEL • 1000+ PR";
-
-
-            progressBar.style.width =
-                "100%";
-
-
-            progressBar.style.background =
-                "#ffffff";
-
-
-            progressBar.style.boxShadow =
-                "0 0 15px rgba(255,255,255,0.7)";
-
-
+        if (level >= 15) {
+            nextText.innerText = "MAX LEVEL • 2000+ PR";
+            progressBar.style.width = "100%";
+            progressBar.style.background = "#e6ffff";
+            progressBar.style.boxShadow = "0 0 15px rgba(230,255,255,0.7)";
             return;
-
+        
         }
 
 
@@ -2092,18 +1855,21 @@
             "%";
 
 
-        const colors = [
-
-            "#777783",
-            "#ffffff",
-            "#5aa9ff",
-            "#48e0ff",
-            "#a67cff",
-            "#d16cff",
-            "#ff5c8a",
-            "#ff7a45",
-            "#ffd84d"
-
+               const colors = [
+            "#777783", // 1
+            "#ffffff", // 2
+            "#85e085", // 3
+            "#33cc33", // 4
+            "#5aa9ff", // 5
+            "#00ffff", // 6
+            "#4d4dff", // 7
+            "#a67cff", // 8
+            "#ff4dff", // 9
+            "#ff5c8a", // 10
+            "#ff7a45", // 11
+            "#ffd84d", // 12
+            "#ff3333", // 13
+            "#cc0000"  // 14
         ];
 
 
@@ -3083,73 +2849,36 @@
     /* ==========================================
        ADMIN LEVEL
     ========================================== */
+function openLevelModal() {
 
-    function openLevelModal() {
-
-        if (
-            !currentUserIsAdmin
-        ) {
-
-            alert(
-                "У тебя нет доступа к управлению уровнем."
-            );
-
-
+        if (!currentUserIsAdmin) {
+            alert("У тебя нет доступа к управлению уровнем.");
             return;
-
         }
 
+        const modal = document.getElementById("levelModal");
+        const input = document.getElementById("levelInput");
 
-        const modal =
-            document.getElementById(
-                "levelModal"
-            );
+        // Берём текущий уровень с экрана
+        const currentLevel = Number(
+            document.getElementById("profile-level").innerText
+        );
 
-
-        const input =
-            document.getElementById(
-                "levelInput"
-            );
-
-
-        const currentLevel =
-            Number(
-                document.getElementById(
-                    "profile-level"
-                ).innerText
-            );
-
-
-        if (
-            currentLevel >= 1 &&
-            currentLevel <= 10
-        ) {
-
-            input.value =
-                currentLevel;
-
+        // Проверяем, что уровень от 1 до 15 — вставляем в селект
+        if (currentLevel >= 1 && currentLevel <= 15) {
+            input.value = currentLevel;
         }
 
-
-        modal.style.display =
-            "flex";
-
+        modal.style.display = "flex";
     }
 
 
     /* ==========================================
-       ЗАКРЫТЬ LEVEL MODAL
+       ЗАКРЫТИЕ МОДАЛКИ УРОВНЯ
     ========================================== */
-
     function closeLevelModal() {
-
-        document.getElementById(
-            "levelModal"
-        ).style.display =
-            "none";
-
+        document.getElementById("levelModal").style.display = "none";
     }
-
 
     /* ==========================================
        ФОН LEVEL MODAL
@@ -3175,199 +2904,74 @@
        СОХРАНЕНИЕ LEVEL
     ========================================== */
 
-    async function confirmLevelChange() {
+     async function confirmLevelChange() {
 
-        if (
-            !currentUserIsAdmin
-        ) {
-
-            alert(
-                "У тебя нет доступа к этой функции."
-            );
-
-
+        if (!currentUserIsAdmin) {
+            alert("У тебя нет доступа к этой функции.");
             return;
-
         }
 
+        const input = document.getElementById("levelInput");
+        const button = document.getElementById("saveLevelBtn");
 
-        const input =
-            document.getElementById(
-                "levelInput"
-            );
+        const level = Number(input.value);
 
-
-        const button =
-            document.getElementById(
-                "saveLevelBtn"
-            );
-
-
-        const level =
-            Number(
-                input.value
-            );
-
-
-        if (
-            !Number.isFinite(level) ||
-            level < 1 ||
-            level > 10
-        ) {
-
-            alert(
-                "Выбери уровень от 1 до 10."
-            );
-
-
+        // Проверка – 15 уровней
+        if (!Number.isFinite(level) || level < 1 || level > 15) {
+            alert("Выбери уровень от 1 до 15.");
             return;
-
         }
 
+        // Получаем PR по порогам (thresholds)
+        const newPR = LEVEL_THRESHOLDS[level - 1];
 
-        /*
-           PR соответствует выбранному Level.
-        */
+        // Доп. проверка: уровень действительно соответствует PR
+        const calculatedLevel = getLevelFromPR(newPR);
 
-        const newPR =
-            LEVEL_THRESHOLDS[
-                level - 1
-            ];
-
-
-        /*
-           Дополнительная проверка:
-           Level вычисляется из PR.
-        */
-
-        const calculatedLevel =
-            getLevelFromPR(
-                newPR
-            );
-
-
-        if (
-            calculatedLevel !== level
-        ) {
-
-            alert(
-                "Ошибка расчёта уровня."
-            );
-
-
+        if (calculatedLevel !== level) {
+            alert("Ошибка расчёта уровня.");
             return;
-
         }
 
-
-        button.innerText =
-            "Сохранение...";
-
-
-        button.disabled =
-            true;
-
+        button.innerText = "Сохранение...";
+        button.disabled = true;
 
         try {
-
-            const response =
-                await fetch(
-                    dbUsersUrl +
-                    encodeURIComponent(
-                        currentUser
-                    ) +
-                    ".json",
-                    {
-
-                        method:
-                            "PATCH",
-
-                        headers: {
-
-                            "Content-Type":
-                                "application/json"
-
-                        },
-
-                        /*
-                           ВАЖНО:
-                           Теперь сохраняем одновременно
-                           и PR, и LEVEL.
-                        */
-
-                        body:
-                            JSON.stringify({
-
-                                pr:
-                                    newPR,
-
-                                level:
-                                    calculatedLevel
-
-                            })
-
-                    }
-                );
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    "Ошибка HTTP: " +
-                    response.status
-                );
-
-            }
-
-
-            /*
-               Обновляем интерфейс.
-            */
-
-            updateProfileLevel(
-                newPR
+            const response = await fetch(
+                dbUsersUrl + encodeURIComponent(currentUser) + ".json",
+                {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        pr: newPR,
+                        level: calculatedLevel
+                    })
+                }
             );
 
+            if (!response.ok) {
+                throw new Error("Ошибка HTTP: " + response.status);
+            }
+
+            // Обновляем интерфейс
+            updateProfileLevel(newPR);
 
             closeLevelModal();
 
-
             alert(
                 "Уровень успешно установлен!\n\n" +
-                "Level " +
-                calculatedLevel +
-                "\n" +
-                newPR +
-                " PR"
+                "Level " + calculatedLevel + "\n" +
+                newPR + " PR"
             );
-
 
         } catch (error) {
-
-            console.error(
-                "Ошибка сохранения уровня:",
-                error
-            );
-
-
-            alert(
-                "Не удалось сохранить уровень в базу данных."
-            );
-
-
+            console.error("Ошибка сохранения уровня:", error);
+            alert("Не удалось сохранить уровень в базу данных.");
         } finally {
-
-            button.innerText =
-                "Сохранить";
-
-
-            button.disabled =
-                false;
-
+            button.innerText = "Сохранить";
+            button.disabled = false;
         }
-
     }
-
 
     /* ==========================================
        ENTER / ESCAPE STEAM
