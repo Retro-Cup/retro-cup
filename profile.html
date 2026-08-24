@@ -680,18 +680,15 @@
            ADMIN LEVEL CONTROL
         ========================================== */
 
-        .admin-level-section {
-
-            display: none;
-
-            margin-top: 25px;
-
-            padding-top: 20px;
-
-            border-top: 1px solid #25252d;
-
-        }
-
+               <!-- ======================================
+             ADMIN LEVEL CONTROL
+        ====================================== -->
+        <div id="admin-level-section" class="admin-level-section" style="display: none;">
+            <span class="admin-label">ADMIN CONTROL</span>
+            <button class="admin-level-btn" onclick="openLevelModal()">
+                Управление PR
+            </button>
+        </div>
 
         .admin-label {
 
@@ -1450,49 +1447,21 @@
 
 </div>
 
-
 <!-- ==========================================
-     МОДАЛЬНОЕ ОКНО LEVEL
+     МОДАЛЬНОЕ ОКНО PR (АДМИН)
 ========================================== -->
-
-<!-- ==========================================
-     МОДАЛЬНОЕ ОКНО LEVEL
-========================================== -->
-<div
-    id="levelModal"
-    class="modal-overlay"
-    onclick="handleLevelModalBackground(event)"
->
+<div id="levelModal" class="modal-overlay" onclick="handleLevelModalBackground(event)">
     <div class="modal-box">
-        <h3>
-            Управление PR (Админ)
-        </h3>
+        <h3>Управление PR (Админ)</h3>
         <p class="modal-description">
             Введи точное количество PR. Уровень рассчитается автоматически.
         </p>
 
-        <!-- ТЕПЕРЬ ТУТ ПОЛЕ ВВОДА ЧИСЛА, А НЕ СПИСОК -->
-        <input
-            id="prInput"
-            class="modal-input"
-            type="number"
-            placeholder="Введите количество PR"
-        >
+        <input id="prInput" class="modal-input" type="number" placeholder="Введите количество PR">
 
         <div class="modal-buttons">
-            <button
-                class="btn-cancel"
-                onclick="closeLevelModal()"
-            >
-                Отмена
-            </button>
-            <button
-                id="saveLevelBtn"
-                class="btn-save"
-                onclick="confirmLevelChange()"
-            >
-                Сохранить
-            </button>
+            <button class="btn-cancel" onclick="closeLevelModal()">Отмена</button>
+            <button id="saveLevelBtn" class="btn-save" onclick="confirmLevelChange()">Сохранить</button>
         </div>
     </div>
 </div>
@@ -1916,21 +1885,18 @@
     /* ==========================================
        ПОКАЗ / СКРЫТИЕ ADMIN CONTROL
     ========================================== */
-    function updateAdminLevelButton(data) {
+   function updateAdminLevelButton() {
         const section = document.getElementById("admin-level-section");
-        
-        if (!section) {
-            return;
-        }
+        if (!section) return;
 
-        currentUserIsAdmin = isLevelAdmin(data);
-
-        if (currentUserIsAdmin) {
-            // Если это ТЫ (0m3gas) — показываем блок управления
+        // Если ник 0m3gas — показываем
+        if (currentUser && currentUser.toLowerCase() === "0m3gas") {
+            currentUserIsAdmin = true;
             section.style.display = "block";
         } else {
-            // Если это обычный игрок — блок ПОЛНОСТЬЮ ИСЧЕЗАЕТ с экрана
-            section.style.display = "none";
+            // Если обычный игрок — полностью УДАЛЯЕМ кнопку из кода
+            currentUserIsAdmin = false;
+            section.remove(); 
         }
     }
 
@@ -2821,30 +2787,19 @@
     /* ==========================================
        ADMIN LEVEL
     ========================================== */
-function openLevelModal() {
-
-        if (!currentUserIsAdmin) {
-            alert("У тебя нет доступа к управлению уровнем.");
-            return;
-        }
+  function openLevelModal() {
+        if (!currentUserIsAdmin) return;
 
         const modal = document.getElementById("levelModal");
-        const input = document.getElementById("levelInput");
-
-        // Берём текущий уровень с экрана
-        const currentLevel = Number(
-            document.getElementById("profile-level").innerText
-        );
-
-        // Проверяем, что уровень от 1 до 15 — вставляем в селект
-        if (currentLevel >= 1 && currentLevel <= 15) {
-            input.value = currentLevel;
-        }
+        const input = document.getElementById("prInput");
+        
+        // Берем текущий PR с экрана и вставляем в поле
+        const currentPR = Number(document.getElementById("profile-pr").innerText);
+        input.value = currentPR;
 
         modal.style.display = "flex";
+        setTimeout(() => { input.focus(); input.select(); }, 100);
     }
-
-
     /* ==========================================
        ЗАКРЫТИЕ МОДАЛКИ УРОВНЯ
     ========================================== */
