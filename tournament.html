@@ -3694,7 +3694,13 @@ async function openProfile(
     }
 
 
+    /*
+       Временно показываем первый уровень,
+       пока загружается профиль.
+    */
+
     updateMiniProfileLevel(
+        1,
         1
     );
 
@@ -3712,6 +3718,10 @@ async function openProfile(
 
     }
 
+
+    /* =====================================================
+       ЗАГРУЗКА USER
+    ===================================================== */
 
     let user;
 
@@ -3749,6 +3759,9 @@ async function openProfile(
                     null,
 
                 pr:
+                    1,
+
+                level:
                     1
 
             };
@@ -3773,12 +3786,19 @@ async function openProfile(
                 null,
 
             pr:
+                1,
+
+            level:
                 1
 
         };
 
     }
 
+
+    /* =====================================================
+       АВАТАР
+    ===================================================== */
 
     const avatar =
         document.getElementById(
@@ -3795,6 +3815,10 @@ async function openProfile(
     }
 
 
+    /* =====================================================
+       ИМЯ
+    ===================================================== */
+
     const nameElement =
         document.getElementById(
             "prof-name"
@@ -3808,6 +3832,10 @@ async function openProfile(
 
     }
 
+
+    /* =====================================================
+       STEAM ID
+    ===================================================== */
 
     let stCode =
         user.steamCode;
@@ -3844,6 +3872,10 @@ async function openProfile(
     }
 
 
+    /* =====================================================
+       PR
+    ===================================================== */
+
     let pr =
         Number(user.pr);
 
@@ -3854,6 +3886,7 @@ async function openProfile(
     ) {
 
         pr = 1;
+
     }
 
 
@@ -3861,9 +3894,39 @@ async function openProfile(
         Math.round(pr);
 
 
-    const level =
-        calculateLevel(
-            pr
+    /* =====================================================
+       LEVEL ИЗ FIREBASE
+    ===================================================== */
+
+    let level =
+        Number(user.level);
+
+
+    /*
+       Если level существует в Firebase —
+       используем именно его.
+
+       Если его нет или он неправильный —
+       рассчитываем уровень по PR.
+    */
+
+    if (
+        !Number.isFinite(level) ||
+        level < 1
+    ) {
+
+        level =
+            calculateLevel(
+                pr
+            );
+
+    }
+
+
+    level =
+        Math.max(
+            1,
+            Math.floor(level)
         );
 
 
@@ -3872,21 +3935,36 @@ async function openProfile(
         playerName,
         "PR:",
         pr,
-        "LEVEL:",
+        "FIREBASE LEVEL:",
+        user.level,
+        "DISPLAY LEVEL:",
         level
     );
 
 
+    /* =====================================================
+       ПОКАЗЫВАЕМ LEVEL
+    ===================================================== */
+
     updateMiniProfileLevel(
-        pr
+        pr,
+        level
     );
 
+
+    /* =====================================================
+       ГЛОБАЛЬНАЯ СТАТИСТИКА
+    ===================================================== */
 
     const stats =
         await getGlobalStats(
             playerName
         );
 
+
+    /* =====================================================
+       K/D
+    ===================================================== */
 
     if (profKD) {
 
@@ -3896,6 +3974,10 @@ async function openProfile(
     }
 
 
+    /* =====================================================
+       WINRATE
+    ===================================================== */
+
     if (profWinrate) {
 
         profWinrate.innerText =
@@ -3903,6 +3985,10 @@ async function openProfile(
 
     }
 
+
+    /* =====================================================
+       MATCHES
+    ===================================================== */
 
     if (profMatches) {
 
@@ -3912,7 +3998,6 @@ async function openProfile(
     }
 
 }
-
 
 /* =========================================================
    ЗАКРЫТИЕ МИНИ-ПРОФИЛЯ
