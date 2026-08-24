@@ -2395,43 +2395,17 @@ function getLevelColor(level) {
 /* =========================================================
    СОЗДАНИЕ LEVEL В МИНИ-ПРОФИЛЕ
    ========================================================= */
-
 /* =========================================================
    СОЗДАНИЕ LEVEL В МИНИ-ПРОФИЛЕ
    ========================================================= */
-
 function createMiniProfileLevel() {
+    const modalBox = document.querySelector("#profileModal .modal-box");
+    if (!modalBox) return;
 
-    const modalBox =
-        document.querySelector(
-            "#profileModal .modal-box"
-        );
+    if (document.getElementById("prof-level-wrapper")) return;
 
-
-    if (!modalBox) {
-        return;
-    }
-
-
-    if (
-        document.getElementById(
-            "prof-level-wrapper"
-        )
-    ) {
-
-        return;
-    }
-
-
-    const levelWrapper =
-        document.createElement(
-            "div"
-        );
-
-
-    levelWrapper.id =
-        "prof-level-wrapper";
-
+    const levelWrapper = document.createElement("div");
+    levelWrapper.id = "prof-level-wrapper";
 
     levelWrapper.style.cssText = `
         margin-top:20px;
@@ -2445,394 +2419,130 @@ function createMiniProfileLevel() {
         gap:14px;
     `;
 
-
     levelWrapper.innerHTML = `
-
-        <div
-            id="prof-level-circle"
-            style="
-                width:58px;
-                height:58px;
-                min-width:58px;
-                border-radius:50%;
-                border:3px solid #777783;
-                display:flex;
-                align-items:center;
-                justify-content:center;
-                background:#101014;
-                color:#777783;
-                font-size:20px;
-                font-weight:900;
-                box-shadow:0 0 18px rgba(150,150,160,0.15);
-                transition:0.3s;
-            "
-        >
-
-            <span id="prof-level">
-                1
-            </span>
-
+        <div id="prof-level-circle" style="
+                width:58px; height:58px; min-width:58px;
+                border-radius:50%; border:3px solid #777783;
+                display:flex; align-items:center; justify-content:center;
+                background:#101014; color:#777783; font-size:20px; font-weight:900;
+                box-shadow:0 0 18px rgba(150,150,160,0.15); transition:0.3s;
+            ">
+            <span id="prof-level">1</span>
         </div>
 
-
-        <div
-            style="
-                display:flex;
-                flex-direction:column;
-                gap:3px;
-            "
-        >
-
-            <div
-                style="
-                    color:#858592;
-                    font-size:10px;
-                    font-weight:900;
-                    text-transform:uppercase;
-                "
-            >
+        <div style="display:flex; flex-direction:column; gap:3px;">
+            <div style="color:#858592; font-size:10px; font-weight:900; text-transform:uppercase;">
                 Retro Cup Level
             </div>
-
-
-            <div
-                id="prof-pr"
-                style="
-                    color:#a67cff;
-                    font-size:13px;
-                    font-weight:900;
-                "
-            >
+            <div id="prof-pr" style="color:#a67cff; font-size:13px; font-weight:900;">
                 1 PR
             </div>
-
         </div>
     `;
 
-
-    const statsGrid =
-        modalBox.querySelector(
-            ".wg-meta-grid"
-        );
-
-
+    const statsGrid = modalBox.querySelector(".wg-meta-grid");
     if (statsGrid) {
-
-        modalBox.insertBefore(
-            levelWrapper,
-            statsGrid
-        );
-
+        modalBox.insertBefore(levelWrapper, statsGrid);
     } else {
-
-        modalBox.appendChild(
-            levelWrapper
-        );
+        modalBox.appendChild(levelWrapper);
     }
 }
+
 /* =========================================================
    ОБНОВЛЕНИЕ LEVEL В МИНИ-ПРОФИЛЕ
    ========================================================= */
-
-function updateMiniProfileLevel(
-    pr,
-    savedLevel = null
-) {
-
+function updateMiniProfileLevel(pr, savedLevel = null) {
     createMiniProfileLevel();
 
-
     /* =====================================================
-       УДАЛЯЕМ СТАРУЮ НАДПИСЬ LEVEL 10
+       УДАЛЯЕМ СТАРЫЕ ТЕКСТЫ LEVEL
     ===================================================== */
+    const oldLevelName = document.getElementById("prof-level-name");
+    if (oldLevelName) oldLevelName.remove();
 
-    const oldLevelName =
-        document.getElementById(
-            "prof-level-name"
-        );
-
-
-    if (oldLevelName) {
-
-        oldLevelName.remove();
-
-    }
-
-
-    /* =====================================================
-       УДАЛЯЕМ ЛЮБОЙ СТАРЫЙ ТЕКСТ
-       "Level 1", "Level 2", "Level 10" И Т.Д.
-    ===================================================== */
-
-    const levelWrapper =
-        document.getElementById(
-            "prof-level-wrapper"
-        );
-
-
+    const levelWrapper = document.getElementById("prof-level-wrapper");
     if (levelWrapper) {
-
-        const textElements =
-            levelWrapper.querySelectorAll(
-                "div, span"
-            );
-
-
-        textElements.forEach(
-            element => {
-
-                const text =
-                    element.innerText
-                        ?.trim();
-
-
-                if (
-                    /^Level\s+\d+$/i.test(
-                        text
-                    )
-                ) {
-
-                    element.remove();
-
-                }
-
-            }
-        );
-
+        const textElements = levelWrapper.querySelectorAll("div, span");
+        textElements.forEach(element => {
+            const text = element.innerText?.trim();
+            if (/^Level\s+\d+$/i.test(text)) element.remove();
+        });
     }
-
 
     /* =====================================================
        ОПРЕДЕЛЯЕМ LEVEL
     ===================================================== */
-
     let level;
-
-
-    if (
-        savedLevel !== null &&
-        savedLevel !== undefined &&
-        savedLevel !== "" &&
-        Number.isFinite(
-            Number(savedLevel)
-        )
-    ) {
-
-        level =
-            Math.max(
-                1,
-                Math.floor(
-                    Number(savedLevel)
-                )
-            );
-
+    if (savedLevel !== null && savedLevel !== undefined && savedLevel !== "" && Number.isFinite(Number(savedLevel))) {
+        level = Math.max(1, Math.floor(Number(savedLevel)));
     } else {
-
-        level =
-            calculateLevel(
-                pr
-            );
-
+        level = calculateLevel(pr); // Убедись, что функция calculateLevel у тебя использует новые пороги (15 штук)
     }
-
 
     /* =====================================================
        COLOR
     ===================================================== */
-
-    const color =
-        getLevelColor(
-            level
-        );
-
+    const color = getLevelColor(level);
 
     /* =====================================================
-       LEVEL В КРУГУ
+       ОБНОВЛЕНИЕ ИНТЕРФЕЙСА
     ===================================================== */
+    const levelText = document.getElementById("prof-level");
+    if (levelText) levelText.innerText = String(level);
 
-    const levelText =
-        document.getElementById(
-            "prof-level"
-        );
-
-
-    if (levelText) {
-
-        levelText.innerText =
-            String(level);
-
-    }
-
-
-    /* =====================================================
-       PR
-    ===================================================== */
-
-    const prText =
-        document.getElementById(
-            "prof-pr"
-        );
-
-
+    const prText = document.getElementById("prof-pr");
     if (prText) {
-
-        const numericPR =
-            Number(pr);
-
-
-        prText.innerText =
-            (
-                Number.isFinite(
-                    numericPR
-                )
-                    ? Math.round(
-                        numericPR
-                    )
-                    : 1
-            ) +
-            " PR";
-
-
-        prText.style.color =
-            color;
-
+        const numericPR = Number(pr);
+        prText.innerText = (Number.isFinite(numericPR) ? Math.round(numericPR) : 1) + " PR";
+        prText.style.color = color;
     }
 
-
-    /* =====================================================
-       КРУГ LEVEL
-    ===================================================== */
-
-    const circle =
-        document.getElementById(
-            "prof-level-circle"
-        );
-
-
+    const circle = document.getElementById("prof-level-circle");
     if (circle) {
-
-        circle.className =
-            "level-circle level-" +
-            level;
-
-
-        circle.style.color =
-            color;
-
-
-        circle.style.borderColor =
-            color;
-
+        circle.className = "level-circle level-" + level;
+        circle.style.color = color;
+        circle.style.borderColor = color;
 
         /* =================================================
-           LEVEL 10
+           LEVEL 15 (MAX) - Анимация
         ================================================= */
-
-        if (
-            level >= 10
-        ) {
-
-            circle.style.boxShadow =
-                `
-                0 0 18px rgba(255,255,255,0.5),
-                0 0 35px rgba(166,124,255,0.35)
-                `;
-
-
-            circle.style.animation =
-                "retroMiniLevelGlow 2s infinite alternate";
-
-
+        if (level >= 15) { // БЫЛО 10, ТЕПЕРЬ 15
+            circle.style.boxShadow = `
+                0 0 18px rgba(230,255,255,0.5),
+                0 0 35px rgba(0,255,255,0.35)
+            `;
+            circle.style.animation = "retroMiniLevelGlow 2s infinite alternate";
         } else {
-
-            circle.style.boxShadow =
-                `0 0 18px ${color}55`;
-
-
-            circle.style.animation =
-                "none";
-
+            circle.style.boxShadow = `0 0 18px ${color}55`;
+            circle.style.animation = "none";
         }
-
     }
-
-
-    /* =====================================================
-       DEBUG
-    ===================================================== */
-
-    console.log(
-        "MINI PROFILE LEVEL:",
-        {
-            PR:
-                pr,
-
-            FirebaseLevel:
-                savedLevel,
-
-            DisplayLevel:
-                level
-        }
-    );
-
 }
 
 /* =========================================================
-   CSS ДЛЯ LEVEL 10
+   CSS ДЛЯ LEVEL 15 (Бриллиантовый цвет)
    ========================================================= */
-
 (function addMiniLevelStyle() {
+    if (document.getElementById("retro-mini-level-style")) return;
 
-    if (
-        document.getElementById(
-            "retro-mini-level-style"
-        )
-    ) {
-
-        return;
-
-    }
-
-
-    const style =
-        document.createElement(
-            "style"
-        );
-
-
-    style.id =
-        "retro-mini-level-style";
-
+    const style = document.createElement("style");
+    style.id = "retro-mini-level-style";
 
     style.innerHTML = `
-
         @keyframes retroMiniLevelGlow {
-
             from {
-
                 box-shadow:
-                    0 0 18px rgba(255,255,255,0.35),
-                    0 0 30px rgba(166,124,255,0.25);
-
+                    0 0 18px rgba(230,255,255,0.35),
+                    0 0 30px rgba(0,255,255,0.25);
             }
-
             to {
-
                 box-shadow:
-                    0 0 25px rgba(255,255,255,0.65),
-                    0 0 45px rgba(166,124,255,0.45);
-
+                    0 0 25px rgba(230,255,255,0.65),
+                    0 0 45px rgba(0,255,255,0.45);
             }
-
         }
-
     `;
-
-
-    document.head.appendChild(
-        style
-    );
-
+    document.head.appendChild(style);
 })();
 /* =========================================================
    ПОЛУЧАЕМ ПОБЕДЫ ИГРОКА
@@ -3913,9 +3623,8 @@ async function openProfile(
 
     }
 
-
     /* =====================================================
-       AVATAR
+       AVATAR (ФИКС БАГА С ПРОШЛОЙ КАРТИНКОЙ)
     ===================================================== */
 
     const avatar =
@@ -3924,11 +3633,27 @@ async function openProfile(
         );
 
 
+    const defaultAvatarImage = 
+        "https://via.placeholder.com/150/141419/a67cff?text=TU";
+
+
     if (avatar) {
 
-        avatar.src =
-            user.avatar ||
-            defaultAvatar;
+        if (
+            user && 
+            user.avatar && 
+            user.avatar.trim() !== ""
+        ) {
+
+            avatar.src =
+                user.avatar;
+
+        } else {
+
+            avatar.src =
+                defaultAvatarImage;
+
+        }
 
     }
 
@@ -4155,7 +3880,7 @@ async function openProfile(
 }
 
 /* =========================================================
-   ЗАКРЫТИЕ МИНИ-ПРОФИЛЯ
+   ЗАКРЫТИЕ МИНИ-ПРОФИЛЯ (СБРОС ДАННЫХ)
    ========================================================= */
 
 function closeProfileModal() {
@@ -4172,6 +3897,41 @@ function closeProfileModal() {
             "none";
 
     }
+
+
+    /* =====================================================
+       ОЧИЩАЕМ АВАТАРКУ ПРИ ЗАКРЫТИИ
+       Чтобы при открытии следующего игрока не было бага
+    ===================================================== */
+
+    const avatar =
+        document.getElementById(
+            "prof-avatar"
+        );
+
+    if (avatar) {
+        
+        avatar.src = 
+            "https://via.placeholder.com/150/141419/a67cff?text=TU";
+            
+    }
+
+
+    /* =====================================================
+       ОЧИЩАЕМ ИМЯ И СТАТИСТИКУ ПРИ ЗАКРЫТИИ (ВИЗУАЛЬНО)
+    ===================================================== */
+
+    const nameElement = document.getElementById("prof-name");
+    if (nameElement) nameElement.innerText = "Загрузка...";
+
+    const profKD = document.getElementById("prof-kd");
+    if (profKD) profKD.innerText = "⏳...";
+
+    const profWinrate = document.getElementById("prof-winrate");
+    if (profWinrate) profWinrate.innerText = "⏳...";
+
+    const profMatches = document.getElementById("prof-matches");
+    if (profMatches) profMatches.innerText = "⏳...";
 
 }
 
