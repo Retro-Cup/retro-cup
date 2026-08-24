@@ -3537,7 +3537,6 @@ function toggleLanguage() {
     );
 }
 
-
 /* =========================================================
    GLOBAL STATS
    ========================================================= */
@@ -3556,9 +3555,7 @@ async function getGlobalStats(
 
     if (
         !allTournamentsCache ||
-        now -
-            lastTournamentsFetch >
-            15000
+        now - lastTournamentsFetch > 15000
     ) {
 
         try {
@@ -3576,6 +3573,7 @@ async function getGlobalStats(
             lastTournamentsFetch =
                 now;
 
+
         } catch (e) {
 
             console.error(
@@ -3586,16 +3584,16 @@ async function getGlobalStats(
 
             return {
 
-                kd:
-                    "0.00",
+                kd: "0.00",
 
-                winrate:
-                    "0.0%",
+                winrate: "0.0%",
 
-                matches:
-                    0
+                matches: 0
+
             };
+
         }
+
     }
 
 
@@ -3627,10 +3625,8 @@ async function getGlobalStats(
                             if (
                                 match &&
                                 (
-                                    match.p1 ===
-                                        playerName ||
-                                    match.p2 ===
-                                        playerName
+                                    match.p1 === playerName ||
+                                    match.p2 === playerName
                                 )
                             ) {
 
@@ -3660,6 +3656,7 @@ async function getGlobalStats(
                                     ) {
 
                                         matchesWon++;
+
                                     }
 
 
@@ -3668,37 +3665,43 @@ async function getGlobalStats(
                                         playerName
                                     ) {
 
-                                        totalKills +=
-                                            s1;
+                                        totalKills += s1;
 
-                                        totalDeaths +=
-                                            s2;
+                                        totalDeaths += s2;
+
 
                                     } else {
 
-                                        totalKills +=
-                                            s2;
+                                        totalKills += s2;
 
-                                        totalDeaths +=
-                                            s1;
+                                        totalDeaths += s1;
+
                                     }
+
                                 }
+
                             }
+
                         }
                     );
+
                 }
+
             }
         );
+
     }
 
 
     const kd =
         totalDeaths === 0
+
             ? (
                 totalKills > 0
                     ? totalKills
                     : 0
             )
+
             : (
                 totalKills /
                 totalDeaths
@@ -3707,12 +3710,13 @@ async function getGlobalStats(
 
     const winrate =
         matchesPlayed === 0
+
             ? 0
+
             : (
                 matchesWon /
                 matchesPlayed
-            ) *
-            100;
+            ) * 100;
 
 
     return {
@@ -3726,7 +3730,9 @@ async function getGlobalStats(
 
         matches:
             matchesPlayed
+
     };
+
 }
 
 
@@ -3758,15 +3764,18 @@ async function openProfile(
             "prof-kd"
         );
 
+
     const profWinrate =
         document.getElementById(
             "prof-winrate"
         );
 
+
     const profMatches =
         document.getElementById(
             "prof-matches"
         );
+
 
     const profSteam =
         document.getElementById(
@@ -3778,6 +3787,7 @@ async function openProfile(
 
         profKD.innerText =
             "...";
+
     }
 
 
@@ -3785,6 +3795,7 @@ async function openProfile(
 
         profWinrate.innerText =
             "...";
+
     }
 
 
@@ -3792,6 +3803,7 @@ async function openProfile(
 
         profMatches.innerText =
             "...";
+
     }
 
 
@@ -3799,6 +3811,7 @@ async function openProfile(
 
         profSteam.innerText =
             "⏳...";
+
     }
 
 
@@ -3825,6 +3838,7 @@ async function openProfile(
 
         modal.style.display =
             "flex";
+
     }
 
 
@@ -3849,6 +3863,7 @@ async function openProfile(
                 "HTTP " +
                 res.status
             );
+
         }
 
 
@@ -3868,8 +3883,11 @@ async function openProfile(
 
                 pr:
                     1
+
             };
+
         }
+
 
     } catch (e) {
 
@@ -3889,7 +3907,9 @@ async function openProfile(
 
             pr:
                 1
+
         };
+
     }
 
 
@@ -3908,6 +3928,7 @@ async function openProfile(
         avatar.src =
             user.avatar ||
             defaultAvatar;
+
     }
 
 
@@ -3925,6 +3946,7 @@ async function openProfile(
 
         nameElement.innerText =
             playerName;
+
     }
 
 
@@ -3943,6 +3965,7 @@ async function openProfile(
 
         stCode =
             stCode.trim();
+
     }
 
 
@@ -3960,103 +3983,67 @@ async function openProfile(
 
             profSteam.innerText =
                 l.notSet;
+
         }
+
     }
 
 
-/* ==========================================
-   PR
-========================================== */
+    /* ==========================================
+       PR
+    ========================================== */
 
-let pr =
-    Number(user.pr);
-
-
-if (
-    isNaN(pr) ||
-    pr < 1
-) {
-
-    pr = 1;
-
-}
+    let pr =
+        Number(
+            user.pr
+        );
 
 
-pr =
-    Math.round(pr);
+    if (
+        isNaN(pr) ||
+        pr < 1
+    ) {
+
+        pr = 1;
+
+    }
 
 
-/* ==========================================
-   LEVEL
-========================================== */
+    pr =
+        Math.round(
+            pr
+        );
 
-const level =
-    calculateLevel(
+
+    /* ==========================================
+       LEVEL
+    ========================================== */
+
+    const level =
+        calculateLevel(
+            pr
+        );
+
+
+    console.log(
+        "PROFILE:",
+        playerName,
+        "PR:",
+        pr,
+        "LEVEL:",
+        level
+    );
+
+
+    /* ==========================================
+       ПОКАЗЫВАЕМ LEVEL + PR
+    ========================================== */
+
+    updateMiniProfileLevel(
         pr
     );
 
 
-console.log(
-    "PROFILE:",
-    playerName,
-    "PR:",
-    pr,
-    "LEVEL:",
-    level
-);
-
-
-/* ==========================================
-   ПОКАЗЫВАЕМ LEVEL
-========================================== */
-
-updateMiniProfileLevel(
-    pr
-);
-
-
-/* ==========================================
-   ДОПОЛНИТЕЛЬНО ОБНОВЛЯЕМ ТЕКСТ LEVEL
-========================================== */
-
-const miniLevelText =
-    document.getElementById(
-        "prof-level-small"
-    );
-
-
-if (
-    miniLevelText
-) {
-
-    miniLevelText.innerText =
-        level;
-
-    miniLevelText.className =
-        "level-" +
-        level;
-
-}
-
-
-/* ==========================================
-   ОБНОВЛЯЕМ PR
-========================================== */
-
-const miniPR =
-    document.getElementById(
-        "prof-pr"
-    );
-
-
-if (
-    miniPR
-) {
-
-    miniPR.innerText =
-        pr + " PR";
-
-}
     /* ==========================================
        ГЛОБАЛЬНАЯ СТАТИСТИКА
     ========================================== */
@@ -4075,6 +4062,7 @@ if (
 
         profKD.innerText =
             stats.kd;
+
     }
 
 
@@ -4086,6 +4074,7 @@ if (
 
         profWinrate.innerText =
             stats.winrate;
+
     }
 
 
@@ -4097,7 +4086,9 @@ if (
 
         profMatches.innerText =
             stats.matches;
+
     }
+
 }
 
 
@@ -4117,7 +4108,9 @@ function closeProfileModal() {
 
         modal.style.display =
             "none";
+
     }
+
 }
 
 
@@ -4135,7 +4128,9 @@ function handleProfileBackground(
     ) {
 
         closeProfileModal();
+
     }
+
 }
 
 /* =========================================================
