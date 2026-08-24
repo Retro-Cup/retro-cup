@@ -2549,20 +2549,52 @@ function createMiniProfileLevel() {
     }
 }
 
-
 /* =========================================================
    ОБНОВЛЕНИЕ LEVEL В МИНИ-ПРОФИЛЕ
    ========================================================= */
 
 function updateMiniProfileLevel(
-    pr
+    pr,
+    savedLevel = null
 ) {
 
     createMiniProfileLevel();
 
 
-    const level =
-        calculateLevel(pr);
+    /*
+       Если Firebase передал сохранённый LEVEL —
+       используем именно его.
+
+       Если LEVEL не передан —
+       рассчитываем его по PR.
+    */
+
+    let level;
+
+
+    if (
+        savedLevel !== null &&
+        savedLevel !== undefined &&
+        savedLevel !== "" &&
+        Number.isFinite(
+            Number(savedLevel)
+        )
+    ) {
+
+        level =
+            Math.max(
+                1,
+                Math.floor(
+                    Number(savedLevel)
+                )
+            );
+
+    } else {
+
+        level =
+            calculateLevel(pr);
+
+    }
 
 
     const color =
@@ -2593,12 +2625,21 @@ function updateMiniProfileLevel(
         );
 
 
+    /* =====================================================
+       ЧИСЛО В КРУГУ
+    ===================================================== */
+
     if (levelText) {
 
         levelText.innerText =
-            level;
+            String(level);
+
     }
 
+
+    /* =====================================================
+       LEVEL СПРАВА ОТ КРУГА
+    ===================================================== */
 
     if (levelName) {
 
@@ -2608,28 +2649,62 @@ function updateMiniProfileLevel(
 
         levelName.style.color =
             color;
+
     }
 
 
+    /* =====================================================
+       PR СПРАВА ОТ КРУГА
+    ===================================================== */
+
     if (prText) {
 
+        const numericPR =
+            Number(pr);
+
+
         prText.innerText =
-            Math.round(pr) +
+            (
+                Number.isFinite(numericPR)
+                    ? Math.round(numericPR)
+                    : 1
+            ) +
             " PR";
 
         prText.style.color =
             color;
+
     }
 
 
+    /* =====================================================
+       КРУГ LEVEL
+    ===================================================== */
+
     if (circle) {
+
+        /*
+           Полностью обновляем класс,
+           чтобы CSS level-1 ... level-10
+           соответствовал текущему уровню.
+        */
+
+        circle.className =
+            "level-circle level-" +
+            level;
+
 
         circle.style.color =
             color;
 
+
         circle.style.borderColor =
             color;
 
+
+        /* =================================================
+           LEVEL 10
+        ================================================= */
 
         if (level >= 10) {
 
@@ -2639,18 +2714,38 @@ function updateMiniProfileLevel(
                 0 0 35px rgba(166,124,255,0.35)
                 `;
 
+
             circle.style.animation =
                 "retroMiniLevelGlow 2s infinite alternate";
+
 
         } else {
 
             circle.style.boxShadow =
                 `0 0 18px ${color}55`;
 
+
             circle.style.animation =
                 "none";
+
         }
+
     }
+
+
+    /*
+       Для проверки в консоли
+    */
+
+    console.log(
+        "MINI PROFILE LEVEL:",
+        {
+            PR: pr,
+            FirebaseLevel: savedLevel,
+            DisplayLevel: level
+        }
+    );
+
 }
 
 
@@ -2665,7 +2760,9 @@ function updateMiniProfileLevel(
             "retro-mini-level-style"
         )
     ) {
+
         return;
+
     }
 
 
@@ -2709,8 +2806,6 @@ function updateMiniProfileLevel(
     );
 
 })();
-
-
 /* =========================================================
    ПОЛУЧАЕМ ПОБЕДЫ ИГРОКА
    ========================================================= */
