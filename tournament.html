@@ -3964,56 +3964,99 @@ async function openProfile(
     }
 
 
-    /* ==========================================
-       PR
-    ========================================== */
+/* ==========================================
+   PR
+========================================== */
 
-    let pr =
-        Number(user.pr);
-
-
-    if (
-        isNaN(pr) ||
-        pr < 1
-    ) {
-
-        pr = 1;
-    }
+let pr =
+    Number(user.pr);
 
 
-    pr =
-        Math.round(pr);
+if (
+    isNaN(pr) ||
+    pr < 1
+) {
+
+    pr = 1;
+
+}
 
 
-    /* ==========================================
-       LEVEL
-    ========================================== */
-
-    const level =
-        calculateLevel(
-            pr
-        );
+pr =
+    Math.round(pr);
 
 
-    console.log(
-        "PROFILE:",
-        playerName,
-        "PR:",
-        pr,
-        "LEVEL:",
-        level
-    );
+/* ==========================================
+   LEVEL
+========================================== */
 
-
-    /* ==========================================
-       ПОКАЗЫВАЕМ LEVEL
-    ========================================== */
-
-    updateMiniProfileLevel(
+const level =
+    calculateLevel(
         pr
     );
 
 
+console.log(
+    "PROFILE:",
+    playerName,
+    "PR:",
+    pr,
+    "LEVEL:",
+    level
+);
+
+
+/* ==========================================
+   ПОКАЗЫВАЕМ LEVEL
+========================================== */
+
+updateMiniProfileLevel(
+    pr
+);
+
+
+/* ==========================================
+   ДОПОЛНИТЕЛЬНО ОБНОВЛЯЕМ ТЕКСТ LEVEL
+========================================== */
+
+const miniLevelText =
+    document.getElementById(
+        "prof-level-small"
+    );
+
+
+if (
+    miniLevelText
+) {
+
+    miniLevelText.innerText =
+        level;
+
+    miniLevelText.className =
+        "level-" +
+        level;
+
+}
+
+
+/* ==========================================
+   ОБНОВЛЯЕМ PR
+========================================== */
+
+const miniPR =
+    document.getElementById(
+        "prof-pr"
+    );
+
+
+if (
+    miniPR
+) {
+
+    miniPR.innerText =
+        pr + " PR";
+
+}
     /* ==========================================
        ГЛОБАЛЬНАЯ СТАТИСТИКА
     ========================================== */
