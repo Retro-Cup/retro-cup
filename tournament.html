@@ -1475,11 +1475,12 @@
         margin-top:10px;
         padding:10px 14px;
         border-radius:14px;
-        background:linear-gradient(
-            135deg,
-            rgba(255,79,139,0.07),
-            rgba(166,124,255,0.05)
-        );
+        background:
+            linear-gradient(
+                135deg,
+                rgba(255,255,255,0.025),
+                rgba(255,255,255,0.01)
+            );
         border:1px solid rgba(255,255,255,0.06);
         box-shadow:
             inset 0 1px 0 rgba(255,255,255,0.03),
@@ -1496,22 +1497,13 @@
             height:64px;
             min-width:64px;
             border-radius:50%;
-            border:2px solid #ff4f8b;
-            background:
-                radial-gradient(
-                    circle at 35% 30%,
-                    rgba(255,79,139,0.16),
-                    rgba(16,16,22,0.98) 65%
-                );
+            background:#101014;
             display:flex;
             align-items:center;
             justify-content:center;
             box-sizing:border-box;
             position:relative;
-            box-shadow:
-                0 0 0 4px rgba(255,79,139,0.04),
-                0 0 20px rgba(255,79,139,0.22),
-                inset 0 0 15px rgba(255,79,139,0.06);
+            border-width:2px;
         "
     >
 
@@ -1519,25 +1511,26 @@
         <div
             style="
                 position:absolute;
-                inset:5px;
+                width:48px;
+                height:48px;
                 border-radius:50%;
-                border:1px solid rgba(255,79,139,0.14);
+                background:#141419;
+                border:1px solid rgba(255,255,255,0.05);
                 pointer-events:none;
             "
         ></div>
 
+
+        <!-- ЦИФРА LEVEL -->
         <span
             id="prof-level"
             style="
-                color:#ff4f8b;
-                font-size:27px;
+                position:relative;
+                z-index:2;
+                font-size:26px;
                 font-weight:900;
                 line-height:1;
                 letter-spacing:-1px;
-                text-shadow:
-                    0 0 10px rgba(255,79,139,0.35);
-                position:relative;
-                z-index:2;
             "
         >
             1
@@ -1553,8 +1546,8 @@
             flex-direction:column;
             align-items:flex-start;
             justify-content:center;
-            gap:4px;
-            min-width:100px;
+            gap:5px;
+            min-width:105px;
         "
     >
 
@@ -1595,8 +1588,8 @@
 
             <span
                 id="prof-level-small"
+                class="level-1"
                 style="
-                    color:#ff4f8b;
                     font-size:15px;
                     font-weight:900;
                     line-height:1;
@@ -1614,7 +1607,6 @@
                 display:flex;
                 align-items:center;
                 gap:7px;
-                margin-top:1px;
             "
         >
 
@@ -1637,8 +1629,6 @@
                     font-size:14px;
                     font-weight:900;
                     line-height:1;
-                    text-shadow:
-                        0 0 8px rgba(166,124,255,0.22);
                 "
             >
                 1
