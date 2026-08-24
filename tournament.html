@@ -1230,6 +1230,40 @@
     </div>
 
 
+<!-- =========================================================
+     TOURNAMENT TABS
+     ========================================================= -->
+
+<div
+    id="tourney-tabs"
+    style="
+        display:flex;
+        gap:8px;
+        margin-top:20px;
+        margin-bottom:15px;
+    "
+>
+
+    <button
+        id="tab-details"
+        class="wg-btn"
+        onclick="switchTab('details')"
+    >
+        Подробности
+    </button>
+
+
+    <button
+        id="tab-bracket"
+        class="wg-btn"
+        onclick="switchTab('bracket')"
+    >
+        Турнирная сетка
+    </button>
+
+</div>
+    
+    
     <!-- BRACKET -->
     <div
         class="wg-card"
@@ -4030,6 +4064,10 @@ function switchTab(
    TOURNAMENT LOAD
    ========================================================= */
 
+/* =========================================================
+   TOURNAMENT LOAD
+   ========================================================= */
+
 async function loadTournamentData(
     force = false
 ) {
@@ -4103,11 +4141,16 @@ async function loadTournamentData(
             {};
 
 
+        /* =====================================================
+           ОСНОВНАЯ ИНФОРМАЦИЯ
+           ===================================================== */
+
         document.getElementById(
             "t-game"
         ).innerText =
             data.game ||
             "---";
+
 
         document.getElementById(
             "t-name"
@@ -4172,12 +4215,20 @@ async function loadTournamentData(
             "---";
 
 
+        /* =====================================================
+           ПЕРЕВОДЫ / СТАТУС / АДМИН
+           ===================================================== */
+
         applyTranslations();
 
         updateTournamentStatus();
 
         updateAdminControls();
 
+
+        /* =====================================================
+           УЧАСТНИКИ
+           ===================================================== */
 
         await preloadUsers(
             data
@@ -4194,64 +4245,106 @@ async function loadTournamentData(
             result.validParticipants;
 
 
+        /* =====================================================
+           ВКЛАДКИ
+           
+           Подробности и Турнирная сетка существуют
+           независимо от статуса турнира.
+
+           Для Спидрана сетка полностью скрывается.
+           ===================================================== */
+
+        const tabs =
+            document.getElementById(
+                "tourney-tabs"
+            );
+
+        const bracketSection =
+            document.getElementById(
+                "bracket-section"
+            );
+
+        const leaderboardSection =
+            document.getElementById(
+                "leaderboard-section"
+            );
+
+
         if (
             tournamentSystem ===
             "Спидран"
         ) {
 
-            document.getElementById(
-                "bracket-section"
-            ).style.display =
-                "none";
+            /*
+                У спидрана нет турнирной сетки.
+            */
 
-            document.getElementById(
-                "tourney-tabs"
-            ).style.display =
-                "none";
+            if (tabs) {
 
-            document.getElementById(
-                "leaderboard-section"
-            ).style.display =
-                "none";
+                tabs.style.display =
+                    "none";
+            }
+
+
+            if (bracketSection) {
+
+                bracketSection.style.display =
+                    "none";
+            }
+
+
+            if (leaderboardSection) {
+
+                leaderboardSection.style.display =
+                    "none";
+            }
 
         } else {
 
-            if (
-                tStatus ===
-                "finished"
-            ) {
+            /*
+                Для обычных турниров вкладки
+                доступны ВСЕГДА:
 
-                document.getElementById(
-                    "tourney-tabs"
-                ).style.display =
+                waiting
+                registration
+                active
+                finished
+            */
+
+            if (tabs) {
+
+                tabs.style.display =
                     "flex";
+            }
+
+
+            /*
+                После загрузки турнира
+                восстанавливаем выбранную вкладку.
+            */
+
+            if (
+                typeof switchTab ===
+                "function"
+            ) {
 
                 switchTab(
                     currentTab
                 );
-
-            } else {
-
-                document.getElementById(
-                    "tourney-tabs"
-                ).style.display =
-                    "none";
-
-                document.getElementById(
-                    "leaderboard-section"
-                ).style.display =
-                    "none";
-
-                document.getElementById(
-                    "bracket-section"
-                ).style.display =
-                    "block";
             }
         }
 
 
+        /* =====================================================
+           КНОПКА УЧАСТИЯ
+           ===================================================== */
+
         updateJoinButton();
 
+
+        /* =====================================================
+           ТУРНИРНАЯ СЕТКА
+           ===================================================== */
 
         if (
             tournamentSystem !==
@@ -4265,9 +4358,13 @@ async function loadTournamentData(
             );
         }
 
+
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            error
+        );
+
 
         showToast(
             "Не удалось загрузить данные турнира.",
