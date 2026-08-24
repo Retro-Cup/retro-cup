@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -27,7 +26,10 @@
             margin: 0 auto;
         }
 
-        /* Навигация */
+        /* ==========================================
+           НАВИГАЦИЯ
+        ========================================== */
+
         .nav-link {
             color: #8c8c9b;
             text-decoration: none;
@@ -41,7 +43,10 @@
             color: #a67cff;
         }
 
-        /* Шапка */
+        /* ==========================================
+           ШАПКА
+        ========================================== */
+
         header {
             display: flex;
             justify-content: space-between;
@@ -57,7 +62,10 @@
             font-weight: 900;
         }
 
-        /* Кнопка выхода */
+        /* ==========================================
+           КНОПКА ВЫХОДА
+        ========================================== */
+
         .logout-btn {
             background: rgba(255, 60, 100, 0.1);
             color: #ff3c64;
@@ -74,7 +82,10 @@
             color: white;
         }
 
-        /* Карточки */
+        /* ==========================================
+           КАРТОЧКИ
+        ========================================== */
+
         .profile-card {
             background: #141419;
             padding: 25px;
@@ -104,7 +115,10 @@
             word-break: break-word;
         }
 
-        /* Аватар */
+        /* ==========================================
+           АВАТАР
+        ========================================== */
+
         .avatar-wrapper {
             display: flex;
             align-items: center;
@@ -163,7 +177,10 @@
             display: none;
         }
 
-        /* Кнопка изменения Steam */
+        /* ==========================================
+           КНОПКА STEAM
+        ========================================== */
+
         .edit-btn {
             background: #a67cff;
             color: white;
@@ -182,15 +199,247 @@
         }
 
         /* ==========================================
-           СТАТИСТИКА (НОВОЕ)
+           RETRO CUP LEVEL
         ========================================== */
+
+        .level-profile-section {
+            margin-top: 28px;
+            padding-top: 25px;
+            border-top: 1px solid #25252d;
+        }
+
+        .level-main {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .level-circle {
+            width: 92px;
+            height: 92px;
+            min-width: 92px;
+
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            position: relative;
+
+            background: #101014;
+
+            font-size: 30px;
+            font-weight: 900;
+
+            border: 4px solid;
+
+            transition:
+                border-color 0.3s,
+                color 0.3s,
+                box-shadow 0.3s,
+                transform 0.3s;
+        }
+
+        .level-circle:hover {
+            transform: scale(1.04);
+        }
+
+        .level-circle::before {
+            content: "";
+
+            position: absolute;
+
+            width: 68px;
+            height: 68px;
+
+            border-radius: 50%;
+
+            background: #141419;
+
+            z-index: 0;
+        }
+
+        .level-circle span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* LEVEL 1 */
+
+        .level-1 {
+            color: #b8b8c2;
+            border-color: #777783;
+            box-shadow: 0 0 20px rgba(150, 150, 160, 0.12);
+        }
+
+        /* LEVEL 2 */
+
+        .level-2 {
+            color: #ffffff;
+            border-color: #ffffff;
+            box-shadow: 0 0 22px rgba(255, 255, 255, 0.18);
+        }
+
+        /* LEVEL 3 */
+
+        .level-3 {
+            color: #5aa9ff;
+            border-color: #5aa9ff;
+            box-shadow: 0 0 25px rgba(90, 169, 255, 0.22);
+        }
+
+        /* LEVEL 4 */
+
+        .level-4 {
+            color: #48e0ff;
+            border-color: #48e0ff;
+            box-shadow: 0 0 25px rgba(72, 224, 255, 0.25);
+        }
+
+        /* LEVEL 5 */
+
+        .level-5 {
+            color: #a67cff;
+            border-color: #a67cff;
+            box-shadow: 0 0 28px rgba(166, 124, 255, 0.28);
+        }
+
+        /* LEVEL 6 */
+
+        .level-6 {
+            color: #d16cff;
+            border-color: #d16cff;
+            box-shadow: 0 0 30px rgba(209, 108, 255, 0.3);
+        }
+
+        /* LEVEL 7 */
+
+        .level-7 {
+            color: #ff5c8a;
+            border-color: #ff5c8a;
+            box-shadow: 0 0 30px rgba(255, 92, 138, 0.3);
+        }
+
+        /* LEVEL 8 */
+
+        .level-8 {
+            color: #ff7a45;
+            border-color: #ff7a45;
+            box-shadow: 0 0 32px rgba(255, 122, 69, 0.32);
+        }
+
+        /* LEVEL 9 */
+
+        .level-9 {
+            color: #ffd84d;
+            border-color: #ffd84d;
+            box-shadow: 0 0 35px rgba(255, 216, 77, 0.35);
+        }
+
+        /* LEVEL 10 */
+
+        .level-10 {
+            color: #ffffff;
+            border-color: #ffffff;
+            box-shadow:
+                0 0 20px rgba(255, 255, 255, 0.4),
+                0 0 45px rgba(166, 124, 255, 0.35);
+
+            animation: level10Glow 2s infinite alternate;
+        }
+
+        @keyframes level10Glow {
+            from {
+                box-shadow:
+                    0 0 20px rgba(255, 255, 255, 0.35),
+                    0 0 40px rgba(166, 124, 255, 0.25);
+            }
+
+            to {
+                box-shadow:
+                    0 0 30px rgba(255, 255, 255, 0.6),
+                    0 0 60px rgba(166, 124, 255, 0.45);
+            }
+        }
+
+        /* ==========================================
+           ИНФОРМАЦИЯ УРОВНЯ
+        ========================================== */
+
+        .level-info {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .level-title {
+            color: white;
+            font-size: 17px;
+            font-weight: 900;
+        }
+
+        .level-pr {
+            color: #a67cff;
+            font-size: 21px;
+            font-weight: 900;
+        }
+
+        .level-progress-text {
+            color: #8c8c9b;
+            font-size: 12px;
+        }
+
+        /* ==========================================
+           ПРОГРЕСС
+        ========================================== */
+
+        .level-progress {
+            width: 100%;
+            height: 9px;
+
+            background: #0b0b0e;
+
+            border-radius: 20px;
+
+            margin-top: 20px;
+
+            overflow: hidden;
+
+            border: 1px solid #292932;
+        }
+
+        .level-progress-fill {
+            width: 0%;
+
+            height: 100%;
+
+            border-radius: 20px;
+
+            background: #a67cff;
+
+            box-shadow:
+                0 0 12px rgba(166, 124, 255, 0.5);
+
+            transition:
+                width 0.7s ease,
+                background 0.3s ease;
+        }
+
+        /* ==========================================
+           СТАТИСТИКА
+        ========================================== */
+
         .stats-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
+
             margin-top: 25px;
             padding-top: 20px;
+
             border-top: 1px solid #25252d;
+
             text-align: center;
         }
 
@@ -198,9 +447,13 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
+
             background: #0c0c10;
+
             padding: 15px;
+
             border-radius: 8px;
+
             border: 1px solid #303039;
         }
 
@@ -221,77 +474,118 @@
             color: #00ffcc;
         }
 
-        /* Модальное окно */
+        /* ==========================================
+           МОДАЛЬНОЕ ОКНО
+        ========================================== */
+
         .modal-overlay {
             display: none;
+
             position: fixed;
+
             top: 0;
             left: 0;
+
             width: 100%;
             height: 100%;
+
             background: rgba(0, 0, 0, 0.8);
+
             backdrop-filter: blur(5px);
+
             z-index: 1000;
+
             justify-content: center;
             align-items: center;
+
             padding: 20px;
         }
 
         .modal-box {
             background: #141419;
+
             padding: 30px;
+
             border-radius: 12px;
+
             border: 1px solid #2a2a35;
+
             width: 90%;
             max-width: 350px;
+
             text-align: center;
-            box-shadow: 0 20px 50px rgba(166, 124, 255, 0.2);
+
+            box-shadow:
+                0 20px 50px rgba(166, 124, 255, 0.2);
         }
 
         .modal-box h3 {
             margin-top: 0;
+
             color: white;
+
             font-size: 20px;
         }
 
         .modal-description {
             color: #8c8c9b;
+
             font-size: 13px;
+
             line-height: 1.5;
+
             margin-bottom: 15px;
         }
 
         .modal-input {
             width: 100%;
+
             padding: 12px;
+
             margin: 5px 0 15px 0;
+
             background: #0b0b0e;
+
             color: white;
+
             border: 1px solid #333;
+
             border-radius: 8px;
+
             font-size: 16px;
+
             text-align: center;
         }
 
         .modal-input:focus {
             outline: none;
+
             border-color: #a67cff;
         }
 
         .modal-buttons {
             display: flex;
+
             gap: 10px;
         }
 
         .btn-save {
             flex: 1;
+
             background: #a67cff;
+
             color: white;
+
             border: none;
+
             padding: 10px;
+
             border-radius: 6px;
+
             cursor: pointer;
+
             font-weight: bold;
+
             transition: 0.2s;
         }
 
@@ -301,27 +595,40 @@
 
         .btn-save:disabled {
             opacity: 0.6;
+
             cursor: not-allowed;
         }
 
         .btn-cancel {
             flex: 1;
+
             background: transparent;
+
             color: #8c8c9b;
+
             border: 1px solid #333;
+
             padding: 10px;
+
             border-radius: 6px;
+
             cursor: pointer;
+
             transition: 0.2s;
         }
 
         .btn-cancel:hover {
             background: #23232b;
+
             color: white;
         }
 
-        /* Адаптив */
+        /* ==========================================
+           АДАПТИВ
+        ========================================== */
+
         @media (max-width: 500px) {
+
             body {
                 padding: 15px;
             }
@@ -354,9 +661,33 @@
             .modal-box {
                 padding: 25px 20px;
             }
-            
+
             .stats-container {
                 grid-template-columns: 1fr;
+            }
+
+            .level-main {
+                gap: 15px;
+            }
+
+            .level-circle {
+                width: 78px;
+                height: 78px;
+                min-width: 78px;
+                font-size: 25px;
+            }
+
+            .level-circle::before {
+                width: 57px;
+                height: 57px;
+            }
+
+            .level-title {
+                font-size: 15px;
+            }
+
+            .level-pr {
+                font-size: 18px;
             }
         }
     </style>
@@ -366,27 +697,50 @@
 
 <div class="container">
 
-    <!-- Навигация -->
+    <!-- ==========================================
+         НАВИГАЦИЯ
+    ========================================== -->
+
     <a href="index.html" class="nav-link">
         ← Вернуться на главную
     </a>
 
-    <!-- Шапка -->
-    <header>
-        <h1 id="welcome-text">Профиль</h1>
 
-        <button class="logout-btn" onclick="logout()">
+    <!-- ==========================================
+         ШАПКА
+    ========================================== -->
+
+    <header>
+
+        <h1 id="welcome-text">
+            Профиль
+        </h1>
+
+        <button
+            class="logout-btn"
+            onclick="logout()"
+        >
             Выйти
         </button>
+
     </header>
 
 
-    <!-- Карточка профиля -->
+    <!-- ==========================================
+         КАРТОЧКА ПРОФИЛЯ
+    ========================================== -->
+
     <div class="profile-card">
 
-        <h2>Мой Аккаунт</h2>
+        <h2>
+            Мой Аккаунт
+        </h2>
 
-        <!-- Аватар -->
+
+        <!-- ======================================
+             АВАТАР
+        ======================================= -->
+
         <div class="avatar-wrapper">
 
             <img
@@ -407,6 +761,7 @@
                 </div>
 
                 <label class="avatar-upload">
+
                     Изменить аватарку
 
                     <input
@@ -414,6 +769,7 @@
                         accept="image/*"
                         onchange="uploadAvatar(event)"
                     >
+
                 </label>
 
             </div>
@@ -421,7 +777,10 @@
         </div>
 
 
-        <!-- Steam ID -->
+        <!-- ======================================
+             STEAM ID
+        ======================================= -->
+
         <div class="info-row">
 
             <span style="color: #8c8c9b; font-size: 14px;">
@@ -444,22 +803,118 @@
 
         </div>
 
-        <!-- ==========================================
+
+        <!-- ======================================
+             RETRO CUP LEVEL
+        ======================================= -->
+
+        <div class="level-profile-section">
+
+            <div class="level-main">
+
+                <div
+                    id="profile-level-circle"
+                    class="level-circle level-1"
+                >
+
+                    <span id="profile-level">
+                        1
+                    </span>
+
+                </div>
+
+
+                <div class="level-info">
+
+                    <div class="level-title">
+                        Retro Cup Level
+                    </div>
+
+                    <div class="level-pr">
+                        <span id="profile-pr">
+                            1
+                        </span>
+                        PR
+                    </div>
+
+                    <div class="level-progress-text">
+
+                        <span id="level-next-text">
+                            До Level 2: 19 PR
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="level-progress">
+
+                <div
+                    id="level-progress-bar"
+                    class="level-progress-fill"
+                ></div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ======================================
              ГЛОБАЛЬНАЯ СТАТИСТИКА
-        ========================================== -->
+        ======================================= -->
+
         <div class="stats-container">
+
             <div class="stat-box">
-                <span class="stat-label">K/D Рейтинг</span>
-                <span class="stat-val green" id="stat-kd">⏳...</span>
+
+                <span class="stat-label">
+                    K/D Рейтинг
+                </span>
+
+                <span
+                    class="stat-val green"
+                    id="stat-kd"
+                >
+                    ⏳...
+                </span>
+
             </div>
+
+
             <div class="stat-box">
-                <span class="stat-label">Винрейт</span>
-                <span class="stat-val" id="stat-winrate">⏳...</span>
+
+                <span class="stat-label">
+                    Винрейт
+                </span>
+
+                <span
+                    class="stat-val"
+                    id="stat-winrate"
+                >
+                    ⏳...
+                </span>
+
             </div>
+
+
             <div class="stat-box">
-                <span class="stat-label">Матчи</span>
-                <span class="stat-val" id="stat-matches">⏳...</span>
+
+                <span class="stat-label">
+                    Матчи
+                </span>
+
+                <span
+                    class="stat-val"
+                    id="stat-matches"
+                >
+                    ⏳...
+                </span>
+
             </div>
+
         </div>
 
     </div>
@@ -525,11 +980,241 @@
        FIREBASE
     ========================================== */
 
-    const dbBase = "https://retro-cup-51db5-default-rtdb.firebaseio.com/";
-    const dbUsersUrl = dbBase + "users/";
+    const dbBase =
+        "https://retro-cup-51db5-default-rtdb.firebaseio.com/";
+
+    const dbUsersUrl =
+        dbBase + "users/";
+
 
     let currentUser =
         localStorage.getItem("currentUser");
+
+
+    /* ==========================================
+       RETRO CUP LEVEL SYSTEM
+       
+       Порог PR для каждого уровня:
+       
+       Level 1 = 1 PR
+       Level 2 = 20 PR
+       Level 3 = 50 PR
+       Level 4 = 100 PR
+       Level 5 = 150 PR
+       Level 6 = 250 PR
+       Level 7 = 400 PR
+       Level 8 = 600 PR
+       Level 9 = 800 PR
+       Level 10 = 1000 PR
+    ========================================== */
+
+    const LEVEL_THRESHOLDS = [
+        1,
+        20,
+        50,
+        100,
+        150,
+        250,
+        400,
+        600,
+        800,
+        1000
+    ];
+
+
+    /* ==========================================
+       ПОЛУЧИТЬ LEVEL ПО PR
+    ========================================== */
+
+    function getLevelFromPR(pr) {
+
+        let level = 1;
+
+        for (
+            let i = 0;
+            i < LEVEL_THRESHOLDS.length;
+            i++
+        ) {
+
+            if (
+                pr >= LEVEL_THRESHOLDS[i]
+            ) {
+
+                level = i + 1;
+
+            } else {
+
+                break;
+            }
+        }
+
+        return level;
+    }
+
+
+    /* ==========================================
+       ОБНОВЛЕНИЕ LEVEL НА ЭКРАНЕ
+    ========================================== */
+
+    function updateProfileLevel(pr) {
+
+        pr = Number(pr);
+
+        if (
+            isNaN(pr) ||
+            pr < 1
+        ) {
+            pr = 1;
+        }
+
+
+        const level =
+            getLevelFromPR(pr);
+
+
+        const circle =
+            document.getElementById(
+                "profile-level-circle"
+            );
+
+        const levelText =
+            document.getElementById(
+                "profile-level"
+            );
+
+        const prText =
+            document.getElementById(
+                "profile-pr"
+            );
+
+        const nextText =
+            document.getElementById(
+                "level-next-text"
+            );
+
+        const progressBar =
+            document.getElementById(
+                "level-progress-bar"
+            );
+
+
+        /* ------------------------------
+           LEVEL
+        ------------------------------ */
+
+        levelText.innerText =
+            level;
+
+
+        /* ------------------------------
+           PR
+        ------------------------------ */
+
+        prText.innerText =
+            pr;
+
+
+        /* ------------------------------
+           СМЕНА ЦВЕТА LEVEL
+        ------------------------------ */
+
+        circle.className =
+            "level-circle level-" + level;
+
+
+        /* ------------------------------
+           LEVEL 10
+        ------------------------------ */
+
+        if (level >= 10) {
+
+            nextText.innerText =
+                "MAX LEVEL • 1000+ PR";
+
+            progressBar.style.width =
+                "100%";
+
+            progressBar.style.background =
+                "#ffffff";
+
+            progressBar.style.boxShadow =
+                "0 0 15px rgba(255,255,255,0.7)";
+
+            return;
+        }
+
+
+        /* ------------------------------
+           СЛЕДУЮЩИЙ LEVEL
+        ------------------------------ */
+
+        const currentThreshold =
+            LEVEL_THRESHOLDS[level - 1];
+
+        const nextThreshold =
+            LEVEL_THRESHOLDS[level];
+
+
+        const remaining =
+            nextThreshold - pr;
+
+
+        nextText.innerText =
+            "До Level " +
+            (level + 1) +
+            ": " +
+            Math.max(remaining, 0) +
+            " PR";
+
+
+        /* ------------------------------
+           ПРОГРЕСС
+        ------------------------------ */
+
+        const progress =
+            (
+                (pr - currentThreshold) /
+                (nextThreshold - currentThreshold)
+            ) * 100;
+
+
+        const safeProgress =
+            Math.max(
+                0,
+                Math.min(
+                    100,
+                    progress
+                )
+            );
+
+
+        progressBar.style.width =
+            safeProgress + "%";
+
+
+        /* Цвет шкалы */
+
+        const colors = [
+            "#777783",
+            "#ffffff",
+            "#5aa9ff",
+            "#48e0ff",
+            "#a67cff",
+            "#d16cff",
+            "#ff5c8a",
+            "#ff7a45",
+            "#ffd84d"
+        ];
+
+
+        progressBar.style.background =
+            colors[level - 1] || "#a67cff";
+
+        progressBar.style.boxShadow =
+            "0 0 12px " +
+            (colors[level - 1] || "#a67cff");
+
+    }
 
 
     /* ==========================================
@@ -538,84 +1223,186 @@
 
     if (!currentUser) {
 
-        window.location.href = "auth.html";
+        window.location.href =
+            "auth.html";
 
     } else {
 
-        document.getElementById("welcome-text").innerText =
+        document.getElementById(
+            "welcome-text"
+        ).innerText =
             currentUser;
 
+
         loadUserData();
+
     }
 
 
     /* ==========================================
-       ПОДСЧЕТ ГЛОБАЛЬНОЙ СТАТИСТИКИ (НОВОЕ)
+       ПОДСЧЕТ ГЛОБАЛЬНОЙ СТАТИСТИКИ
     ========================================== */
+
     async function getGlobalStats(playerName) {
+
         try {
-            // Скачиваем все турниры разом
-            const response = await fetch(dbBase + "tournaments.json");
-            const tournaments = await response.json();
+
+            const response =
+                await fetch(
+                    dbBase +
+                    "tournaments.json"
+                );
+
+
+            const tournaments =
+                await response.json();
+
 
             let totalKills = 0;
+
             let totalDeaths = 0;
+
             let matchesPlayed = 0;
+
             let matchesWon = 0;
 
+
             if (tournaments) {
-                // Перебираем каждый турнир
-                Object.values(tournaments).forEach(tourney => {
+
+                Object.values(
+                    tournaments
+                ).forEach(tourney => {
+
                     if (tourney.matches) {
-                        // Перебираем каждый матч в турнире
-                        Object.values(tourney.matches).forEach(match => {
-                            // Если игрок участвовал в матче
-                            if (match && (match.p1 === playerName || match.p2 === playerName)) {
-                                
-                                let s1 = parseInt(match.s1);
-                                let s2 = parseInt(match.s2);
 
-                                // Проверяем, что матч был реально сыгран (есть счет)
-                                if (!isNaN(s1) && !isNaN(s2)) {
+                        Object.values(
+                            tourney.matches
+                        ).forEach(match => {
+
+                            if (
+                                match &&
+                                (
+                                    match.p1 === playerName ||
+                                    match.p2 === playerName
+                                )
+                            ) {
+
+                                let s1 =
+                                    parseInt(match.s1);
+
+                                let s2 =
+                                    parseInt(match.s2);
+
+
+                                if (
+                                    !isNaN(s1) &&
+                                    !isNaN(s2)
+                                ) {
+
                                     matchesPlayed++;
-                                    
-                                    if (match.winner === playerName) {
+
+
+                                    if (
+                                        match.winner ===
+                                        playerName
+                                    ) {
+
                                         matchesWon++;
+
                                     }
 
-                                    // Суммируем фраги и смерти
-                                    if (match.p1 === playerName) {
+
+                                    if (
+                                        match.p1 ===
+                                        playerName
+                                    ) {
+
                                         totalKills += s1;
+
                                         totalDeaths += s2;
+
                                     } else {
+
                                         totalKills += s2;
+
                                         totalDeaths += s1;
+
                                     }
+
                                 }
+
                             }
+
                         });
+
                     }
+
                 });
+
             }
 
-            let kd = totalDeaths === 0 ? (totalKills > 0 ? totalKills : 0) : (totalKills / totalDeaths);
-            let winrate = matchesPlayed === 0 ? 0 : (matchesWon / matchesPlayed) * 100;
+
+            let kd =
+                totalDeaths === 0
+                    ? (
+                        totalKills > 0
+                            ? totalKills
+                            : 0
+                    )
+                    : (
+                        totalKills /
+                        totalDeaths
+                    );
+
+
+            let winrate =
+                matchesPlayed === 0
+                    ? 0
+                    : (
+                        matchesWon /
+                        matchesPlayed
+                    ) * 100;
+
 
             return {
-                kd: kd.toFixed(2),
-                winrate: winrate.toFixed(1) + "%",
-                matches: matchesPlayed
+
+                kd:
+                    kd.toFixed(2),
+
+                winrate:
+                    winrate.toFixed(1) + "%",
+
+                matches:
+                    matchesPlayed
+
             };
 
+
         } catch (error) {
-            console.error("Ошибка загрузки статистики:", error);
-            return { kd: "0.00", winrate: "0.0%", matches: 0 };
+
+            console.error(
+                "Ошибка загрузки статистики:",
+                error
+            );
+
+
+            return {
+
+                kd: "0.00",
+
+                winrate: "0.0%",
+
+                matches: 0
+
+            };
+
         }
+
     }
 
 
     /* ==========================================
-       ЗАГРУЗКА ДАННЫХ ПОЛЬЗОВАТЕЛЯ И СТАТИСТИКИ
+       ЗАГРУЗКА ДАННЫХ ПОЛЬЗОВАТЕЛЯ
     ========================================== */
 
     async function loadUserData() {
@@ -625,28 +1412,41 @@
             const response =
                 await fetch(
                     dbUsersUrl +
-                    encodeURIComponent(currentUser) +
+                    encodeURIComponent(
+                        currentUser
+                    ) +
                     ".json"
                 );
 
+
             if (!response.ok) {
+
                 throw new Error(
-                    "Ошибка HTTP: " + response.status
+                    "Ошибка HTTP: " +
+                    response.status
                 );
+
             }
+
 
             const data =
                 await response.json();
 
 
-            /* -------------------------------
-               Steam ID
-            -------------------------------- */
+            /* ==================================
+               STEAM ID
+            ================================== */
 
             const steamElement =
-                document.getElementById("display-steam");
+                document.getElementById(
+                    "display-steam"
+                );
 
-            if (data && data.steamCode) {
+
+            if (
+                data &&
+                data.steamCode
+            ) {
 
                 steamElement.innerText =
                     data.steamCode;
@@ -661,30 +1461,92 @@
 
                 steamElement.style.color =
                     "#8c8c9b";
+
             }
 
 
-            /* -------------------------------
-               Аватар
-            -------------------------------- */
+            /* ==================================
+               АВАТАР
+            ================================== */
 
-            if (data && data.avatar) {
+            if (
+                data &&
+                data.avatar
+            ) {
 
                 document.getElementById(
                     "profile-avatar"
-                ).src = data.avatar;
+                ).src =
+                    data.avatar;
 
             }
-            
-            /* -------------------------------
-               ГЛОБАЛЬНАЯ СТАТИСТИКА (НОВОЕ)
-            -------------------------------- */
-            
-            const stats = await getGlobalStats(currentUser);
-            
-            document.getElementById("stat-kd").innerText = stats.kd;
-            document.getElementById("stat-winrate").innerText = stats.winrate;
-            document.getElementById("stat-matches").innerText = stats.matches;
+
+
+            /* ==================================
+               RETRO CUP PR
+               
+               Если pr существует —
+               используем его.
+
+               Если нет —
+               игрок начинает с 1 PR.
+            ================================== */
+
+            let playerPR = 1;
+
+
+            if (
+                data &&
+                data.pr !== undefined
+            ) {
+
+                playerPR =
+                    Number(data.pr);
+
+
+                if (
+                    isNaN(playerPR) ||
+                    playerPR < 1
+                ) {
+
+                    playerPR = 1;
+
+                }
+
+            }
+
+
+            updateProfileLevel(
+                playerPR
+            );
+
+
+            /* ==================================
+               ГЛОБАЛЬНАЯ СТАТИСТИКА
+            ================================== */
+
+            const stats =
+                await getGlobalStats(
+                    currentUser
+                );
+
+
+            document.getElementById(
+                "stat-kd"
+            ).innerText =
+                stats.kd;
+
+
+            document.getElementById(
+                "stat-winrate"
+            ).innerText =
+                stats.winrate;
+
+
+            document.getElementById(
+                "stat-matches"
+            ).innerText =
+                stats.matches;
 
 
         } catch (error) {
@@ -694,15 +1556,38 @@
                 error
             );
 
+
             document.getElementById(
                 "display-steam"
-            ).innerText = "Ошибка загрузки";
-            
-            document.getElementById("stat-kd").innerText = "---";
-            document.getElementById("stat-winrate").innerText = "---";
-            document.getElementById("stat-matches").innerText = "---";
+            ).innerText =
+                "Ошибка загрузки";
+
+
+            document.getElementById(
+                "stat-kd"
+            ).innerText =
+                "---";
+
+
+            document.getElementById(
+                "stat-winrate"
+            ).innerText =
+                "---";
+
+
+            document.getElementById(
+                "stat-matches"
+            ).innerText =
+                "---";
+
+
+            /* Даже при ошибке
+               уровень остаётся Level 1 */
+
+            updateProfileLevel(1);
 
         }
+
     }
 
 
@@ -715,37 +1600,51 @@
         const file =
             event.target.files[0];
 
+
         if (!file) {
+
             return;
+
         }
 
 
-        /* Проверка типа файла */
-
-        if (!file.type.startsWith("image/")) {
+        if (
+            !file.type.startsWith(
+                "image/"
+            )
+        ) {
 
             alert(
                 "Пожалуйста, выберите изображение."
             );
 
-            event.target.value = "";
+
+            event.target.value =
+                "";
+
 
             return;
+
         }
 
 
-        /* Ограничение размера */
-
-        if (file.size > 800 * 1024) {
+        if (
+            file.size >
+            800 * 1024
+        ) {
 
             alert(
                 "Файл слишком большой! " +
                 "Выберите картинку весом до 800 КБ."
             );
 
-            event.target.value = "";
+
+            event.target.value =
+                "";
+
 
             return;
+
         }
 
 
@@ -753,83 +1652,100 @@
             new FileReader();
 
 
-        reader.onload = async function(e) {
+        reader.onload =
+            async function(e) {
 
-            const base64Image =
-                e.target.result;
-
-
-            /* Сразу показываем аватар */
-
-            document.getElementById(
-                "profile-avatar"
-            ).src = base64Image;
+                const base64Image =
+                    e.target.result;
 
 
-            try {
+                document.getElementById(
+                    "profile-avatar"
+                ).src =
+                    base64Image;
 
-                const response =
-                    await fetch(
-                        dbUsersUrl +
-                        encodeURIComponent(currentUser) +
-                        ".json",
-                        {
-                            method: "PATCH",
 
-                            headers: {
-                                "Content-Type":
-                                    "application/json"
-                            },
+                try {
 
-                            body: JSON.stringify({
-                                avatar: base64Image
-                            })
-                        }
+                    const response =
+                        await fetch(
+                            dbUsersUrl +
+                            encodeURIComponent(
+                                currentUser
+                            ) +
+                            ".json",
+                            {
+
+                                method:
+                                    "PATCH",
+
+                                headers: {
+
+                                    "Content-Type":
+                                        "application/json"
+
+                                },
+
+                                body:
+                                    JSON.stringify({
+
+                                        avatar:
+                                            base64Image
+
+                                    })
+
+                            }
+                        );
+
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            "Ошибка сохранения"
+                        );
+
+                    }
+
+
+                    alert(
+                        "Аватарка успешно сохранена!"
                     );
 
 
-                if (!response.ok) {
-                    throw new Error(
-                        "Ошибка сохранения"
+                } catch (error) {
+
+                    console.error(
+                        "Ошибка сохранения аватарки:",
+                        error
                     );
+
+
+                    alert(
+                        "Ошибка при сохранении аватарки в базу данных!"
+                    );
+
                 }
 
+            };
+
+
+        reader.onerror =
+            function() {
 
                 alert(
-                    "Аватарка успешно сохранена!"
+                    "Не удалось прочитать файл."
                 );
 
-            } catch (error) {
-
-                console.error(
-                    "Ошибка сохранения аватарки:",
-                    error
-                );
-
-                alert(
-                    "Ошибка при сохранении аватарки в базу данных!"
-                );
-
-            }
-
-        };
-
-
-        reader.onerror = function() {
-
-            alert(
-                "Не удалось прочитать файл."
-            );
-
-        };
+            };
 
 
         reader.readAsDataURL(file);
+
     }
 
 
     /* ==========================================
-       ОТКРЫТИЕ МОДАЛЬНОГО ОКНА
+       ОТКРЫТИЕ STEAM MODAL
     ========================================== */
 
     function openModal() {
@@ -839,13 +1755,12 @@
                 "steamModal"
             );
 
+
         const input =
             document.getElementById(
                 "newSteamInput"
             );
 
-
-        /* Получаем текущий Steam ID */
 
         const currentCode =
             document.getElementById(
@@ -854,9 +1769,14 @@
 
 
         if (
-            currentCode !== "⏳ Загрузка..." &&
-            currentCode !== "Не указан" &&
-            currentCode !== "Ошибка загрузки"
+            currentCode !==
+                "⏳ Загрузка..." &&
+
+            currentCode !==
+                "Не указан" &&
+
+            currentCode !==
+                "Ошибка загрузки"
         ) {
 
             input.value =
@@ -864,7 +1784,8 @@
 
         } else {
 
-            input.value = "";
+            input.value =
+                "";
 
         }
 
@@ -873,42 +1794,49 @@
             "flex";
 
 
-        /* Фокус на поле */
+        setTimeout(
+            function() {
 
-        setTimeout(function() {
+                input.focus();
 
-            input.focus();
+                input.select();
 
-            input.select();
+            },
+            100
+        );
 
-        }, 100);
     }
 
 
     /* ==========================================
-       ЗАКРЫТИЕ МОДАЛЬНОГО ОКНА
+       ЗАКРЫТИЕ MODAL
     ========================================== */
 
     function closeModal() {
 
         document.getElementById(
             "steamModal"
-        ).style.display = "none";
+        ).style.display =
+            "none";
+
     }
 
 
     /* ==========================================
-       ЗАКРЫТИЕ ПРИ КЛИКЕ НА ФОН
+       КЛИК ПО ФОНУ MODAL
     ========================================== */
 
     function handleModalBackground(event) {
 
         if (
-            event.target.id === "steamModal"
+            event.target.id ===
+            "steamModal"
         ) {
 
             closeModal();
+
         }
+
     }
 
 
@@ -923,6 +1851,7 @@
                 "newSteamInput"
             );
 
+
         const btn =
             document.getElementById(
                 "saveBtn"
@@ -933,38 +1862,44 @@
             input.value.trim();
 
 
-        /* Проверка */
-
         if (!newSteam) {
 
             alert(
                 "Поле не может быть пустым!"
             );
 
+
             input.focus();
 
+
             return;
+
         }
 
 
-        if (newSteam.length < 3) {
+        if (
+            newSteam.length < 3
+        ) {
 
             alert(
                 "Steam ID слишком короткий."
             );
 
+
             input.focus();
 
+
             return;
+
         }
 
-
-        /* Блокируем кнопку */
 
         btn.innerText =
             "Сохранение...";
 
-        btn.disabled = true;
+
+        btn.disabled =
+            true;
 
 
         try {
@@ -972,19 +1907,30 @@
             const response =
                 await fetch(
                     dbUsersUrl +
-                    encodeURIComponent(currentUser) +
+                    encodeURIComponent(
+                        currentUser
+                    ) +
                     ".json",
                     {
-                        method: "PATCH",
+
+                        method:
+                            "PATCH",
 
                         headers: {
+
                             "Content-Type":
                                 "application/json"
+
                         },
 
-                        body: JSON.stringify({
-                            steamCode: newSteam
-                        })
+                        body:
+                            JSON.stringify({
+
+                                steamCode:
+                                    newSteam
+
+                            })
+
                     }
                 );
 
@@ -995,24 +1941,23 @@
                     "Ошибка HTTP: " +
                     response.status
                 );
+
             }
 
-
-            /* Обновляем значение на странице */
 
             const displaySteam =
                 document.getElementById(
                     "display-steam"
                 );
 
+
             displaySteam.innerText =
                 newSteam;
+
 
             displaySteam.style.color =
                 "white";
 
-
-            /* Закрываем окно */
 
             closeModal();
 
@@ -1024,8 +1969,9 @@
                 error
             );
 
+
             alert(
-                "❌ Ошибка соединения с базы данных!"
+                "Ошибка соединения с базой данных!"
             );
 
         } finally {
@@ -1033,30 +1979,46 @@
             btn.innerText =
                 "Сохранить";
 
-            btn.disabled = false;
+
+            btn.disabled =
+                false;
+
         }
+
     }
 
 
     /* ==========================================
-       ENTER В ПОЛЕ STEAM ID
+       ENTER / ESCAPE
     ========================================== */
 
     document
-        .getElementById("newSteamInput")
+        .getElementById(
+            "newSteamInput"
+        )
         .addEventListener(
             "keydown",
             function(event) {
 
-                if (event.key === "Enter") {
+                if (
+                    event.key ===
+                    "Enter"
+                ) {
 
                     confirmSteamChange();
+
                 }
 
-                if (event.key === "Escape") {
+
+                if (
+                    event.key ===
+                    "Escape"
+                ) {
 
                     closeModal();
+
                 }
+
             }
         );
 
@@ -1074,7 +2036,9 @@
 
 
         if (!confirmed) {
+
             return;
+
         }
 
 
@@ -1085,6 +2049,7 @@
 
         window.location.href =
             "index.html";
+
     }
 
 </script>
