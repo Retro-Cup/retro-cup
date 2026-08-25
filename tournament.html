@@ -45,9 +45,15 @@
         body {
             margin: 0;
             padding: 0 0 60px;
+
             background:
-                radial-gradient(circle at 50% -20%, rgba(166,124,255,.08), transparent 35%),
+                radial-gradient(
+                    circle at 50% -20%,
+                    rgba(166,124,255,.08),
+                    transparent 35%
+                ),
                 var(--bg);
+
             color: var(--text);
             font-family: 'Inter', sans-serif;
             min-height: 100vh;
@@ -92,7 +98,10 @@
             }
         }
 
-        /* МАЛЕНЬКАЯ АВАТАРКА */
+        /* =====================================================
+           PLAYER AVATAR
+        ===================================================== */
+
         .player-avatar-small {
             width: 20px;
             height: 20px;
@@ -103,20 +112,26 @@
             flex-shrink: 0;
         }
 
-        /* NAV */
+
+        /* =====================================================
+           NAV
+        ===================================================== */
 
         .top-nav {
             position: sticky;
             top: 0;
             z-index: 1000;
+
             background: rgba(14,14,18,.92);
             backdrop-filter: blur(12px);
+
             border-bottom: 1px solid var(--border);
         }
 
         .nav-inner {
             max-width: 1100px;
             min-height: 58px;
+
             margin: 0 auto;
             padding: 0 20px;
 
@@ -128,8 +143,10 @@
         .nav-link {
             color: var(--muted);
             text-decoration: none;
+
             font-size: 14px;
             font-weight: 800;
+
             transition: .2s;
         }
 
@@ -141,12 +158,16 @@
         .lang-btn {
             background: #17171e;
             color: var(--muted);
+
             border: 1px solid var(--border2);
             padding: 7px 11px;
             border-radius: 6px;
+
             cursor: pointer;
+
             font-size: 11px;
             font-weight: 900;
+
             transition: .2s;
         }
 
@@ -155,14 +176,20 @@
             border-color: var(--purple);
         }
 
-        /* MAIN */
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
 
         .container {
             width: min(1100px, calc(100% - 30px));
             margin: 0 auto;
         }
 
-        /* HEADER */
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
 
         .wg-header {
             position: relative;
@@ -173,8 +200,16 @@
             padding: 30px;
 
             background:
-                radial-gradient(circle at 100% 0%, rgba(166,124,255,.12), transparent 35%),
-                linear-gradient(135deg, #191921, #101015);
+                radial-gradient(
+                    circle at 100% 0%,
+                    rgba(166,124,255,.12),
+                    transparent 35%
+                ),
+                linear-gradient(
+                    135deg,
+                    #191921,
+                    #101015
+                );
 
             border: 1px solid var(--border2);
             border-top: 3px solid var(--purple);
@@ -185,24 +220,31 @@
 
         .wg-header::after {
             content: "";
+
             position: absolute;
+
             width: 220px;
             height: 220px;
+
             right: -100px;
             bottom: -140px;
 
             background: var(--purple);
             opacity: .05;
+
             border-radius: 50%;
+
             pointer-events: none;
         }
 
         .status-badge {
             position: absolute;
+
             right: 22px;
             top: 22px;
 
             padding: 6px 12px;
+
             border-radius: 999px;
 
             background: #292930;
@@ -210,6 +252,7 @@
 
             font-size: 10px;
             font-weight: 900;
+
             letter-spacing: .8px;
             text-transform: uppercase;
         }
@@ -217,6 +260,7 @@
         .status-badge.active {
             background: var(--green);
             color: #001a14;
+
             animation: pulse 2s infinite;
         }
 
@@ -227,10 +271,13 @@
 
         .wg-game {
             color: var(--purple);
+
             font-size: 12px;
             font-weight: 900;
+
             letter-spacing: 1px;
             text-transform: uppercase;
+
             margin-bottom: 8px;
         }
 
@@ -239,14 +286,17 @@
             padding-right: 180px;
 
             color: white;
+
             font-size: clamp(25px, 4vw, 36px);
             line-height: 1.15;
+
             font-weight: 900;
         }
 
         .wg-meta-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
+
             gap: 12px;
 
             margin-top: 25px;
@@ -257,20 +307,25 @@
 
         .meta-box {
             min-width: 0;
+
             display: flex;
             flex-direction: column;
+
             gap: 5px;
         }
 
         .meta-label {
             color: var(--muted);
+
             font-size: 10px;
             font-weight: 700;
+
             text-transform: uppercase;
         }
 
         .meta-val {
             color: white;
+
             font-size: 14px;
             font-weight: 800;
 
@@ -283,20 +338,31 @@
             color: var(--green);
         }
 
-        /* GRID */
+
+        /* =====================================================
+           CONTENT
+        ===================================================== */
 
         .content-grid {
             display: grid;
-            grid-template-columns: minmax(0, 2fr) minmax(300px, 1fr);
+
+            grid-template-columns:
+                minmax(0, 2fr)
+                minmax(300px, 1fr);
+
             gap: 20px;
+
             margin-bottom: 30px;
         }
 
         .wg-card {
             background: rgba(20,20,25,.94);
+
             border: 1px solid var(--border);
             border-radius: var(--radius);
+
             padding: 25px;
+
             animation: fadeIn .4s ease;
         }
 
@@ -304,34 +370,48 @@
             margin: 0 0 20px;
 
             padding-bottom: 12px;
+
             border-bottom: 1px solid var(--border);
 
             color: white;
+
             font-size: 17px;
             font-weight: 900;
+
             text-transform: uppercase;
         }
 
         .rules-text {
             color: #aaa;
+
             font-size: 14px;
             line-height: 1.7;
+
             white-space: pre-wrap;
             word-break: break-word;
         }
 
-        /* ACTION */
+
+        /* =====================================================
+           ACTION
+        ===================================================== */
 
         .action-box {
             position: sticky;
             top: 78px;
 
             background:
-                linear-gradient(180deg, #1a1a22, #121217);
+                linear-gradient(
+                    180deg,
+                    #1a1a22,
+                    #121217
+                );
 
             border: 1px solid var(--border2);
             border-radius: var(--radius);
+
             padding: 22px;
+
             text-align: center;
         }
 
@@ -339,14 +419,17 @@
             margin-bottom: 14px;
 
             color: var(--muted);
+
             font-size: 11px;
             font-weight: 900;
+
             text-transform: uppercase;
             letter-spacing: .5px;
         }
 
         .wg-btn {
             width: 100%;
+
             border: 0;
             border-radius: 7px;
 
@@ -359,6 +442,7 @@
             font-weight: 900;
 
             cursor: pointer;
+
             text-transform: uppercase;
 
             transition: .2s;
@@ -377,6 +461,7 @@
         .wg-btn.leave {
             background: transparent;
             color: var(--red);
+
             border: 1px solid var(--red);
         }
 
@@ -388,20 +473,26 @@
         .wg-btn.locked {
             background: #292930;
             color: #707078;
+
             cursor: not-allowed;
         }
 
-        /* ADMIN */
+
+        /* =====================================================
+           ADMIN
+        ===================================================== */
 
         .admin-controls-box {
             display: flex;
             gap: 8px;
+
             margin-top: 12px;
         }
 
         .admin-start-btn,
         .admin-stop-btn {
             flex: 1;
+
             border: 0;
             border-radius: 6px;
 
@@ -409,7 +500,9 @@
 
             font-size: 10px;
             font-weight: 900;
+
             cursor: pointer;
+
             text-transform: uppercase;
         }
 
@@ -423,14 +516,19 @@
             color: white;
         }
 
-        /* PLAYERS */
+
+        /* =====================================================
+           PLAYERS
+        ===================================================== */
 
         .players-title {
             margin: 24px 0 10px;
 
             color: var(--muted);
+
             font-size: 10px;
             font-weight: 900;
+
             text-align: left;
             text-transform: uppercase;
         }
@@ -438,10 +536,13 @@
         .players-list {
             display: flex;
             flex-direction: column;
+
             gap: 7px;
 
             max-height: 400px;
+
             overflow-y: auto;
+
             padding-right: 3px;
         }
 
@@ -458,6 +559,7 @@
             padding: 10px;
 
             background: #0c0c10;
+
             border: 1px solid #2b2b34;
             border-radius: 7px;
         }
@@ -466,51 +568,69 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+
             gap: 10px;
 
             margin-bottom: 8px;
 
             color: var(--purple);
+
             font-size: 13px;
             font-weight: 900;
         }
 
         .player-item {
             padding: 6px 7px;
+
             color: #aaa;
+
             border-left: 2px solid #333;
+
             font-size: 12px;
+
             display: flex;
             align-items: center;
+
             gap: 8px;
+
             cursor: pointer;
+
             transition: .2s;
         }
 
         .player-item:hover {
             background: rgba(166,124,255,0.1);
+
             border-color: var(--purple);
+
             color: white;
         }
 
         .player-item.me {
             color: white;
+
             border-left-color: var(--green);
+
             background: rgba(0,255,204,.035);
         }
 
-        /* SPEEDRUN */
+
+        /* =====================================================
+           SPEEDRUN
+        ===================================================== */
 
         .speedrun-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
+
             gap: 10px;
 
             margin-bottom: 7px;
             padding: 10px;
 
             background: #0c0c10;
+
             border: 1px solid #303039;
             border-radius: 7px;
         }
@@ -519,6 +639,7 @@
             width: 28px;
 
             color: #555;
+
             font-size: 15px;
             font-weight: 900;
         }
@@ -540,10 +661,12 @@
 
             color: var(--green);
             background: #17171e;
+
             border: 1px solid rgba(0,255,204,.4);
             border-radius: 5px;
 
             font-family: monospace;
+
             font-size: 14px;
             font-weight: 900;
         }
@@ -559,15 +682,22 @@
             border-radius: 5px;
 
             cursor: pointer;
+
             font-size: 10px;
             font-weight: 900;
         }
 
-        /* TABS */
+
+        /* =====================================================
+           TOURNAMENT TABS
+        ===================================================== */
 
         .tabs-container {
             display: flex;
+
             gap: 8px;
+
+            margin-top: 20px;
             margin-bottom: 18px;
         }
 
@@ -586,6 +716,7 @@
 
             font-size: 11px;
             font-weight: 900;
+
             text-transform: uppercase;
 
             transition: .2s;
@@ -598,15 +729,22 @@
 
         .tab-btn.active {
             color: #001a14;
+
             background: var(--green);
+
             border-color: var(--green);
         }
 
-        /* BRACKET */
+
+        /* =====================================================
+           BRACKET
+        ===================================================== */
 
         .bracket-wrapper {
             width: 100%;
+
             overflow-x: auto;
+
             padding: 10px 3px 20px;
         }
 
@@ -621,7 +759,9 @@
 
         .bracket {
             display: flex;
+
             gap: 45px;
+
             min-width: max-content;
         }
 
@@ -630,7 +770,9 @@
 
             display: flex;
             flex-direction: column;
+
             justify-content: space-around;
+
             gap: 20px;
         }
 
@@ -638,21 +780,28 @@
             position: relative;
 
             background: #191920;
+
             border: 1px solid #30303a;
             border-radius: 7px;
 
             overflow: hidden;
+
             transition: .2s;
         }
 
         .match.match-clickable {
             cursor: pointer;
+
             border-color: var(--purple);
         }
 
         .match.match-clickable:hover {
             background: #25252f;
-            box-shadow: 0 0 20px rgba(166,124,255,.18);
+
+            box-shadow:
+                0 0 20px
+                rgba(166,124,255,.18);
+
             transform: translateY(-2px);
         }
 
@@ -660,6 +809,7 @@
             content: "";
 
             position: absolute;
+
             right: -45px;
             top: 50%;
 
@@ -673,6 +823,7 @@
             content: "";
 
             position: absolute;
+
             left: -45px;
             top: 50%;
 
@@ -686,14 +837,17 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+
             gap: 8px;
 
             min-height: 39px;
+
             padding: 8px 10px;
 
             border-bottom: 1px solid #303039;
 
             color: #ddd;
+
             font-size: 12px;
             font-weight: 800;
         }
@@ -708,6 +862,7 @@
 
         .match-team.loser {
             color: #555;
+
             text-decoration: line-through;
         }
 
@@ -717,54 +872,70 @@
             padding: 3px 6px;
 
             background: #0b0b0f;
+
             border: 1px solid #35353e;
             border-radius: 4px;
 
             color: white;
+
             font-size: 11px;
         }
 
         .match-team.winner .match-score {
             color: #001a14;
+
             background: var(--green);
+
             border-color: var(--green);
         }
 
         .score-auto {
             color: var(--purple);
+
             font-size: 9px;
             font-weight: 900;
         }
 
-        /* MODAL */
+
+        /* =====================================================
+           MODAL
+        ===================================================== */
 
         .modal-overlay {
             position: fixed;
             inset: 0;
+
             z-index: 2000;
 
             display: none;
+
             align-items: center;
             justify-content: center;
 
             padding: 15px;
 
             background: rgba(0,0,0,.82);
+
             backdrop-filter: blur(7px);
         }
 
         .modal-box {
             width: min(470px, 100%);
+
             max-height: calc(100vh - 30px);
+
             overflow-y: auto;
 
             padding: 22px;
 
             background: #141419;
+
             border: 1px solid #30303a;
             border-radius: 12px;
 
-            box-shadow: 0 20px 80px rgba(0,0,0,.6);
+            box-shadow:
+                0 20px 80px
+                rgba(0,0,0,.6);
 
             animation: fadeIn .2s ease;
         }
@@ -778,17 +949,25 @@
             border-radius: 5px;
         }
 
+
+        /* =====================================================
+           CHAT
+        ===================================================== */
+
         .chat-history {
             height: 240px;
+
             overflow-y: auto;
 
             display: flex;
             flex-direction: column;
+
             gap: 6px;
 
             padding: 10px;
 
             background: #09090c;
+
             border: 1px solid #30303a;
             border-radius: 7px;
         }
@@ -812,10 +991,12 @@
             max-width: 90%;
 
             margin-top: 3px;
+
             padding: 6px 9px;
 
             color: white;
             background: #1b1b23;
+
             border: 1px solid #30303a;
             border-radius: 7px;
 
@@ -824,13 +1005,17 @@
 
         .chat-time {
             margin-top: 3px;
+
             color: #555;
+
             font-size: 9px;
         }
 
         .chat-input-row {
             display: flex;
+
             gap: 6px;
+
             margin: 9px 0 18px;
         }
 
@@ -864,13 +1049,20 @@
             border-radius: 7px;
 
             cursor: pointer;
+
             font-weight: 900;
         }
+
+
+        /* =====================================================
+           ADMIN SCORE
+        ===================================================== */
 
         .admin-score-section {
             padding: 15px;
 
             background: #1a1a22;
+
             border: 1px solid var(--red);
             border-radius: 8px;
         }
@@ -878,6 +1070,7 @@
         .score-input-row {
             display: flex;
             align-items: center;
+
             gap: 10px;
 
             margin-bottom: 10px;
@@ -887,6 +1080,7 @@
             flex: 1;
 
             color: white;
+
             font-size: 13px;
             font-weight: 800;
 
@@ -907,8 +1101,10 @@
             border-radius: 6px;
 
             text-align: center;
+
             font-size: 17px;
             font-weight: 900;
+
             outline: none;
         }
 
@@ -929,8 +1125,10 @@
             border-radius: 6px;
 
             cursor: pointer;
+
             font-size: 11px;
             font-weight: 900;
+
             text-transform: uppercase;
         }
 
@@ -945,6 +1143,7 @@
             border: 0;
 
             cursor: pointer;
+
             font-size: 11px;
             font-weight: 700;
         }
@@ -953,10 +1152,14 @@
             color: white;
         }
 
-        /* TOAST */
+
+        /* =====================================================
+           TOAST
+        ===================================================== */
 
         #toast-container {
             position: fixed;
+
             z-index: 5000;
 
             right: 18px;
@@ -964,6 +1167,7 @@
 
             display: flex;
             flex-direction: column;
+
             gap: 8px;
 
             width: min(350px, calc(100% - 36px));
@@ -978,7 +1182,9 @@
             border: 1px solid #33333d;
             border-radius: 8px;
 
-            box-shadow: 0 10px 30px rgba(0,0,0,.35);
+            box-shadow:
+                0 10px 30px
+                rgba(0,0,0,.35);
 
             font-size: 12px;
             font-weight: 700;
@@ -998,18 +1204,28 @@
             border-color: rgba(166,124,255,.5);
         }
 
-        /* EMPTY */
+
+        /* =====================================================
+           EMPTY
+        ===================================================== */
 
         .empty-state {
             padding: 25px 10px;
+
             color: #555;
+
             font-size: 12px;
+
             text-align: center;
         }
 
-        /* MOBILE */
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
 
         @media (max-width: 850px) {
+
             .wg-meta-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
@@ -1021,9 +1237,12 @@
             .action-box {
                 position: static;
             }
+
         }
 
+
         @media (max-width: 600px) {
+
             .container {
                 width: min(100% - 20px, 1100px);
             }
@@ -1034,7 +1253,9 @@
 
             .status-badge {
                 position: static;
+
                 display: inline-block;
+
                 margin-bottom: 15px;
             }
 
@@ -1061,16 +1282,30 @@
             .round {
                 min-width: 200px;
             }
+
         }
+
     </style>
 </head>
 
+
 <body>
 
-<!-- NAV -->
+<!-- =========================================================
+     NAV
+========================================================= -->
+
 <div class="top-nav">
+
     <div class="nav-inner">
-        <a href="index.html" class="nav-link" id="nav-back">← Назад</a>
+
+        <a
+            href="index.html"
+            class="nav-link"
+            id="nav-back"
+        >
+            ← Назад
+        </a>
 
         <button
             class="lang-btn"
@@ -1079,81 +1314,231 @@
         >
             RU
         </button>
+
     </div>
+
 </div>
 
 
 <div class="container">
 
-    <!-- HEADER -->
+
+    <!-- =====================================================
+         TOURNAMENT HEADER
+    ===================================================== -->
+
     <div class="wg-header">
 
-        <div id="tourney-status-badge" class="status-badge">
+        <div
+            id="tourney-status-badge"
+            class="status-badge"
+        >
             Ожидание
         </div>
 
-        <div class="wg-game" id="t-game">
+
+        <div
+            class="wg-game"
+            id="t-game"
+        >
             ⏳ Загрузка...
         </div>
 
-        <h1 class="wg-title" id="t-name">
+
+        <h1
+            class="wg-title"
+            id="t-name"
+        >
             Загрузка турнира...
         </h1>
 
+
         <div class="wg-meta-grid">
 
-            <div class="meta-box">
-                <span class="meta-label" id="lbl-org">Организатор</span>
-                <span class="meta-val" id="t-author">...</span>
-            </div>
 
             <div class="meta-box">
-                <span class="meta-label" id="lbl-format">Формат</span>
-                <span class="meta-val" id="t-format">...</span>
+
+                <span
+                    class="meta-label"
+                    id="lbl-org"
+                >
+                    Организатор
+                </span>
+
+                <span
+                    class="meta-val"
+                    id="t-author"
+                >
+                    ...
+                </span>
+
             </div>
 
-            <div class="meta-box">
-                <span class="meta-label" id="lbl-system">Система</span>
-                <span class="meta-val" id="t-system">...</span>
-            </div>
 
             <div class="meta-box">
-                <span class="meta-label" id="lbl-slots">Слоты</span>
-                <span class="meta-val" id="t-max">...</span>
+
+                <span
+                    class="meta-label"
+                    id="lbl-format"
+                >
+                    Формат
+                </span>
+
+                <span
+                    class="meta-val"
+                    id="t-format"
+                >
+                    ...
+                </span>
+
             </div>
 
+
             <div class="meta-box">
-                <span class="meta-label" id="lbl-prize">Призовые</span>
-                <span class="meta-val green" id="t-prize">...</span>
+
+                <span
+                    class="meta-label"
+                    id="lbl-system"
+                >
+                    Система
+                </span>
+
+                <span
+                    class="meta-val"
+                    id="t-system"
+                >
+                    ...
+                </span>
+
+            </div>
+
+
+            <div class="meta-box">
+
+                <span
+                    class="meta-label"
+                    id="lbl-slots"
+                >
+                    Слоты
+                </span>
+
+                <span
+                    class="meta-val"
+                    id="t-max"
+                >
+                    ...
+                </span>
+
+            </div>
+
+
+            <div class="meta-box">
+
+                <span
+                    class="meta-label"
+                    id="lbl-prize"
+                >
+                    Призовые
+                </span>
+
+                <span
+                    class="meta-val green"
+                    id="t-prize"
+                >
+                    ...
+                </span>
+
             </div>
 
         </div>
+
     </div>
 
 
-    <!-- DESCRIPTION + ACTION -->
-    <div class="content-grid">
+    <!-- =====================================================
+         TABS
+    ===================================================== -->
+
+    <div
+        class="tabs-container"
+        id="tourney-tabs"
+    >
+
+        <button
+            id="tab-details"
+            class="tab-btn active"
+            onclick="switchTab('details')"
+        >
+            Подробности
+        </button>
+
+
+        <button
+            id="tab-bracket"
+            class="tab-btn"
+            onclick="switchTab('bracket')"
+        >
+            Турнирная сетка
+        </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         DETAILS
+         
+         Здесь находится:
+         - описание
+         - правила
+         - участники
+         - кнопка участия
+         - админские кнопки
+         
+         На вкладке "Турнирная сетка" этот блок скрывается.
+    ===================================================== -->
+
+    <div
+        class="content-grid"
+        id="details-section"
+    >
+
+
+        <!-- DESCRIPTION -->
 
         <div class="wg-card">
 
-            <h2 class="wg-card-title" id="lbl-desc">
+            <h2
+                class="wg-card-title"
+                id="lbl-desc"
+            >
                 Описание и регламент
             </h2>
 
-            <div class="rules-text" id="t-rules">
+
+            <div
+                class="rules-text"
+                id="t-rules"
+            >
                 Загрузка информации...
             </div>
 
         </div>
 
 
+        <!-- ACTION + PLAYERS -->
+
         <div>
 
             <div class="action-box">
 
-                <div class="status-text" id="join-status">
+
+                <div
+                    class="status-text"
+                    id="join-status"
+                >
                     Загрузка...
                 </div>
+
 
                 <button
                     class="wg-btn"
@@ -1163,22 +1548,34 @@
                     Загрузка...
                 </button>
 
+
+                <!-- ADMIN -->
+
                 <div
                     id="admin-controls"
                     class="admin-controls-box"
                 ></div>
 
-                <div class="players-title" id="lbl-members">
+
+                <!-- PLAYERS -->
+
+                <div
+                    class="players-title"
+                    id="lbl-members"
+                >
                     Участники
                 </div>
+
 
                 <div
                     class="players-list"
                     id="players-container"
                 >
+
                     <div class="empty-state">
                         Загрузка...
                     </div>
+
                 </div>
 
             </div>
@@ -1188,92 +1585,31 @@
     </div>
 
 
-    <!-- TABS -->
-    <div
-        class="tabs-container"
-        id="tourney-tabs"
-        style="display:none;"
-    >
+    <!-- =====================================================
+         BRACKET
+         
+         Здесь отображается ТОЛЬКО турнирное дерево.
+         
+         Участники матчей находятся непосредственно внутри
+         match-блоков, которые создаёт JS.
+    ===================================================== -->
 
-        <button
-            class="tab-btn active"
-            id="tab-btn-leaderboard"
-            onclick="switchTab('leaderboard')"
-        >
-            🏆 Итоги
-        </button>
-
-        <button
-            class="tab-btn"
-            id="tab-btn-bracket"
-            onclick="switchTab('bracket')"
-        >
-            🌳 Сетка
-        </button>
-
-    </div>
-
-
-    <!-- LEADERBOARD -->
-    <div
-        class="wg-card"
-        id="leaderboard-section"
-        style="display:none; margin-bottom:30px;"
-    >
-
-        <h2 class="wg-card-title" id="lbl-tab-lb">
-            Итоговая таблица
-        </h2>
-
-        <div id="final-leaderboard-container"></div>
-
-    </div>
-
-
-<!-- =========================================================
-     TOURNAMENT TABS
-     ========================================================= -->
-
-<div
-    id="tourney-tabs"
-    style="
-        display:flex;
-        gap:8px;
-        margin-top:20px;
-        margin-bottom:15px;
-    "
->
-
-    <button
-        id="tab-details"
-        class="wg-btn"
-        onclick="switchTab('details')"
-    >
-        Подробности
-    </button>
-
-
-    <button
-        id="tab-bracket"
-        class="wg-btn"
-        onclick="switchTab('bracket')"
-    >
-        Турнирная сетка
-    </button>
-
-</div>
-    
-    
-    <!-- BRACKET -->
     <div
         class="wg-card"
         id="bracket-section"
-        style="display:none; margin-bottom:30px;"
+        style="
+            display:none;
+            margin-bottom:30px;
+        "
     >
 
-        <h2 class="wg-card-title" id="lbl-tab-br">
+        <h2
+            class="wg-card-title"
+            id="lbl-tab-br"
+        >
             Турнирная сетка
         </h2>
+
 
         <div class="bracket-wrapper">
 
@@ -1281,19 +1617,54 @@
                 class="bracket"
                 id="bracket-container"
             >
+
                 <div class="empty-state">
                     Ожидание...
                 </div>
+
             </div>
 
         </div>
 
     </div>
 
+
+    <!-- =====================================================
+         LEADERBOARD
+         
+         Оставляем отдельным блоком, если твой JS его использует.
+    ===================================================== -->
+
+    <div
+        class="wg-card"
+        id="leaderboard-section"
+        style="
+            display:none;
+            margin-bottom:30px;
+        "
+    >
+
+        <h2
+            class="wg-card-title"
+            id="lbl-tab-lb"
+        >
+            Итоговая таблица
+        </h2>
+
+
+        <div
+            id="final-leaderboard-container"
+        ></div>
+
+    </div>
+
 </div>
 
 
-<!-- MATCH MODAL -->
+<!-- =========================================================
+     MATCH MODAL
+========================================================= -->
+
 <div
     class="modal-overlay"
     id="matchModal"
@@ -1305,13 +1676,20 @@
         onclick="event.stopPropagation()"
     >
 
+
         <h3
             id="match-modal-title"
-            style="margin:0 0 15px; color:white; text-align:center;"
+            style="
+                margin:0 0 15px;
+                color:white;
+                text-align:center;
+            "
         >
             Чат матча
         </h3>
 
+
+        <!-- CHAT -->
 
         <div
             class="chat-history"
@@ -1329,6 +1707,7 @@
                 placeholder="Сообщение или ссылка..."
             >
 
+
             <button
                 class="chat-send"
                 onclick="sendChatMessage()"
@@ -1340,11 +1719,13 @@
 
 
         <!-- ADMIN SCORE -->
+
         <div
             id="admin-score-section"
             class="admin-score-section"
             style="display:none;"
         >
+
 
             <h4
                 id="lbl-admin-panel"
@@ -1369,6 +1750,7 @@
                     Игрок 1
                 </span>
 
+
                 <input
                     type="number"
                     id="score-p1-val"
@@ -1389,6 +1771,7 @@
                 >
                     Игрок 2
                 </span>
+
 
                 <input
                     type="number"
@@ -1413,10 +1796,25 @@
         </div>
 
 
-        <input type="hidden" id="active-match-id">
-        <input type="hidden" id="active-p1-raw">
-        <input type="hidden" id="active-p2-raw">
+        <!-- ACTIVE MATCH -->
 
+        <input
+            type="hidden"
+            id="active-match-id"
+        >
+
+        <input
+            type="hidden"
+            id="active-p1-raw"
+        >
+
+        <input
+            type="hidden"
+            id="active-p2-raw"
+        >
+
+
+        <!-- CLOSE -->
 
         <button
             class="btn-cancel"
@@ -1431,7 +1829,10 @@
 </div>
 
 
-<!-- ПРОФИЛЬ ИГРОКА (НОВОЕ МОДАЛЬНОЕ ОКНО) -->
+<!-- =========================================================
+     PLAYER PROFILE MODAL
+========================================================= -->
+
 <div
     class="modal-overlay"
     id="profileModal"
@@ -1441,8 +1842,11 @@
     <div
         class="modal-box"
         onclick="event.stopPropagation()"
-        style="max-width: 400px;"
+        style="max-width:400px;"
     >
+
+
+        <!-- HEADER -->
 
         <h3
             id="prof-header"
@@ -1458,9 +1862,9 @@
         </h3>
 
 
-        <!-- ======================================
-             АВАТАР + ИМЯ
-        ======================================= -->
+        <!-- =================================================
+             AVATAR + NAME
+        ================================================== -->
 
         <div
             style="
@@ -1471,9 +1875,10 @@
             "
         >
 
-            <img 
-                id="prof-avatar" 
-                src="" 
+
+            <img
+                id="prof-avatar"
+                src=""
                 style="
                     width:80px;
                     height:80px;
@@ -1496,187 +1901,239 @@
             </h2>
 
 
-            <!-- ======================================
+            <!-- =================================================
                  LEVEL
-            ======================================= -->
-<div
-    id="prof-level-wrapper"
-    style="
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        gap:16px;
-        margin-top:10px;
-        padding:10px 14px;
-        border-radius:14px;
-        background:
-            linear-gradient(
-                135deg,
-                rgba(255,255,255,0.025),
-                rgba(255,255,255,0.01)
-            );
-        border:1px solid rgba(255,255,255,0.06);
-        box-shadow:
-            inset 0 1px 0 rgba(255,255,255,0.03),
-            0 6px 20px rgba(0,0,0,0.18);
-    "
->
+            ================================================== -->
 
-    <!-- КРУГ УРОВНЯ -->
-    <div
-        id="prof-level-circle"
-        class="level-circle level-1"
-        style="
-            width:64px;
-            height:64px;
-            min-width:64px;
-            border-radius:50%;
-            background:#101014;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            box-sizing:border-box;
-            position:relative;
-            border-width:2px;
-        "
-    >
-
-        <!-- ВНУТРЕННИЙ КРУГ -->
-        <div
-            style="
-                position:absolute;
-                width:48px;
-                height:48px;
-                border-radius:50%;
-                background:#141419;
-                border:1px solid rgba(255,255,255,0.05);
-                pointer-events:none;
-            "
-        ></div>
-
-
-        <!-- ЦИФРА LEVEL -->
-        <span
-            id="prof-level"
-            style="
-                position:relative;
-                z-index:2;
-                font-size:26px;
-                font-weight:900;
-                line-height:1;
-                letter-spacing:-1px;
-            "
-        >
-            1
-        </span>
-
-    </div>
-
-
-    <!-- LEVEL + PR -->
-    <div
-        style="
-            display:flex;
-            flex-direction:column;
-            align-items:flex-start;
-            justify-content:center;
-            gap:5px;
-            min-width:105px;
-        "
-    >
-
-        <!-- НАЗВАНИЕ -->
-        <span
-            style="
-                color:#777783;
-                font-size:9px;
-                text-transform:uppercase;
-                font-weight:900;
-                letter-spacing:1px;
-                line-height:1;
-            "
-        >
-            RETRO CUP LEVEL
-        </span>
-
-
-        <!-- LEVEL -->
-        <div
-            style="
-                display:flex;
-                align-items:center;
-                gap:7px;
-            "
-        >
-
-            <span
+            <div
+                id="prof-level-wrapper"
                 style="
-                    color:#e8e8ee;
-                    font-size:15px;
-                    font-weight:900;
-                    line-height:1;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+
+                    gap:16px;
+
+                    margin-top:10px;
+
+                    padding:10px 14px;
+
+                    border-radius:14px;
+
+                    background:
+                        linear-gradient(
+                            135deg,
+                            rgba(255,255,255,0.025),
+                            rgba(255,255,255,0.01)
+                        );
+
+                    border:1px solid rgba(255,255,255,0.06);
+
+                    box-shadow:
+                        inset 0 1px 0
+                        rgba(255,255,255,0.03),
+
+                        0 6px 20px
+                        rgba(0,0,0,0.18);
                 "
             >
-                Level
-            </span>
-
-            <span
-                id="prof-level-small"
-                class="level-1"
-                style="
-                    font-size:15px;
-                    font-weight:900;
-                    line-height:1;
-                "
-            >
-                1
-            </span>
-
-        </div>
 
 
-        <!-- PR -->
-        <div
-            style="
-                display:flex;
-                align-items:center;
-                gap:7px;
-            "
-        >
+                <!-- LEVEL CIRCLE -->
 
-            <span
-                style="
-                    color:#777783;
-                    font-size:10px;
-                    font-weight:800;
-                    text-transform:uppercase;
-                    letter-spacing:.5px;
-                "
-            >
-                PR
-            </span>
+                <div
+                    id="prof-level-circle"
+                    class="level-circle level-1"
+                    style="
+                        width:64px;
+                        height:64px;
+                        min-width:64px;
 
-            <span
-                id="prof-pr"
-                style="
-                    color:#a67cff;
-                    font-size:14px;
-                    font-weight:900;
-                    line-height:1;
-                "
-            >
-                1
-            </span>
+                        border-radius:50%;
 
-        </div>
+                        background:#101014;
 
-    </div>
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
 
-</div>
+                        box-sizing:border-box;
 
-            <!-- ======================================
+                        position:relative;
+
+                        border-width:2px;
+                    "
+                >
+
+
+                    <!-- INNER -->
+
+                    <div
+                        style="
+                            position:absolute;
+
+                            width:48px;
+                            height:48px;
+
+                            border-radius:50%;
+
+                            background:#141419;
+
+                            border:1px solid
+                                rgba(255,255,255,0.05);
+
+                            pointer-events:none;
+                        "
+                    ></div>
+
+
+                    <!-- LEVEL NUMBER -->
+
+                    <span
+                        id="prof-level"
+                        style="
+                            position:relative;
+                            z-index:2;
+
+                            font-size:26px;
+                            font-weight:900;
+
+                            line-height:1;
+
+                            letter-spacing:-1px;
+                        "
+                    >
+                        1
+                    </span>
+
+                </div>
+
+
+                <!-- LEVEL + PR -->
+
+                <div
+                    style="
+                        display:flex;
+                        flex-direction:column;
+                        align-items:flex-start;
+                        justify-content:center;
+
+                        gap:5px;
+
+                        min-width:105px;
+                    "
+                >
+
+
+                    <!-- TITLE -->
+
+                    <span
+                        style="
+                            color:#777783;
+
+                            font-size:9px;
+                            text-transform:uppercase;
+
+                            font-weight:900;
+
+                            letter-spacing:1px;
+                            line-height:1;
+                        "
+                    >
+                        RETRO CUP LEVEL
+                    </span>
+
+
+                    <!-- LEVEL -->
+
+                    <div
+                        style="
+                            display:flex;
+                            align-items:center;
+                            gap:7px;
+                        "
+                    >
+
+                        <span
+                            style="
+                                color:#e8e8ee;
+
+                                font-size:15px;
+                                font-weight:900;
+
+                                line-height:1;
+                            "
+                        >
+                            Level
+                        </span>
+
+
+                        <span
+                            id="prof-level-small"
+                            class="level-1"
+                            style="
+                                font-size:15px;
+                                font-weight:900;
+
+                                line-height:1;
+                            "
+                        >
+                            1
+                        </span>
+
+                    </div>
+
+
+                    <!-- PR -->
+
+                    <div
+                        style="
+                            display:flex;
+                            align-items:center;
+                            gap:7px;
+                        "
+                    >
+
+                        <span
+                            style="
+                                color:#777783;
+
+                                font-size:10px;
+                                font-weight:800;
+
+                                text-transform:uppercase;
+
+                                letter-spacing:.5px;
+                            "
+                        >
+                            PR
+                        </span>
+
+
+                        <span
+                            id="prof-pr"
+                            style="
+                                color:#a67cff;
+
+                                font-size:14px;
+                                font-weight:900;
+
+                                line-height:1;
+                            "
+                        >
+                            1
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
                  STEAM
-            ======================================= -->
+            ================================================== -->
 
             <div
                 style="
@@ -1687,7 +2144,8 @@
 
                 <span id="prof-steam-lbl">
                     Steam ID:
-                </span> 
+                </span>
+
 
                 <span
                     id="prof-steam"
@@ -1704,22 +2162,32 @@
         </div>
 
 
-        <!-- ======================================
-             СТАТИСТИКА
-        ======================================= -->
+        <!-- =================================================
+             STATISTICS
+        ================================================== -->
 
         <div
             class="wg-meta-grid"
             style="
                 margin-top:25px;
-                grid-template-columns:repeat(3, 1fr);
+
+                grid-template-columns:
+                    repeat(3,1fr);
+
                 text-align:center;
+
                 background:#0c0c10;
+
                 padding:15px;
+
                 border-radius:8px;
+
                 border:1px solid #303039;
             "
         >
+
+
+            <!-- K/D -->
 
             <div class="meta-box">
 
@@ -1730,16 +2198,21 @@
                     K/D Рейтинг
                 </span>
 
+
                 <span
                     class="meta-val green"
                     id="prof-kd"
-                    style="font-size:18px;"
+                    style="
+                        font-size:18px;
+                    "
                 >
                     0.00
                 </span>
 
             </div>
 
+
+            <!-- WINRATE -->
 
             <div class="meta-box">
 
@@ -1750,16 +2223,21 @@
                     Винрейт
                 </span>
 
+
                 <span
                     class="meta-val"
                     id="prof-winrate"
-                    style="font-size:18px;"
+                    style="
+                        font-size:18px;
+                    "
                 >
                     0%
                 </span>
 
             </div>
 
+
+            <!-- MATCHES -->
 
             <div class="meta-box">
 
@@ -1770,10 +2248,13 @@
                     Матчи
                 </span>
 
+
                 <span
                     class="meta-val"
                     id="prof-matches"
-                    style="font-size:18px;"
+                    style="
+                        font-size:18px;
+                    "
                 >
                     0
                 </span>
@@ -1783,9 +2264,9 @@
         </div>
 
 
-        <!-- ======================================
-             ЗАКРЫТЬ
-        ======================================= -->
+        <!-- =================================================
+             CLOSE PROFILE
+        ================================================== -->
 
         <button
             class="btn-cancel"
@@ -1799,9 +2280,14 @@
 
 </div>
 
-<!-- TOASTS -->
+
+<!-- =========================================================
+     TOASTS
+========================================================= -->
+
 <div id="toast-container"></div>
 
+</body>
 
 <script>
 /* =========================================================
