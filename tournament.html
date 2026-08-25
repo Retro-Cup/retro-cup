@@ -1,21 +1,37 @@
-
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
+
     <meta charset="UTF-8">
-    <link rel="icon" type="image/png" href="logo.png">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link
+        rel="icon"
+        type="image/png"
+        href="logo.png"
+    >
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Retro Cup | Турнир</title>
 
+
     <style>
+
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
+
         :root {
+
             --bg: #09090c;
             --bg2: #0f0f14;
+
             --card: #141419;
             --card2: #1a1a22;
+
             --border: #272731;
             --border2: #343440;
 
@@ -34,15 +50,19 @@
             --radius: 10px;
         }
 
+
         * {
             box-sizing: border-box;
         }
+
 
         html {
             scroll-behavior: smooth;
         }
 
+
         body {
+
             margin: 0;
             padding: 0 0 60px;
 
@@ -55,20 +75,26 @@
                 var(--bg);
 
             color: var(--text);
+
             font-family: 'Inter', sans-serif;
+
             min-height: 100vh;
         }
+
 
         button,
         input {
             font-family: inherit;
         }
 
+
         button {
             -webkit-tap-highlight-color: transparent;
         }
 
+
         @keyframes fadeIn {
+
             from {
                 opacity: 0;
                 transform: translateY(10px);
@@ -78,37 +104,62 @@
                 opacity: 1;
                 transform: translateY(0);
             }
+
         }
 
+
         @keyframes pulse {
-            0%, 100% {
+
+            0%,
+            100% {
+
                 transform: scale(1);
-                box-shadow: 0 0 0 rgba(0,255,204,0);
+
+                box-shadow:
+                    0 0 0
+                    rgba(0,255,204,0);
+
             }
 
             50% {
+
                 transform: scale(1.04);
-                box-shadow: 0 0 20px rgba(0,255,204,.35);
+
+                box-shadow:
+                    0 0 20px
+                    rgba(0,255,204,.35);
+
             }
+
         }
 
+
         @keyframes spin {
+
             to {
                 transform: rotate(360deg);
             }
+
         }
+
 
         /* =====================================================
            PLAYER AVATAR
         ===================================================== */
 
         .player-avatar-small {
+
             width: 20px;
             height: 20px;
+
             border-radius: 50%;
+
             object-fit: cover;
+
             border: 1px solid #33333d;
+
             background: #0b0b0e;
+
             flex-shrink: 0;
         }
 
@@ -118,62 +169,93 @@
         ===================================================== */
 
         .top-nav {
+
             position: sticky;
+
             top: 0;
+
             z-index: 1000;
 
-            background: rgba(14,14,18,.92);
+            background:
+                rgba(14,14,18,.92);
+
             backdrop-filter: blur(12px);
 
-            border-bottom: 1px solid var(--border);
+            border-bottom:
+                1px solid var(--border);
         }
 
+
         .nav-inner {
+
             max-width: 1100px;
+
             min-height: 58px;
 
             margin: 0 auto;
+
             padding: 0 20px;
 
             display: flex;
+
             align-items: center;
+
             justify-content: space-between;
         }
 
+
         .nav-link {
+
             color: var(--muted);
+
             text-decoration: none;
 
             font-size: 14px;
+
             font-weight: 800;
 
             transition: .2s;
         }
 
+
         .nav-link:hover {
+
             color: white;
-            transform: translateX(-2px);
+
+            transform:
+                translateX(-2px);
         }
 
+
         .lang-btn {
+
             background: #17171e;
+
             color: var(--muted);
 
-            border: 1px solid var(--border2);
+            border:
+                1px solid var(--border2);
+
             padding: 7px 11px;
+
             border-radius: 6px;
 
             cursor: pointer;
 
             font-size: 11px;
+
             font-weight: 900;
 
             transition: .2s;
         }
 
+
         .lang-btn:hover {
+
             color: white;
-            border-color: var(--purple);
+
+            border-color:
+                var(--purple);
         }
 
 
@@ -182,7 +264,10 @@
         ===================================================== */
 
         .container {
-            width: min(1100px, calc(100% - 30px));
+
+            width:
+                min(1100px, calc(100% - 30px));
+
             margin: 0 auto;
         }
 
@@ -192,33 +277,47 @@
         ===================================================== */
 
         .wg-header {
+
             position: relative;
+
             overflow: hidden;
 
             margin-top: 22px;
+
             margin-bottom: 20px;
+
             padding: 30px;
 
             background:
+
                 radial-gradient(
                     circle at 100% 0%,
                     rgba(166,124,255,.12),
                     transparent 35%
                 ),
+
                 linear-gradient(
                     135deg,
                     #191921,
                     #101015
                 );
 
-            border: 1px solid var(--border2);
-            border-top: 3px solid var(--purple);
-            border-radius: var(--radius);
+            border:
+                1px solid var(--border2);
 
-            animation: fadeIn .35s ease;
+            border-top:
+                3px solid var(--purple);
+
+            border-radius:
+                var(--radius);
+
+            animation:
+                fadeIn .35s ease;
         }
 
+
         .wg-header::after {
+
             content: "";
 
             position: absolute;
@@ -229,7 +328,9 @@
             right: -100px;
             bottom: -140px;
 
-            background: var(--purple);
+            background:
+                var(--purple);
+
             opacity: .05;
 
             border-radius: 50%;
@@ -237,7 +338,9 @@
             pointer-events: none;
         }
 
+
         .status-badge {
+
             position: absolute;
 
             right: 22px;
@@ -248,94 +351,139 @@
             border-radius: 999px;
 
             background: #292930;
+
             color: #aaa;
 
             font-size: 10px;
+
             font-weight: 900;
 
             letter-spacing: .8px;
+
             text-transform: uppercase;
         }
 
-        .status-badge.active {
-            background: var(--green);
-            color: #001a14;
 
-            animation: pulse 2s infinite;
+        .status-badge.active {
+
+            background:
+                var(--green);
+
+            color:
+                #001a14;
+
+            animation:
+                pulse 2s infinite;
         }
+
 
         .status-badge.finished {
-            background: var(--yellow);
-            color: #161200;
+
+            background:
+                var(--yellow);
+
+            color:
+                #161200;
         }
 
+
         .wg-game {
-            color: var(--purple);
+
+            color:
+                var(--purple);
 
             font-size: 12px;
+
             font-weight: 900;
 
             letter-spacing: 1px;
+
             text-transform: uppercase;
 
             margin-bottom: 8px;
         }
 
+
         .wg-title {
+
             margin: 0;
+
             padding-right: 180px;
 
             color: white;
 
-            font-size: clamp(25px, 4vw, 36px);
+            font-size:
+                clamp(25px, 4vw, 36px);
+
             line-height: 1.15;
 
             font-weight: 900;
         }
 
+
         .wg-meta-grid {
+
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+
+            grid-template-columns:
+                repeat(5, 1fr);
 
             gap: 12px;
 
             margin-top: 25px;
+
             padding-top: 20px;
 
-            border-top: 1px solid var(--border);
+            border-top:
+                1px solid var(--border);
         }
 
+
         .meta-box {
+
             min-width: 0;
 
             display: flex;
+
             flex-direction: column;
 
             gap: 5px;
         }
 
+
         .meta-label {
-            color: var(--muted);
+
+            color:
+                var(--muted);
 
             font-size: 10px;
+
             font-weight: 700;
 
             text-transform: uppercase;
         }
 
+
         .meta-val {
+
             color: white;
 
             font-size: 14px;
+
             font-weight: 800;
 
             overflow: hidden;
+
             text-overflow: ellipsis;
+
             white-space: nowrap;
         }
 
+
         .meta-val.green {
-            color: var(--green);
+
+            color:
+                var(--green);
         }
 
 
@@ -344,6 +492,7 @@
         ===================================================== */
 
         .content-grid {
+
             display: grid;
 
             grid-template-columns:
@@ -355,39 +504,54 @@
             margin-bottom: 30px;
         }
 
-        .wg-card {
-            background: rgba(20,20,25,.94);
 
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
+        .wg-card {
+
+            background:
+                rgba(20,20,25,.94);
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                var(--radius);
 
             padding: 25px;
 
-            animation: fadeIn .4s ease;
+            animation:
+                fadeIn .4s ease;
         }
 
+
         .wg-card-title {
+
             margin: 0 0 20px;
 
             padding-bottom: 12px;
 
-            border-bottom: 1px solid var(--border);
+            border-bottom:
+                1px solid var(--border);
 
             color: white;
 
             font-size: 17px;
+
             font-weight: 900;
 
             text-transform: uppercase;
         }
 
+
         .rules-text {
+
             color: #aaa;
 
             font-size: 14px;
+
             line-height: 1.7;
 
             white-space: pre-wrap;
+
             word-break: break-word;
         }
 
@@ -397,48 +561,66 @@
         ===================================================== */
 
         .action-box {
+
             position: sticky;
+
             top: 78px;
 
             background:
+
                 linear-gradient(
                     180deg,
                     #1a1a22,
                     #121217
                 );
 
-            border: 1px solid var(--border2);
-            border-radius: var(--radius);
+            border:
+                1px solid var(--border2);
+
+            border-radius:
+                var(--radius);
 
             padding: 22px;
 
             text-align: center;
         }
 
+
         .status-text {
+
             margin-bottom: 14px;
 
-            color: var(--muted);
+            color:
+                var(--muted);
 
             font-size: 11px;
+
             font-weight: 900;
 
             text-transform: uppercase;
+
             letter-spacing: .5px;
         }
 
+
         .wg-btn {
+
             width: 100%;
 
             border: 0;
+
             border-radius: 7px;
 
             padding: 14px 15px;
 
-            background: var(--yellow);
-            color: #080800;
+            background:
+                var(--yellow);
+
+            color:
+                #080800;
 
             font-size: 14px;
+
             font-weight: 900;
 
             cursor: pointer;
@@ -448,31 +630,53 @@
             transition: .2s;
         }
 
+
         .wg-btn:hover:not(:disabled) {
+
             background: white;
-            transform: translateY(-2px);
+
+            transform:
+                translateY(-2px);
         }
 
+
         .wg-btn:disabled {
+
             opacity: .6;
+
             cursor: not-allowed;
         }
 
-        .wg-btn.leave {
-            background: transparent;
-            color: var(--red);
 
-            border: 1px solid var(--red);
+        .wg-btn.leave {
+
+            background:
+                transparent;
+
+            color:
+                var(--red);
+
+            border:
+                1px solid var(--red);
         }
 
+
         .wg-btn.leave:hover:not(:disabled) {
-            background: var(--red);
+
+            background:
+                var(--red);
+
             color: white;
         }
 
+
         .wg-btn.locked {
-            background: #292930;
-            color: #707078;
+
+            background:
+                #292930;
+
+            color:
+                #707078;
 
             cursor: not-allowed;
         }
@@ -483,22 +687,28 @@
         ===================================================== */
 
         .admin-controls-box {
+
             display: flex;
+
             gap: 8px;
 
             margin-top: 12px;
         }
 
+
         .admin-start-btn,
         .admin-stop-btn {
+
             flex: 1;
 
             border: 0;
+
             border-radius: 6px;
 
             padding: 10px;
 
             font-size: 10px;
+
             font-weight: 900;
 
             cursor: pointer;
@@ -506,13 +716,21 @@
             text-transform: uppercase;
         }
 
+
         .admin-start-btn {
-            background: var(--green);
+
+            background:
+                var(--green);
+
             color: black;
         }
 
+
         .admin-stop-btn {
-            background: var(--red);
+
+            background:
+                var(--red);
+
             color: white;
         }
 
@@ -522,19 +740,26 @@
         ===================================================== */
 
         .players-title {
+
             margin: 24px 0 10px;
 
-            color: var(--muted);
+            color:
+                var(--muted);
 
             font-size: 10px;
+
             font-weight: 900;
 
             text-align: left;
+
             text-transform: uppercase;
         }
 
+
         .players-list {
+
             display: flex;
+
             flex-direction: column;
 
             gap: 7px;
@@ -546,49 +771,70 @@
             padding-right: 3px;
         }
 
+
         .players-list::-webkit-scrollbar {
+
             width: 5px;
         }
 
+
         .players-list::-webkit-scrollbar-thumb {
-            background: #303039;
+
+            background:
+                #303039;
+
             border-radius: 5px;
         }
 
+
         .team-block {
+
             padding: 10px;
 
-            background: #0c0c10;
+            background:
+                #0c0c10;
 
-            border: 1px solid #2b2b34;
+            border:
+                1px solid #2b2b34;
+
             border-radius: 7px;
         }
 
+
         .team-name {
+
             display: flex;
+
             align-items: center;
+
             justify-content: space-between;
 
             gap: 10px;
 
             margin-bottom: 8px;
 
-            color: var(--purple);
+            color:
+                var(--purple);
 
             font-size: 13px;
+
             font-weight: 900;
         }
 
+
         .player-item {
+
             padding: 6px 7px;
 
             color: #aaa;
 
-            border-left: 2px solid #333;
+            border-left:
+                2px solid #333;
 
             font-size: 12px;
 
             display: flex;
+
             align-items: center;
 
             gap: 8px;
@@ -598,20 +844,28 @@
             transition: .2s;
         }
 
-        .player-item:hover {
-            background: rgba(166,124,255,0.1);
 
-            border-color: var(--purple);
+        .player-item:hover {
+
+            background:
+                rgba(166,124,255,0.1);
+
+            border-color:
+                var(--purple);
 
             color: white;
         }
 
+
         .player-item.me {
+
             color: white;
 
-            border-left-color: var(--green);
+            border-left-color:
+                var(--green);
 
-            background: rgba(0,255,204,.035);
+            background:
+                rgba(0,255,204,.035);
         }
 
 
@@ -620,70 +874,104 @@
         ===================================================== */
 
         .speedrun-item {
+
             display: flex;
+
             align-items: center;
+
             justify-content: space-between;
 
             gap: 10px;
 
             margin-bottom: 7px;
+
             padding: 10px;
 
-            background: #0c0c10;
+            background:
+                #0c0c10;
 
-            border: 1px solid #303039;
+            border:
+                1px solid #303039;
+
             border-radius: 7px;
         }
 
+
         .speedrun-rank {
+
             width: 28px;
 
             color: #555;
 
             font-size: 15px;
+
             font-weight: 900;
         }
 
+
         .speedrun-rank.top1 {
-            color: var(--yellow);
+
+            color:
+                var(--yellow);
         }
+
 
         .speedrun-rank.top2 {
-            color: #c0c0c0;
+
+            color:
+                #c0c0c0;
         }
+
 
         .speedrun-rank.top3 {
-            color: #cd7f32;
+
+            color:
+                #cd7f32;
         }
 
+
         .speedrun-time {
+
             padding: 4px 8px;
 
-            color: var(--green);
-            background: #17171e;
+            color:
+                var(--green);
 
-            border: 1px solid rgba(0,255,204,.4);
+            background:
+                #17171e;
+
+            border:
+                1px solid rgba(0,255,204,.4);
+
             border-radius: 5px;
 
             font-family: monospace;
 
             font-size: 14px;
+
             font-weight: 900;
         }
 
+
         .edit-time-btn {
+
             margin-left: 7px;
+
             padding: 5px 8px;
 
-            background: var(--red);
+            background:
+                var(--red);
+
             color: white;
 
             border: 0;
+
             border-radius: 5px;
 
             cursor: pointer;
 
             font-size: 10px;
+
             font-weight: 900;
         }
 
@@ -693,28 +981,37 @@
         ===================================================== */
 
         .tabs-container {
+
             display: flex;
 
             gap: 8px;
 
             margin-top: 20px;
+
             margin-bottom: 18px;
         }
 
+
         .tab-btn {
+
             flex: 1;
 
             padding: 13px;
 
             color: #aaa;
-            background: #1b1b22;
 
-            border: 1px solid var(--border);
+            background:
+                #1b1b22;
+
+            border:
+                1px solid var(--border);
+
             border-radius: 7px;
 
             cursor: pointer;
 
             font-size: 11px;
+
             font-weight: 900;
 
             text-transform: uppercase;
@@ -722,17 +1019,26 @@
             transition: .2s;
         }
 
+
         .tab-btn:hover {
-            background: #25252e;
+
+            background:
+                #25252e;
+
             color: white;
         }
 
+
         .tab-btn.active {
-            color: #001a14;
 
-            background: var(--green);
+            color:
+                #001a14;
 
-            border-color: var(--green);
+            background:
+                var(--green);
+
+            border-color:
+                var(--green);
         }
 
 
@@ -741,34 +1047,48 @@
         ===================================================== */
 
         .bracket-wrapper {
+
             width: 100%;
 
             overflow-x: auto;
 
-            padding: 10px 3px 20px;
+            padding:
+                10px 3px 20px;
         }
 
+
         .bracket-wrapper::-webkit-scrollbar {
+
             height: 7px;
         }
 
+
         .bracket-wrapper::-webkit-scrollbar-thumb {
-            background: #35353f;
+
+            background:
+                #35353f;
+
             border-radius: 10px;
         }
 
+
         .bracket {
+
             display: flex;
 
             gap: 45px;
 
-            min-width: max-content;
+            min-width:
+                max-content;
         }
 
+
         .round {
+
             min-width: 220px;
 
             display: flex;
+
             flex-direction: column;
 
             justify-content: space-around;
@@ -776,12 +1096,17 @@
             gap: 20px;
         }
 
+
         .match {
+
             position: relative;
 
-            background: #191920;
+            background:
+                #191920;
 
-            border: 1px solid #30303a;
+            border:
+                1px solid #30303a;
+
             border-radius: 7px;
 
             overflow: hidden;
@@ -789,53 +1114,76 @@
             transition: .2s;
         }
 
+
         .match.match-clickable {
+
             cursor: pointer;
 
-            border-color: var(--purple);
+            border-color:
+                var(--purple);
         }
 
+
         .match.match-clickable:hover {
-            background: #25252f;
+
+            background:
+                #25252f;
 
             box-shadow:
                 0 0 20px
                 rgba(166,124,255,.18);
 
-            transform: translateY(-2px);
+            transform:
+                translateY(-2px);
         }
 
-        .round:not(:last-child) .match::after {
+
+        .round:not(:last-child)
+        .match::after {
+
             content: "";
 
             position: absolute;
 
             right: -45px;
+
             top: 50%;
 
             width: 45px;
+
             height: 1px;
 
-            background: #41414a;
+            background:
+                #41414a;
         }
 
-        .round:not(:first-child) .match::before {
+
+        .round:not(:first-child)
+        .match::before {
+
             content: "";
 
             position: absolute;
 
             left: -45px;
+
             top: 50%;
 
             width: 45px;
+
             height: 1px;
 
-            background: #41414a;
+            background:
+                #41414a;
         }
 
+
         .match-team {
+
             display: flex;
+
             align-items: center;
+
             justify-content: space-between;
 
             gap: 8px;
@@ -844,36 +1192,51 @@
 
             padding: 8px 10px;
 
-            border-bottom: 1px solid #303039;
+            border-bottom:
+                1px solid #303039;
 
             color: #ddd;
 
             font-size: 12px;
+
             font-weight: 800;
         }
 
+
         .match-team:last-child {
+
             border-bottom: 0;
         }
 
+
         .match-team.winner {
-            color: var(--green);
+
+            color:
+                var(--green);
         }
+
 
         .match-team.loser {
+
             color: #555;
 
-            text-decoration: line-through;
+            text-decoration:
+                line-through;
         }
 
+
         .match-score {
+
             flex-shrink: 0;
 
             padding: 3px 6px;
 
-            background: #0b0b0f;
+            background:
+                #0b0b0f;
 
-            border: 1px solid #35353e;
+            border:
+                1px solid #35353e;
+
             border-radius: 4px;
 
             color: white;
@@ -881,18 +1244,28 @@
             font-size: 11px;
         }
 
-        .match-team.winner .match-score {
-            color: #001a14;
 
-            background: var(--green);
+        .match-team.winner
+        .match-score {
 
-            border-color: var(--green);
+            color:
+                #001a14;
+
+            background:
+                var(--green);
+
+            border-color:
+                var(--green);
         }
 
+
         .score-auto {
-            color: var(--purple);
+
+            color:
+                var(--purple);
 
             font-size: 9px;
+
             font-weight: 900;
         }
 
@@ -902,7 +1275,9 @@
         ===================================================== */
 
         .modal-overlay {
+
             position: fixed;
+
             inset: 0;
 
             z-index: 2000;
@@ -910,42 +1285,59 @@
             display: none;
 
             align-items: center;
+
             justify-content: center;
 
             padding: 15px;
 
-            background: rgba(0,0,0,.82);
+            background:
+                rgba(0,0,0,.82);
 
-            backdrop-filter: blur(7px);
+            backdrop-filter:
+                blur(7px);
         }
 
-        .modal-box {
-            width: min(470px, 100%);
 
-            max-height: calc(100vh - 30px);
+        .modal-box {
+
+            width:
+                min(470px, 100%);
+
+            max-height:
+                calc(100vh - 30px);
 
             overflow-y: auto;
 
             padding: 22px;
 
-            background: #141419;
+            background:
+                #141419;
 
-            border: 1px solid #30303a;
+            border:
+                1px solid #30303a;
+
             border-radius: 12px;
 
             box-shadow:
                 0 20px 80px
                 rgba(0,0,0,.6);
 
-            animation: fadeIn .2s ease;
+            animation:
+                fadeIn .2s ease;
         }
 
+
         .modal-box::-webkit-scrollbar {
+
             width: 5px;
         }
 
+
         .modal-box::-webkit-scrollbar-thumb {
-            background: #333;
+
+            background:
+                #333;
+
             border-radius: 5px;
         }
 
@@ -955,37 +1347,52 @@
         ===================================================== */
 
         .chat-history {
+
             height: 240px;
 
             overflow-y: auto;
 
             display: flex;
+
             flex-direction: column;
 
             gap: 6px;
 
             padding: 10px;
 
-            background: #09090c;
+            background:
+                #09090c;
 
-            border: 1px solid #30303a;
+            border:
+                1px solid #30303a;
+
             border-radius: 7px;
         }
 
+
         .chat-history::-webkit-scrollbar {
+
             width: 5px;
         }
 
+
         .chat-history::-webkit-scrollbar-thumb {
-            background: #333;
+
+            background:
+                #333;
+
             border-radius: 5px;
         }
 
+
         .chat-row {
+
             font-size: 12px;
         }
 
+
         .chat-bubble {
+
             display: inline-block;
 
             max-width: 90%;
@@ -995,15 +1402,21 @@
             padding: 6px 9px;
 
             color: white;
-            background: #1b1b23;
 
-            border: 1px solid #30303a;
+            background:
+                #1b1b23;
+
+            border:
+                1px solid #30303a;
+
             border-radius: 7px;
 
             word-break: break-word;
         }
 
+
         .chat-time {
+
             margin-top: 3px;
 
             color: #555;
@@ -1011,7 +1424,9 @@
             font-size: 9px;
         }
 
+
         .chat-input-row {
+
             display: flex;
 
             gap: 6px;
@@ -1019,33 +1434,47 @@
             margin: 9px 0 18px;
         }
 
+
         .chat-input {
+
             flex: 1;
 
             min-width: 0;
 
             padding: 10px;
 
-            background: #1a1a22;
+            background:
+                #1a1a22;
+
             color: white;
 
-            border: 1px solid #30303a;
+            border:
+                1px solid #30303a;
+
             border-radius: 7px;
 
             outline: none;
         }
 
+
         .chat-input:focus {
-            border-color: var(--green);
+
+            border-color:
+                var(--green);
         }
 
+
         .chat-send {
+
             width: 45px;
 
-            background: var(--green);
+            background:
+                var(--green);
+
             color: black;
 
             border: 0;
+
             border-radius: 7px;
 
             cursor: pointer;
@@ -1059,16 +1488,23 @@
         ===================================================== */
 
         .admin-score-section {
+
             padding: 15px;
 
-            background: #1a1a22;
+            background:
+                #1a1a22;
 
-            border: 1px solid var(--red);
+            border:
+                1px solid var(--red);
+
             border-radius: 8px;
         }
 
+
         .score-input-row {
+
             display: flex;
+
             align-items: center;
 
             gap: 10px;
@@ -1076,79 +1512,109 @@
             margin-bottom: 10px;
         }
 
+
         .score-name {
+
             flex: 1;
 
             color: white;
 
             font-size: 13px;
+
             font-weight: 800;
 
             overflow: hidden;
+
             text-overflow: ellipsis;
+
             white-space: nowrap;
         }
 
+
         .score-input {
+
             width: 60px;
 
             padding: 8px;
 
-            background: #09090c;
+            background:
+                #09090c;
+
             color: white;
 
-            border: 1px solid #34343e;
+            border:
+                1px solid #34343e;
+
             border-radius: 6px;
 
             text-align: center;
 
             font-size: 17px;
+
             font-weight: 900;
 
             outline: none;
         }
 
+
         .score-input:focus {
-            border-color: var(--green);
+
+            border-color:
+                var(--green);
         }
 
+
         .btn-save {
+
             width: 100%;
 
             margin-top: 5px;
+
             padding: 11px;
 
-            background: var(--red);
+            background:
+                var(--red);
+
             color: white;
 
             border: 0;
+
             border-radius: 6px;
 
             cursor: pointer;
 
             font-size: 11px;
+
             font-weight: 900;
 
             text-transform: uppercase;
         }
 
+
         .btn-cancel {
+
             width: 100%;
 
             margin-top: 14px;
 
-            background: transparent;
-            color: var(--muted);
+            background:
+                transparent;
+
+            color:
+                var(--muted);
 
             border: 0;
 
             cursor: pointer;
 
             font-size: 11px;
+
             font-weight: 700;
         }
 
+
         .btn-cancel:hover {
+
             color: white;
         }
 
@@ -1158,28 +1624,38 @@
         ===================================================== */
 
         #toast-container {
+
             position: fixed;
 
             z-index: 5000;
 
             right: 18px;
+
             bottom: 18px;
 
             display: flex;
+
             flex-direction: column;
 
             gap: 8px;
 
-            width: min(350px, calc(100% - 36px));
+            width:
+                min(350px, calc(100% - 36px));
         }
 
+
         .toast {
+
             padding: 12px 14px;
 
-            background: #1b1b22;
+            background:
+                #1b1b22;
+
             color: white;
 
-            border: 1px solid #33333d;
+            border:
+                1px solid #33333d;
+
             border-radius: 8px;
 
             box-shadow:
@@ -1187,21 +1663,32 @@
                 rgba(0,0,0,.35);
 
             font-size: 12px;
+
             font-weight: 700;
 
-            animation: fadeIn .2s ease;
+            animation:
+                fadeIn .2s ease;
         }
+
 
         .toast.success {
-            border-color: rgba(0,255,204,.5);
+
+            border-color:
+                rgba(0,255,204,.5);
         }
+
 
         .toast.error {
-            border-color: rgba(255,60,100,.6);
+
+            border-color:
+                rgba(255,60,100,.6);
         }
 
+
         .toast.info {
-            border-color: rgba(166,124,255,.5);
+
+            border-color:
+                rgba(166,124,255,.5);
         }
 
 
@@ -1210,6 +1697,7 @@
         ===================================================== */
 
         .empty-state {
+
             padding: 25px 10px;
 
             color: #555;
@@ -1221,20 +1709,186 @@
 
 
         /* =====================================================
+           PLAYER PROFILE LEVEL
+        ===================================================== */
+
+        .level-circle {
+
+            color:
+                var(--green);
+
+            border-style: solid;
+
+            border-color:
+                var(--green);
+
+            box-shadow:
+                0 0 15px
+                rgba(0,255,204,.15);
+        }
+
+
+        .level-circle.level-1 {
+
+            color:
+                #9b9ba5;
+
+            border-color:
+                #55555f;
+
+            box-shadow:
+                none;
+        }
+
+
+        .level-circle.level-2 {
+
+            color:
+                #ffffff;
+
+            border-color:
+                #ffffff;
+
+            box-shadow:
+                0 0 15px
+                rgba(255,255,255,.15);
+        }
+
+
+        .level-circle.level-3 {
+
+            color:
+                var(--green);
+
+            border-color:
+                var(--green);
+
+            box-shadow:
+                0 0 18px
+                rgba(0,255,204,.2);
+        }
+
+
+        .level-circle.level-4 {
+
+            color:
+                var(--blue);
+
+            border-color:
+                var(--blue);
+
+            box-shadow:
+                0 0 18px
+                rgba(77,163,255,.25);
+        }
+
+
+        .level-circle.level-5 {
+
+            color:
+                var(--purple);
+
+            border-color:
+                var(--purple);
+
+            box-shadow:
+                0 0 20px
+                rgba(166,124,255,.3);
+        }
+
+
+        .level-circle.level-6 {
+
+            color:
+                var(--yellow);
+
+            border-color:
+                var(--yellow);
+
+            box-shadow:
+                0 0 22px
+                rgba(255,204,0,.3);
+        }
+
+
+        .level-circle.level-7 {
+
+            color:
+                #ff8c42;
+
+            border-color:
+                #ff8c42;
+
+            box-shadow:
+                0 0 22px
+                rgba(255,140,66,.3);
+        }
+
+
+        .level-circle.level-8 {
+
+            color:
+                var(--red);
+
+            border-color:
+                var(--red);
+
+            box-shadow:
+                0 0 24px
+                rgba(255,60,100,.3);
+        }
+
+
+        .level-circle.level-9 {
+
+            color:
+                #ff66d9;
+
+            border-color:
+                #ff66d9;
+
+            box-shadow:
+                0 0 25px
+                rgba(255,102,217,.35);
+        }
+
+
+        .level-circle.level-10 {
+
+            color:
+                #ffffff;
+
+            border-color:
+                #ffffff;
+
+            box-shadow:
+                0 0 30px
+                rgba(255,255,255,.45);
+        }
+
+
+        /* =====================================================
            MOBILE
         ===================================================== */
 
         @media (max-width: 850px) {
 
             .wg-meta-grid {
-                grid-template-columns: repeat(3, 1fr);
+
+                grid-template-columns:
+                    repeat(3, 1fr);
             }
+
 
             .content-grid {
-                grid-template-columns: 1fr;
+
+                grid-template-columns:
+                    1fr;
             }
 
+
             .action-box {
+
                 position: static;
             }
 
@@ -1244,14 +1898,20 @@
         @media (max-width: 600px) {
 
             .container {
-                width: min(100% - 20px, 1100px);
+
+                width:
+                    min(100% - 20px, 1100px);
             }
 
+
             .wg-header {
+
                 padding: 22px;
             }
 
+
             .status-badge {
+
                 position: static;
 
                 display: inline-block;
@@ -1259,37 +1919,52 @@
                 margin-bottom: 15px;
             }
 
+
             .wg-title {
+
                 padding-right: 0;
             }
 
+
             .wg-meta-grid {
-                grid-template-columns: repeat(2, 1fr);
+
+                grid-template-columns:
+                    repeat(2, 1fr);
             }
 
+
             .wg-card {
+
                 padding: 18px;
             }
 
+
             .tabs-container {
+
                 flex-direction: column;
             }
 
+
             .bracket {
+
                 gap: 35px;
             }
 
+
             .round {
+
                 min-width: 200px;
             }
 
         }
 
     </style>
+
 </head>
 
 
 <body>
+
 
 <!-- =========================================================
      NAV
@@ -1307,7 +1982,9 @@
             ← Назад
         </a>
 
+
         <button
+            type="button"
             class="lang-btn"
             id="lang-toggle"
             onclick="toggleLanguage()"
@@ -1320,6 +1997,10 @@
 </div>
 
 
+<!-- =========================================================
+     MAIN CONTAINER
+========================================================= -->
+
 <div class="container">
 
 
@@ -1328,6 +2009,7 @@
     ===================================================== -->
 
     <div class="wg-header">
+
 
         <div
             id="tourney-status-badge"
@@ -1365,6 +2047,7 @@
                     Организатор
                 </span>
 
+
                 <span
                     class="meta-val"
                     id="t-author"
@@ -1383,6 +2066,7 @@
                 >
                     Формат
                 </span>
+
 
                 <span
                     class="meta-val"
@@ -1403,6 +2087,7 @@
                     Система
                 </span>
 
+
                 <span
                     class="meta-val"
                     id="t-system"
@@ -1421,6 +2106,7 @@
                 >
                     Слоты
                 </span>
+
 
                 <span
                     class="meta-val"
@@ -1441,6 +2127,7 @@
                     Призовые
                 </span>
 
+
                 <span
                     class="meta-val green"
                     id="t-prize"
@@ -1456,7 +2143,7 @@
 
 
     <!-- =====================================================
-         TABS
+         TOURNAMENT TABS
     ===================================================== -->
 
     <div
@@ -1464,7 +2151,9 @@
         id="tourney-tabs"
     >
 
+
         <button
+            type="button"
             id="tab-details"
             class="tab-btn active"
             onclick="switchTab('details')"
@@ -1474,6 +2163,7 @@
 
 
         <button
+            type="button"
             id="tab-bracket"
             class="tab-btn"
             onclick="switchTab('bracket')"
@@ -1485,16 +2175,7 @@
 
 
     <!-- =====================================================
-         DETAILS
-         
-         Здесь находится:
-         - описание
-         - правила
-         - участники
-         - кнопка участия
-         - админские кнопки
-         
-         На вкладке "Турнирная сетка" этот блок скрывается.
+         DETAILS SECTION
     ===================================================== -->
 
     <div
@@ -1541,6 +2222,7 @@
 
 
                 <button
+                    type="button"
                     class="wg-btn"
                     id="action-btn"
                     onclick="handleJoinClick()"
@@ -1586,12 +2268,7 @@
 
 
     <!-- =====================================================
-         BRACKET
-         
-         Здесь отображается ТОЛЬКО турнирное дерево.
-         
-         Участники матчей находятся непосредственно внутри
-         match-блоков, которые создаёт JS.
+         BRACKET SECTION
     ===================================================== -->
 
     <div
@@ -1603,6 +2280,7 @@
         "
     >
 
+
         <h2
             class="wg-card-title"
             id="lbl-tab-br"
@@ -1612,6 +2290,7 @@
 
 
         <div class="bracket-wrapper">
+
 
             <div
                 class="bracket"
@@ -1624,6 +2303,7 @@
 
             </div>
 
+
         </div>
 
     </div>
@@ -1631,8 +2311,6 @@
 
     <!-- =====================================================
          LEADERBOARD
-         
-         Оставляем отдельным блоком, если твой JS его использует.
     ===================================================== -->
 
     <div
@@ -1643,6 +2321,7 @@
             margin-bottom:30px;
         "
     >
+
 
         <h2
             class="wg-card-title"
@@ -1658,6 +2337,7 @@
 
     </div>
 
+
 </div>
 
 
@@ -1670,6 +2350,7 @@
     id="matchModal"
     onclick="handleModalBackground(event)"
 >
+
 
     <div
         class="modal-box"
@@ -1699,6 +2380,7 @@
 
         <div class="chat-input-row">
 
+
             <input
                 type="text"
                 id="chat-input"
@@ -1709,6 +2391,7 @@
 
 
             <button
+                type="button"
                 class="chat-send"
                 onclick="sendChatMessage()"
             >
@@ -1723,7 +2406,9 @@
         <div
             id="admin-score-section"
             class="admin-score-section"
-            style="display:none;"
+            style="
+                display:none;
+            "
         >
 
 
@@ -1742,6 +2427,7 @@
 
 
             <div class="score-input-row">
+
 
                 <span
                     id="score-p1-name"
@@ -1765,6 +2451,7 @@
 
             <div class="score-input-row">
 
+
                 <span
                     id="score-p2-name"
                     class="score-name"
@@ -1786,6 +2473,7 @@
 
 
             <button
+                type="button"
                 class="btn-save"
                 id="btn-save"
                 onclick="saveMatchScore()"
@@ -1803,10 +2491,12 @@
             id="active-match-id"
         >
 
+
         <input
             type="hidden"
             id="active-p1-raw"
         >
+
 
         <input
             type="hidden"
@@ -1817,6 +2507,7 @@
         <!-- CLOSE -->
 
         <button
+            type="button"
             class="btn-cancel"
             id="btn-close"
             onclick="closeMatchModal()"
@@ -1839,10 +2530,13 @@
     onclick="handleProfileBackground(event)"
 >
 
+
     <div
         class="modal-box"
         onclick="event.stopPropagation()"
-        style="max-width:400px;"
+        style="
+            max-width:400px;
+        "
     >
 
 
@@ -1862,9 +2556,7 @@
         </h3>
 
 
-        <!-- =================================================
-             AVATAR + NAME
-        ================================================== -->
+        <!-- AVATAR + NAME -->
 
         <div
             style="
@@ -1879,6 +2571,7 @@
             <img
                 id="prof-avatar"
                 src=""
+                alt=""
                 style="
                     width:80px;
                     height:80px;
@@ -1911,28 +2604,22 @@
                     display:flex;
                     align-items:center;
                     justify-content:center;
-
                     gap:16px;
-
                     margin-top:10px;
-
                     padding:10px 14px;
-
                     border-radius:14px;
-
                     background:
                         linear-gradient(
                             135deg,
                             rgba(255,255,255,0.025),
                             rgba(255,255,255,0.01)
                         );
-
-                    border:1px solid rgba(255,255,255,0.06);
-
+                    border:
+                        1px solid
+                        rgba(255,255,255,0.06);
                     box-shadow:
                         inset 0 1px 0
                         rgba(255,255,255,0.03),
-
                         0 6px 20px
                         rgba(0,0,0,0.18);
                 "
@@ -1948,58 +2635,41 @@
                         width:64px;
                         height:64px;
                         min-width:64px;
-
                         border-radius:50%;
-
                         background:#101014;
-
                         display:flex;
                         align-items:center;
                         justify-content:center;
-
                         box-sizing:border-box;
-
                         position:relative;
-
                         border-width:2px;
                     "
                 >
 
 
-                    <!-- INNER -->
-
                     <div
                         style="
                             position:absolute;
-
                             width:48px;
                             height:48px;
-
                             border-radius:50%;
-
                             background:#141419;
-
-                            border:1px solid
+                            border:
+                                1px solid
                                 rgba(255,255,255,0.05);
-
                             pointer-events:none;
                         "
                     ></div>
 
-
-                    <!-- LEVEL NUMBER -->
 
                     <span
                         id="prof-level"
                         style="
                             position:relative;
                             z-index:2;
-
                             font-size:26px;
                             font-weight:900;
-
                             line-height:1;
-
                             letter-spacing:-1px;
                         "
                     >
@@ -2017,25 +2687,18 @@
                         flex-direction:column;
                         align-items:flex-start;
                         justify-content:center;
-
                         gap:5px;
-
                         min-width:105px;
                     "
                 >
 
 
-                    <!-- TITLE -->
-
                     <span
                         style="
                             color:#777783;
-
                             font-size:9px;
                             text-transform:uppercase;
-
                             font-weight:900;
-
                             letter-spacing:1px;
                             line-height:1;
                         "
@@ -2054,13 +2717,12 @@
                         "
                     >
 
+
                         <span
                             style="
                                 color:#e8e8ee;
-
                                 font-size:15px;
                                 font-weight:900;
-
                                 line-height:1;
                             "
                         >
@@ -2074,7 +2736,6 @@
                             style="
                                 font-size:15px;
                                 font-weight:900;
-
                                 line-height:1;
                             "
                         >
@@ -2094,15 +2755,13 @@
                         "
                     >
 
+
                         <span
                             style="
                                 color:#777783;
-
                                 font-size:10px;
                                 font-weight:800;
-
                                 text-transform:uppercase;
-
                                 letter-spacing:.5px;
                             "
                         >
@@ -2114,10 +2773,8 @@
                             id="prof-pr"
                             style="
                                 color:#a67cff;
-
                                 font-size:14px;
                                 font-weight:900;
-
                                 line-height:1;
                             "
                         >
@@ -2141,6 +2798,7 @@
                     font-size:12px;
                 "
             >
+
 
                 <span id="prof-steam-lbl">
                     Steam ID:
@@ -2170,18 +2828,12 @@
             class="wg-meta-grid"
             style="
                 margin-top:25px;
-
                 grid-template-columns:
-                    repeat(3,1fr);
-
+                    repeat(3, 1fr);
                 text-align:center;
-
                 background:#0c0c10;
-
                 padding:15px;
-
                 border-radius:8px;
-
                 border:1px solid #303039;
             "
         >
@@ -2190,6 +2842,7 @@
             <!-- K/D -->
 
             <div class="meta-box">
+
 
                 <span
                     class="meta-label"
@@ -2216,6 +2869,7 @@
 
             <div class="meta-box">
 
+
                 <span
                     class="meta-label"
                     id="prof-lbl-win"
@@ -2241,6 +2895,7 @@
 
             <div class="meta-box">
 
+
                 <span
                     class="meta-label"
                     id="prof-lbl-matches"
@@ -2264,11 +2919,10 @@
         </div>
 
 
-        <!-- =================================================
-             CLOSE PROFILE
-        ================================================== -->
+        <!-- CLOSE PROFILE -->
 
         <button
+            type="button"
             class="btn-cancel"
             id="btn-prof-close"
             onclick="closeProfileModal()"
@@ -2287,7 +2941,12 @@
 
 <div id="toast-container"></div>
 
-</body>
+
+<!-- =========================================================
+     JAVASCRIPT
+     
+     ТВОЙ СУЩЕСТВУЮЩИЙ SCRIPT НАЧИНАЕТСЯ ЗДЕСЬ.
+========================================================= -->
 
 <script>
 /* =========================================================
@@ -4488,9 +5147,9 @@ function switchTab(
         tab;
 
 
-    const leaderboard =
+    const details =
         document.getElementById(
-            "leaderboard-section"
+            "details-section"
         );
 
 
@@ -4500,59 +5159,161 @@ function switchTab(
         );
 
 
-    const lbBtn =
+    const leaderboard =
         document.getElementById(
-            "tab-btn-leaderboard"
+            "leaderboard-section"
+        );
+
+
+    const detailsBtn =
+        document.getElementById(
+            "tab-details"
         );
 
 
     const bracketBtn =
         document.getElementById(
-            "tab-btn-bracket"
+            "tab-bracket"
         );
 
 
+    /*
+        Защита от отсутствующих элементов.
+    */
+
     if (
-        tab ===
-        "leaderboard"
+        !details ||
+        !bracket ||
+        !detailsBtn ||
+        !bracketBtn
     ) {
 
-        leaderboard.style.display =
-            "block";
+        console.error(
+            "Не найдены элементы вкладок:",
+            {
+                details,
+                bracket,
+                detailsBtn,
+                bracketBtn
+            }
+        );
 
-        bracket.style.display =
-            "none";
-
-        lbBtn.className =
-            "tab-btn active";
-
-        bracketBtn.className =
-            "tab-btn";
-
-    } else {
-
-        leaderboard.style.display =
-            "none";
-
-        bracket.style.display =
-            "block";
-
-        bracketBtn.className =
-            "tab-btn active";
-
-        lbBtn.className =
-            "tab-btn";
+        return;
     }
+
+
+    /* =====================================================
+       ПОДРОБНОСТИ
+    ===================================================== */
+
+    if (
+        tab ===
+        "details"
+    ) {
+
+        details.style.display =
+            "grid";
+
+
+        bracket.style.display =
+            "none";
+
+
+        if (leaderboard) {
+
+            leaderboard.style.display =
+                "none";
+        }
+
+
+        detailsBtn.className =
+            "tab-btn active";
+
+
+        bracketBtn.className =
+            "tab-btn";
+
+
+        return;
+    }
+
+
+    /* =====================================================
+       ТУРНИРНАЯ СЕТКА
+    ===================================================== */
+
+    if (
+        tab ===
+        "bracket"
+    ) {
+
+        details.style.display =
+            "none";
+
+
+        bracket.style.display =
+            "block";
+
+
+        if (leaderboard) {
+
+            leaderboard.style.display =
+                "none";
+        }
+
+
+        detailsBtn.className =
+            "tab-btn";
+
+
+        bracketBtn.className =
+            "tab-btn active";
+
+
+        return;
+    }
+
+
+    /*
+        Если по какой-то причине передали
+        неизвестную вкладку — открываем подробности.
+    */
+
+    currentTab =
+        "details";
+
+
+    details.style.display =
+        "grid";
+
+
+    bracket.style.display =
+        "none";
+
+
+    if (leaderboard) {
+
+        leaderboard.style.display =
+            "none";
+    }
+
+
+    detailsBtn.className =
+        "tab-btn active";
+
+
+    bracketBtn.className =
+        "tab-btn";
 }
 
 
 /* =========================================================
    TOURNAMENT LOAD
-   ========================================================= */
+========================================================= */
 
 /* =========================================================
    TOURNAMENT LOAD
-   ========================================================= */
+========================================================= */
 
 async function loadTournamentData(
     force = false
@@ -4629,7 +5390,7 @@ async function loadTournamentData(
 
         /* =====================================================
            ОСНОВНАЯ ИНФОРМАЦИЯ
-           ===================================================== */
+        ===================================================== */
 
         document.getElementById(
             "t-game"
@@ -4703,7 +5464,7 @@ async function loadTournamentData(
 
         /* =====================================================
            ПЕРЕВОДЫ / СТАТУС / АДМИН
-           ===================================================== */
+        ===================================================== */
 
         applyTranslations();
 
@@ -4714,7 +5475,7 @@ async function loadTournamentData(
 
         /* =====================================================
            УЧАСТНИКИ
-           ===================================================== */
+        ===================================================== */
 
         await preloadUsers(
             data
@@ -4738,17 +5499,19 @@ async function loadTournamentData(
            независимо от статуса турнира.
 
            Для Спидрана сетка полностью скрывается.
-           ===================================================== */
+        ===================================================== */
 
         const tabs =
             document.getElementById(
                 "tourney-tabs"
             );
 
+
         const bracketSection =
             document.getElementById(
                 "bracket-section"
             );
+
 
         const leaderboardSection =
             document.getElementById(
@@ -4814,6 +5577,23 @@ async function loadTournamentData(
                 "function"
             ) {
 
+                /*
+                    Если currentTab почему-то
+                    не задан, открываем подробности.
+                */
+
+                if (
+                    currentTab !==
+                        "details" &&
+                    currentTab !==
+                        "bracket"
+                ) {
+
+                    currentTab =
+                        "details";
+                }
+
+
                 switchTab(
                     currentTab
                 );
@@ -4823,14 +5603,14 @@ async function loadTournamentData(
 
         /* =====================================================
            КНОПКА УЧАСТИЯ
-           ===================================================== */
+        ===================================================== */
 
         updateJoinButton();
 
 
         /* =====================================================
            ТУРНИРНАЯ СЕТКА
-           ===================================================== */
+        ===================================================== */
 
         if (
             tournamentSystem !==
@@ -4867,7 +5647,7 @@ async function loadTournamentData(
 
 /* =========================================================
    STATUS
-   ========================================================= */
+========================================================= */
 
 function updateTournamentStatus() {
 
@@ -4875,6 +5655,12 @@ function updateTournamentStatus() {
         document.getElementById(
             "tourney-status-badge"
         );
+
+
+    if (!badge) {
+        return;
+    }
+
 
     badge.className =
         "status-badge";
@@ -4924,7 +5710,7 @@ function updateTournamentStatus() {
 
 /* =========================================================
    ADMIN CONTROLS
-   ========================================================= */
+========================================================= */
 
 function updateAdminControls() {
 
@@ -5002,7 +5788,6 @@ function updateAdminControls() {
         `;
     }
 }
-
 
 /* =========================================================
    PARTICIPANTS
