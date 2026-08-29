@@ -6596,25 +6596,17 @@ function generateMatchHTML(
         );
 
 
-    const isAdmin =
-        currentUser ===
-        ADMIN_USER;
+   const isAdmin =
+    String(currentUser || "").trim().toLowerCase() ===
+    String(ADMIN_USER || "").trim().toLowerCase();
 
 
-    const canOpen =
-        tStatus ===
-            "active" &&
-        matchObj.p1 &&
-        matchObj.p2 &&
-        matchObj.p1 !==
-            "TBD" &&
-        matchObj.p2 !==
-            "TBD" &&
-        (
-            isP1 ||
-            isP2 ||
-            isAdmin
-        );
+   const canOpen =
+    tStatus === "active" &&
+    matchObj.p1 &&
+    matchObj.p2 &&
+    matchObj.p1 !== "TBD" &&
+    matchObj.p2 !== "TBD";
 
 
     let clickableClass =
