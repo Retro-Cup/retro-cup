@@ -5711,42 +5711,78 @@ function updateTournamentStatus() {
 /* =========================================================
    ADMIN CONTROLS
 ========================================================= */
-/* =========================================================
-   ADMIN CONTROLS
-========================================================= */
 
 function updateAdminControls() {
-    const box = document.getElementById("admin-controls");
+
+    const box =
+        document.getElementById(
+            "admin-controls"
+        );
+
+
     if (!box) {
         return;
     }
-    box.innerHTML = "";
 
-    // --- ИСПРАВЛЕННАЯ ПРОВЕРКА НА АДМИНА ---
-    const isAdmin = 
-        String(currentUser || "").trim().toLowerCase() === String(ADMIN_USER || "").trim().toLowerCase() ||
-        String(currentUser || "").trim().toLowerCase() === "0m3gas"; // Твой ник!
-    // ---------------------------------------
+
+    box.innerHTML =
+        "";
+
+
+    const isAdmin =
+        String(
+            currentUser || ""
+        )
+        .trim()
+        .toLowerCase() ===
+        String(
+            ADMIN_USER || ""
+        )
+        .trim()
+        .toLowerCase();
+
 
     if (!isAdmin) {
         return;
     }
 
-    if (tStatus === "waiting" || tStatus === "registration") {
+
+    if (
+        tStatus === "waiting" ||
+        tStatus === "registration"
+    ) {
+
         box.innerHTML = `
-            <button class="admin-start-btn" onclick="changeStatus('active')">
+            <button
+                class="admin-start-btn"
+                onclick="changeStatus('active')"
+            >
                 🚀 Запустить турнир
             </button>
         `;
-    } else if (tStatus === "active") {
+
+    } else if (
+        tStatus === "active"
+    ) {
+
         box.innerHTML = `
-            <button class="admin-stop-btn" onclick="changeStatus('finished')">
+            <button
+                class="admin-stop-btn"
+                onclick="changeStatus('finished')"
+            >
                 🏁 Завершить турнир
             </button>
         `;
-    } else if (tStatus === "finished") {
+
+    } else if (
+        tStatus === "finished"
+    ) {
+
         box.innerHTML = `
-            <button class="admin-start-btn" onclick="changeStatus('waiting')">
+            <button
+                class="admin-start-btn"
+                onclick="changeStatus('waiting')"
+            >
                 🔄 Открыть регистрацию
             </button>
         `;
@@ -6560,17 +6596,25 @@ function generateMatchHTML(
         );
 
 
-   const isAdmin =
-    String(currentUser || "").trim().toLowerCase() ===
-    String(ADMIN_USER || "").trim().toLowerCase();
+    const isAdmin =
+        currentUser ===
+        ADMIN_USER;
 
 
-   const canOpen =
-    tStatus === "active" &&
-    matchObj.p1 &&
-    matchObj.p2 &&
-    matchObj.p1 !== "TBD" &&
-    matchObj.p2 !== "TBD";
+    const canOpen =
+        tStatus ===
+            "active" &&
+        matchObj.p1 &&
+        matchObj.p2 &&
+        matchObj.p1 !==
+            "TBD" &&
+        matchObj.p2 !==
+            "TBD" &&
+        (
+            isP1 ||
+            isP2 ||
+            isAdmin
+        );
 
 
     let clickableClass =
@@ -7978,42 +8022,110 @@ function renderDoubleElimination(
    MATCH MODAL
    ========================================================= */
 
-/* =========================================================
-   MATCH MODAL
-   ========================================================= */
+function openMatchModal(
+    matchId,
+    p1,
+    p2
+) {
 
-function openMatchModal(matchId, p1, p2) {
-    document.getElementById("match-modal-title").innerText = `${p1} vs ${p2}`;
-    document.getElementById("active-match-id").value = matchId;
-    document.getElementById("active-p1-raw").value = p1;
-    document.getElementById("active-p2-raw").value = p2;
-    document.getElementById("score-p1-name").innerText = p1;
-    document.getElementById("score-p2-name").innerText = p2;
-    document.getElementById("score-p1-val").value = "1";
-    document.getElementById("score-p2-val").value = "0";
+    document.getElementById(
+        "match-modal-title"
+    ).innerText =
+        `${p1} vs ${p2}`;
 
-    // --- ИСПРАВЛЕННАЯ ПРОВЕРКА НА АДМИНА ---
-    const isUserAdmin = 
-        String(currentUser || "").trim().toLowerCase() === String(ADMIN_USER || "").trim().toLowerCase() ||
-        String(currentUser || "").trim().toLowerCase() === "0m3gas"; // Твой ник!
 
-    document.getElementById("admin-score-section").style.display = 
-        isUserAdmin ? "block" : "none";
-    // ---------------------------------------
+    document.getElementById(
+        "active-match-id"
+    ).value =
+        matchId;
 
-    document.getElementById("matchModal").style.display = "flex";
 
-    loadChat(matchId);
+    document.getElementById(
+        "active-p1-raw"
+    ).value =
+        p1;
 
-    if (activeMatchChatInterval) {
-        clearInterval(activeMatchChatInterval);
+
+    document.getElementById(
+        "active-p2-raw"
+    ).value =
+        p2;
+
+
+    document.getElementById(
+        "score-p1-name"
+    ).innerText =
+        p1;
+
+
+    document.getElementById(
+        "score-p2-name"
+    ).innerText =
+        p2;
+
+
+    document.getElementById(
+        "score-p1-val"
+    ).value =
+        "1";
+
+
+    document.getElementById(
+        "score-p2-val"
+    ).value =
+        "0";
+
+
+    document.getElementById(
+        "admin-score-section"
+    ).style.display =
+        currentUser ===
+        ADMIN_USER
+            ? "block"
+            : "none";
+
+
+    document.getElementById(
+        "matchModal"
+    ).style.display =
+        "flex";
+
+
+    loadChat(
+        matchId
+    );
+
+
+    if (
+        activeMatchChatInterval
+    ) {
+
+        clearInterval(
+            activeMatchChatInterval
+        );
     }
 
-    activeMatchChatInterval = setInterval(() => loadChat(matchId), 2500);
 
-    setTimeout(() => {
-        document.getElementById("chat-input").focus();
-    }, 100);
+    activeMatchChatInterval =
+        setInterval(
+            () =>
+                loadChat(
+                    matchId
+                ),
+            2500
+        );
+
+
+    setTimeout(
+        () => {
+
+            document.getElementById(
+                "chat-input"
+            ).focus();
+
+        },
+        100
+    );
 }
 
 
@@ -8333,61 +8445,196 @@ async function sendChatMessage() {
    SAVE MATCH SCORE
    ========================================================= */
 
-/* =========================================================
-   SAVE MATCH SCORE
-   ========================================================= */
-
 async function saveMatchScore() {
-    // --- ИСПРАВЛЕННАЯ ПРОВЕРКА НА АДМИНА ---
-    const isUserAdmin = 
-        String(currentUser || "").trim().toLowerCase() === String(ADMIN_USER || "").trim().toLowerCase() ||
-        String(currentUser || "").trim().toLowerCase() === "0m3gas"; // Твой ник!
 
-    if (!isUserAdmin) {
-        showToast("Недостаточно прав.", "error");
-        return;
-    }
-    // ---------------------------------------
+    if (
+        currentUser !==
+        ADMIN_USER
+    ) {
 
-    const matchId = document.getElementById("active-match-id").value;
-    const p1 = document.getElementById("active-p1-raw").value;
-    const p2 = document.getElementById("active-p2-raw").value;
-    const s1 = parseInt(document.getElementById("score-p1-val").value);
-    const s2 = parseInt(document.getElementById("score-p2-val").value);
+        showToast(
+            "Недостаточно прав.",
+            "error"
+        );
 
-    if (!Number.isInteger(s1) || !Number.isInteger(s2) || s1 < 0 || s2 < 0) {
-        showToast("Введите корректный счёт.", "error");
         return;
     }
 
-    if (s1 === s2) {
-        showToast("Ничья в этом формате невозможна.", "error");
+
+    const matchId =
+        document.getElementById(
+            "active-match-id"
+        ).value;
+
+
+    const p1 =
+        document.getElementById(
+            "active-p1-raw"
+        ).value;
+
+
+    const p2 =
+        document.getElementById(
+            "active-p2-raw"
+        ).value;
+
+
+    const s1 =
+        parseInt(
+            document.getElementById(
+                "score-p1-val"
+            ).value
+        );
+
+
+    const s2 =
+        parseInt(
+            document.getElementById(
+                "score-p2-val"
+            ).value
+        );
+
+
+    if (
+        !Number.isInteger(s1) ||
+        !Number.isInteger(s2) ||
+        s1 < 0 ||
+        s2 < 0
+    ) {
+
+        showToast(
+            "Введите корректный счёт.",
+            "error"
+        );
+
         return;
     }
 
-    const winner = s1 > s2 ? p1 : p2;
 
-    const matchData = { p1, p2, s1, s2, winner };
+    if (
+        s1 === s2
+    ) {
+
+        showToast(
+            "Ничья в этом формате невозможна.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    const winner =
+        s1 > s2
+            ? p1
+            : p2;
+
+
+    const matchData = {
+
+        p1,
+
+        p2,
+
+        s1,
+
+        s2,
+
+        winner
+    };
+
 
     try {
-        await firebasePut(`tournaments/${safeFirebaseKey(tourneyId)}/matches/${safeFirebaseKey(matchId)}`, matchData);
+
+        /*
+            Сохраняем результат матча.
+        */
+
+        await firebasePut(
+            `tournaments/${safeFirebaseKey(tourneyId)}/matches/${safeFirebaseKey(matchId)}`,
+            matchData
+        );
+
+
+        /*
+            ==============================================
+            PR REWARD
+            ==============================================
+
+            ВАЖНО:
+
+            Награда выдаётся только здесь,
+            после реального результата.
+
+            Поэтому AUTO-проходы PR не получают.
+        */
 
         try {
-            await awardMatchPR(matchId, p1, p2, winner);
-        } catch (rewardError) {
-            console.error("Ошибка начисления PR:", rewardError);
-            showToast("Результат сохранён, но PR не удалось начислить.", "error");
+
+            await awardMatchPR(
+                matchId,
+                p1,
+                p2,
+                winner
+            );
+
+        } catch (
+            rewardError
+        ) {
+
+            /*
+                Если матч сохранился,
+                но выдача PR почему-то
+                произошла с ошибкой —
+                матч НЕ откатываем.
+
+                Ошибка будет видна в консоли.
+            */
+
+            console.error(
+                "Ошибка начисления PR:",
+                rewardError
+            );
+
+            showToast(
+                "Результат сохранён, но PR не удалось начислить.",
+                "error"
+            );
         }
 
-        closeMatchModal();
-        cachedData = "";
-        lastTournamentsFetch = 0;
-        await loadTournamentData(true);
 
-        showToast("Результат сохранён.", "success");
+        closeMatchModal();
+
+
+        cachedData =
+            "";
+
+
+        lastTournamentsFetch =
+            0;
+
+
+        await loadTournamentData(
+            true
+        );
+
+
+        showToast(
+            "Результат сохранён.",
+            "success"
+        );
+
     } catch (error) {
-        console.error(error);
-        showToast("Не удалось сохранить результат.", "error");
+
+        console.error(
+            error
+        );
+
+
+        showToast(
+            "Не удалось сохранить результат.",
+            "error"
+        );
     }
 }
 
