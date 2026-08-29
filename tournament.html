@@ -6597,8 +6597,12 @@ function generateMatchHTML(
 
 
    const isAdmin =
-    currentUser ===
-    ADMIN_USER;
+    String(currentUser || "")
+        .trim()
+        .toLowerCase() ===
+    String(ADMIN_USER || "")
+        .trim()
+        .toLowerCase();
 
 
   const canOpen =
