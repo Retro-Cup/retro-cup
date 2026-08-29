@@ -6510,12 +6510,6 @@ function generateMatchHTML(
     let p2Class = "";
 
 
-    /*
-        ==========================================
-        RESULT
-        ==========================================
-    */
-
     if (
         result
     ) {
@@ -6580,16 +6574,9 @@ function generateMatchHTML(
     }
 
 
-    /*
-        ==========================================
-        PLAYER PERMISSIONS
-        ==========================================
-    */
-
     const isP1 =
         matchObj.p1 &&
         matchObj.p1 !== "---" &&
-        matchObj.p1 !== "TBD" &&
         (
             currentUser ===
                 matchObj.p1 ||
@@ -6601,7 +6588,6 @@ function generateMatchHTML(
     const isP2 =
         matchObj.p2 &&
         matchObj.p2 !== "---" &&
-        matchObj.p2 !== "TBD" &&
         (
             currentUser ===
                 matchObj.p2 ||
@@ -6610,42 +6596,17 @@ function generateMatchHTML(
         );
 
 
-    /*
-        ВАЖНО:
-        Проверяем администратора нормально,
-        без зависимости от регистра/пробелов.
-    */
-
-    const isAdmin =
-        String(
-            currentUser || ""
-        )
-        .trim()
-        .toLowerCase() ===
-        String(
-            ADMIN_USER || ""
-        )
-        .trim()
-        .toLowerCase();
+   const isAdmin =
+    String(currentUser || "").trim().toLowerCase() ===
+    String(ADMIN_USER || "").trim().toLowerCase();
 
 
-    /*
-        ==========================================
-        CAN OPEN MATCH
-        ==========================================
-    */
-
-    const canOpen =
-        tStatus === "active" &&
-        matchObj.p1 &&
-        matchObj.p2 &&
-        matchObj.p1 !== "TBD" &&
-        matchObj.p2 !== "TBD" &&
-        (
-            isP1 ||
-            isP2 ||
-            isAdmin
-        );
+   const canOpen =
+    tStatus === "active" &&
+    matchObj.p1 &&
+    matchObj.p2 &&
+    matchObj.p1 !== "TBD" &&
+    matchObj.p2 !== "TBD";
 
 
     let clickableClass =
@@ -6668,12 +6629,6 @@ function generateMatchHTML(
     }
 
 
-    /*
-        ==========================================
-        AVATARS
-        ==========================================
-    */
-
     const p1Avatar =
         getAvatarImgHTML(
             p1Display
@@ -6685,12 +6640,6 @@ function generateMatchHTML(
             p2Display
         );
 
-
-    /*
-        ==========================================
-        PROFILE CLICKS
-        ==========================================
-    */
 
     let p1Click =
         (
@@ -6719,12 +6668,6 @@ function generateMatchHTML(
 
             : "";
 
-
-    /*
-        ==========================================
-        FINAL MATCH HTML
-        ==========================================
-    */
 
     return `
         <div
@@ -6800,6 +6743,7 @@ function generateMatchHTML(
         </div>
     `;
 }
+
 
 /* =========================================================
    BUILD BRACKET
