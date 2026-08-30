@@ -3818,26 +3818,6 @@ async function getTeamPlayers(
 /* =========================================================
    ПОЛУЧАЕМ PR
    ========================================================= */
-
-/* =========================================================
-   НАЧИСЛЕНИЕ PR
-   ========================================================= */
-
-async function addPRToPlayer(
-    playerName,
-    amount
-) {
-
-    if (
-        !playerName ||
-        !Number.isFinite(amount) ||
-        amount <= 0
-    ) {
-
-        return;
-    }
-
-
 /* =========================================================
    ОБНОВЛЕНИЕ СТАТИСТИКИ (МАТЧИ И ВИНРЕЙТ)
    ========================================================= */
@@ -3880,186 +3860,55 @@ async function updatePlayerMatchStats(playerName, isWin) {
     console.log(`Статистика обновлена для ${playerName}. Матчей: ${matches}, Винрейт: ${winrate}%`);
 }
 
-    
-    /* =====================================================
-       ПОЛУЧАЕМ USER
-    ===================================================== */
 
-    const user =
-        await firebaseGet(
-            `users/${safeFirebaseKey(playerName)}`
-        );
-
-
-    /* =====================================================
-       ТЕКУЩИЙ PR
-    ===================================================== */
-
-    let currentPR =
-        Number(
-            user?.pr
-        );
-
-
-    if (
-        !Number.isFinite(currentPR) ||
-        currentPR < 1
-    ) {
-
-        currentPR = 1;
-
+/* =========================================================
+   НАЧИСЛЕНИЕ PR
+   ========================================================= */
+async function addPRToPlayer(playerName, amount) {
+    if (!playerName || !Number.isFinite(amount) || amount <= 0) {
+        return;
     }
 
+    const user = await firebaseGet(`users/${safeFirebaseKey(playerName)}`);
+    
+    let currentPR = Number(user?.pr);
+    if (!Number.isFinite(currentPR) || currentPR < 1) {
+        currentPR = 1;
+    }
 
-    /* =====================================================
-       НОВЫЙ PR
-    ===================================================== */
-
-    const newPR =
-        currentPR +
-        amount;
-
-
-    /* =====================================================
-       LEVEL
-    ===================================================== */
-
+    const newPR = currentPR + amount;
     let newLevel;
 
-
-    /*
-       Если администратор вручную установил уровень,
-       сохраняем его.
-    */
-
-    if (
-        user?.levelManual === true
-    ) {
-
-        let manualLevel =
-            Number(
-                user.level
-            );
-
-
-        if (
-            !Number.isFinite(manualLevel) ||
-            manualLevel < 1
-        ) {
-
-            manualLevel =
-                calculateLevel(
-                    newPR
-                );
-
+    if (user?.levelManual === true) {
+        let manualLevel = Number(user.level);
+        if (!Number.isFinite(manualLevel) || manualLevel < 1) {
+            manualLevel = calculateLevel(newPR);
         }
-
-
-        newLevel =
-            Math.max(
-                1,
-                Math.floor(
-                    manualLevel
-                )
-            );
-
+        newLevel = Math.max(1, Math.floor(manualLevel));
+    } else {
+        newLevel = calculateLevel(newPR);
     }
 
+    await firebasePatch(`users/${safeFirebaseKey(playerName)}`, {
+        pr: newPR,
+        level: newLevel
+    });
 
-    /*
-       Если уровень обычный —
-       автоматически пересчитываем его
-       по новому PR.
-    */
-
-    else {
-
-        newLevel =
-            calculateLevel(
-                newPR
-            );
-
-    }
-
-
-    /* =====================================================
-       СОХРАНЯЕМ
-    ===================================================== */
-
-    await firebasePatch(
-        `users/${safeFirebaseKey(playerName)}`,
-        {
-
-            pr:
-                newPR,
-
-            level:
-                newLevel
-
-        }
-    );
-
-
-    /* =====================================================
-       DEBUG
-    ===================================================== */
-
-    console.log(
-        "PR НАЧИСЛЕН:",
-        playerName
-    );
-
-
-    console.log(
-        "Старый PR:",
-        currentPR
-    );
-
-
-    console.log(
-        "Новый PR:",
-        newPR
-    );
-
-
-    console.log(
-        "Старый Level:",
-        user?.level
-    );
-
-
-    console.log(
-        "Level Manual:",
-        user?.levelManual
-    );
-
-
-    console.log(
-        "Новый Level:",
-        newLevel
-    );
-
+    console.log(`PR НАЧИСЛЕН: ${playerName} | Старый PR: ${currentPR} | Новый PR: ${newPR} | Level: ${newLevel}`);
 }
+
+
 /* =========================================================
    ПРОВЕРКА НАГРАДЫ
    ========================================================= */
-
-async function isMatchRewarded(
-    matchId
-) {
-
-    const reward =
-        await firebaseGet(
-            `tournaments/${safeFirebaseKey(tourneyId)}/rewards/${safeFirebaseKey(matchId)}`
-        );
-
-
+async function isMatchRewarded(matchId) {
+    const reward = await firebaseGet(`tournaments/${safeFirebaseKey(tourneyId)}/rewards/${safeFirebaseKey(matchId)}`);
     return !!reward;
 }
 
 
 /* =========================================================
-   НАЧИСЛЕНИЕ PR И СТАТИСТИКИ ЗА МАТЧ
+   ГЛАВНАЯ ФУНКЦИЯ: НАЧИСЛЕНИЕ PR И СТАТИСТИКИ ЗА МАТЧ
    ========================================================= */
 async function awardMatchPR(matchId, p1, p2, winner) {
     const alreadyRewarded = await isMatchRewarded(matchId);
@@ -4069,239 +3918,81 @@ async function awardMatchPR(matchId, p1, p2, winner) {
         return;
     }
 
-    // Определяем проигравшего (если p1 выиграл, значит p2 проиграл, и наоборот)
+    // Определяем проигравшего
     const loser = (winner === p1) ? p2 : p1;
     
     // Проверяем формат
     const isTeamFormat = (tournamentFormat === "2v2" || tournamentFormat === "5v5");
     const basePR = getBasePR();
 
+    // Переменные для сохранения в базу
+    let rewardPerPlayer = 0;
+    let winsBefore = 0;
+    let coefficient = 1;
+    let rewardedPlayers = [];
+
     try {
         if (isTeamFormat) {
-            /* 
-               =======================================
-               КОМАНДНЫЕ ФОРМАТЫ (2v2, 5v5)
-               =======================================
-            */
-            // Достаем списки игроков из обеих команд
+            /* === КОМАНДНЫЕ ФОРМАТЫ (2v2, 5v5) === */
             const winPlayers = await getTeamPlayers(winner);
             const losePlayers = await getTeamPlayers(loser);
+            rewardedPlayers = winPlayers; // Запоминаем победителей для логов
 
-            // 1. ОБРАБАТЫВАЕМ ПОБЕДИТЕЛЕЙ
-            const winsBefore = await getTournamentTeamWins(winner, matchId);
-            const prReward = (basePR > 0) ? calculatePRReward(winsBefore) : 0;
+            winsBefore = await getTournamentTeamWins(winner, matchId);
+            coefficient = getPRCoefficient(winsBefore);
+            rewardPerPlayer = (basePR > 0) ? (basePR * coefficient) : 0;
 
+            // 1. Победители (PR + Стата)
             for (const playerName of winPlayers) {
-                if (prReward > 0) await addPRToPlayer(playerName, prReward); // Даем PR
-                await updatePlayerMatchStats(playerName, true);              // Записываем победу
+                if (rewardPerPlayer > 0) await addPRToPlayer(playerName, rewardPerPlayer);
+                await updatePlayerMatchStats(playerName, true);
             }
 
-            // 2. ОБРАБАТЫВАЕМ ПРОИГРАВШИХ
+            // 2. Проигравшие (Только Стата)
             for (const playerName of losePlayers) {
-                await updatePlayerMatchStats(playerName, false);             // Записываем поражение (PR не даем)
+                await updatePlayerMatchStats(playerName, false);
             }
 
         } else {
-            /* 
-               =======================================
-               ОДИНОЧНЫЕ ФОРМАТЫ (1v1)
-               =======================================
-            */
-            // Обрабатываем победителя
-            const winsBefore = await getTournamentWins(winner, matchId);
-            const prReward = (basePR > 0) ? calculatePRReward(winsBefore) : 0;
-            
-            if (prReward > 0) await addPRToPlayer(winner, prReward);
-            await updatePlayerMatchStats(winner, true); // Победа
+            /* === ОДИНОЧНЫЕ ФОРМАТЫ (1v1) === */
+            rewardedPlayers = [winner];
+            winsBefore = await getTournamentWins(winner, matchId);
+            coefficient = getPRCoefficient(winsBefore);
+            rewardPerPlayer = (basePR > 0) ? (basePR * coefficient) : 0;
 
-            // Обрабатываем проигравшего
-            await updatePlayerMatchStats(loser, false); // Поражение
+            // 1. Победитель (PR + Стата)
+            if (rewardPerPlayer > 0) await addPRToPlayer(winner, rewardPerPlayer);
+            await updatePlayerMatchStats(winner, true);
+
+            // 2. Проигравший (Только Стата)
+            await updatePlayerMatchStats(loser, false);
         }
 
-        // ПОМЕЧАЕМ МАТЧ КАК ОБРАБОТАННЫЙ В БАЗЕ
-        await firebasePatch(
+        /* === СОХРАНЕНИЕ ПОДРОБНОГО ОТЧЕТА В БАЗУ ДАННЫХ === */
+        await firebasePut(
             `tournaments/${safeFirebaseKey(tourneyId)}/rewards/${safeFirebaseKey(matchId)}`,
             {
-                rewarded: true,
-                timestamp: Date.now()
+                winner: winner,
+                team: isTeamFormat ? winner : null, // Если команда - пишем название, иначе null
+                format: tournamentFormat,
+                basePR: basePR,
+                winsBefore: winsBefore,
+                coefficient: coefficient,
+                reward: rewardPerPlayer,
+                rewardPerPlayer: rewardPerPlayer, // Дублируем для совместимости с прошлым кодом
+                players: rewardedPlayers,
+                time: new Date().toISOString(),
+                rewarded: true // Помечаем как оплаченный матч
             }
         );
 
-        console.log(`Матч ${matchId} успешно обработан. Статистика и PR начислены!`);
+        console.log(`Матч ${matchId} обработан. PR: ${rewardPerPlayer} выдано игрокам: ${rewardedPlayers.join(", ")}`);
 
     } catch (error) {
         console.error("Ошибка при выдаче наград и статы:", error);
         throw error;
     }
 }
-    /* ==========================================
-       CSS ДЛЯ LEVEL
-    ========================================== */
-
-    /* ==========================================
-       1V1
-    ========================================== */
-
-    if (
-        tournamentFormat ===
-        "1v1"
-    ) {
-
-        const winsBefore =
-            await getTournamentWins(
-                winner,
-                matchId
-            );
-
-
-        const coefficient =
-            getPRCoefficient(
-                winsBefore
-            );
-
-
-        const reward =
-            basePR *
-            coefficient;
-
-
-        await addPRToPlayer(
-            winner,
-            reward
-        );
-
-
-        await firebasePut(
-            `tournaments/${safeFirebaseKey(tourneyId)}/rewards/${safeFirebaseKey(matchId)}`,
-            {
-
-                winner,
-
-                format:
-                    tournamentFormat,
-
-                basePR,
-
-                winsBefore,
-
-                coefficient,
-
-                reward,
-
-                players:
-                    [winner],
-
-                time:
-                    new Date().toISOString()
-            }
-        );
-
-
-        console.log(
-            `PR: ${winner} получил ${reward} PR`
-        );
-
-
-        return;
-    }
-
-
-    /* ==========================================
-       2V2 / 5V5
-    ========================================== */
-
-    if (
-        tournamentFormat ===
-            "2v2" ||
-        tournamentFormat ===
-            "5v5"
-    ) {
-
-        const teamPlayers =
-            await getTeamPlayers(
-                winner
-            );
-
-
-        if (
-            !teamPlayers.length
-        ) {
-
-            console.warn(
-                "Не удалось найти игроков команды:",
-                winner
-            );
-
-            return;
-        }
-
-
-        const winsBefore =
-            await getTournamentTeamWins(
-                winner,
-                matchId
-            );
-
-
-        const coefficient =
-            getPRCoefficient(
-                winsBefore
-            );
-
-
-        const rewardPerPlayer =
-            basePR *
-            coefficient;
-
-
-        for (
-            const player
-            of teamPlayers
-        ) {
-
-            await addPRToPlayer(
-                player,
-                rewardPerPlayer
-            );
-        }
-
-
-        await firebasePut(
-            `tournaments/${safeFirebaseKey(tourneyId)}/rewards/${safeFirebaseKey(matchId)}`,
-            {
-
-                winner,
-
-                team:
-                    winner,
-
-                format:
-                    tournamentFormat,
-
-                basePR,
-
-                winsBefore,
-
-                coefficient,
-
-                rewardPerPlayer,
-
-                players:
-                    teamPlayers,
-
-                time:
-                    new Date().toISOString()
-            }
-        );
-
-
-        console.log(
-            `PR: команда ${winner} получила ${rewardPerPlayer} PR каждому`
-        );
-    }
-}
-
-
 /* =========================================================
    LANGUAGE
    ========================================================= */
