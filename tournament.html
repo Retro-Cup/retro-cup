@@ -6381,16 +6381,16 @@ function generateMatchHTML(
         "";
 
 
-    if (
-        canOpen
-    ) {
+      if (canOpen) {
+        clickableClass = "match-clickable";
 
-        clickableClass =
-            "match-clickable";
+        // Пропускаем через защитную функцию, чтобы кавычки не ломали HTML
+        const safeId = escapeHTML(JSON.stringify(id));
+        const safeP1 = escapeHTML(JSON.stringify(String(matchObj.p1)));
+        const safeP2 = escapeHTML(JSON.stringify(String(matchObj.p2)));
 
-
-        clickAction =
-            `onclick='openMatchModal(${JSON.stringify(id)}, ${JSON.stringify(String(matchObj.p1))}, ${JSON.stringify(String(matchObj.p2))})'`;
+        // Используем двойные кавычки для onclick
+        clickAction = `onclick="openMatchModal(${safeId}, ${safeP1}, ${safeP2})"`;
     }
 
 
