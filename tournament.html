@@ -6381,57 +6381,31 @@ function generateMatchHTML(
         "";
 
 
-      if (canOpen) {
+         if (canOpen) {
         clickableClass = "match-clickable";
 
-        // Пропускаем через защитную функцию, чтобы кавычки не ломали HTML
-        const safeId = escapeHTML(JSON.stringify(id));
-        const safeP1 = escapeHTML(JSON.stringify(String(matchObj.p1)));
-        const safeP2 = escapeHTML(JSON.stringify(String(matchObj.p2)));
+        // Железобетонная защита для JavaScript
+        const safeId = String(id).replace(/'/g, "\\'").replace(/"/g, "&quot;");
+        const safeP1 = String(matchObj.p1).replace(/'/g, "\\'").replace(/"/g, "&quot;");
+        const safeP2 = String(matchObj.p2).replace(/'/g, "\\'").replace(/"/g, "&quot;");
 
-        // Используем двойные кавычки для onclick
-        clickAction = `onclick="openMatchModal(${safeId}, ${safeP1}, ${safeP2})"`;
+        clickAction = `onclick="openMatchModal('${safeId}', '${safeP1}', '${safeP2}')"`;
     }
 
+    const p1Avatar = getAvatarImgHTML(p1Display);
+    const p2Avatar = getAvatarImgHTML(p2Display);
 
-    const p1Avatar =
-        getAvatarImgHTML(
-            p1Display
-        );
+    let p1Click = "";
+    if (matchObj.p1 && matchObj.p1 !== "---" && matchObj.p1 !== "TBD" && tournamentFormat === "1v1") {
+        const safeProf1 = String(matchObj.p1).replace(/'/g, "\\'").replace(/"/g, "&quot;");
+        p1Click = `onclick="event.stopPropagation(); openProfile('${safeProf1}');" style="cursor:pointer;"`;
+    }
 
-
-    const p2Avatar =
-        getAvatarImgHTML(
-            p2Display
-        );
-
-
-    let p1Click =
-        (
-            matchObj.p1 &&
-            matchObj.p1 !== "---" &&
-            matchObj.p1 !== "TBD" &&
-            tournamentFormat ===
-                "1v1"
-        )
-
-            ? `onclick="event.stopPropagation(); openProfile('${escapeHTML(matchObj.p1)}');" style="cursor:pointer;"`
-
-            : "";
-
-
-    let p2Click =
-        (
-            matchObj.p2 &&
-            matchObj.p2 !== "---" &&
-            matchObj.p2 !== "TBD" &&
-            tournamentFormat ===
-                "1v1"
-        )
-
-            ? `onclick="event.stopPropagation(); openProfile('${escapeHTML(matchObj.p2)}');" style="cursor:pointer;"`
-
-            : "";
+    let p2Click = "";
+    if (matchObj.p2 && matchObj.p2 !== "---" && matchObj.p2 !== "TBD" && tournamentFormat === "1v1") {
+        const safeProf2 = String(matchObj.p2).replace(/'/g, "\\'").replace(/"/g, "&quot;");
+        p2Click = `onclick="event.stopPropagation(); openProfile('${safeProf2}');" style="cursor:pointer;"`;
+    }
 
 
     return `
