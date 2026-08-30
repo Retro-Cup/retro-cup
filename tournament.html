@@ -4018,43 +4018,81 @@ async function isMatchRewarded(
 
 
 /* =========================================================
-   НАЧИСЛЕНИЕ PR ЗА МАТЧ
+   НАЧИСЛЕНИЕ PR ЗА МАТЧ (С ПОДДЕРЖКОЙ 2v2 И 5v5)
    ========================================================= */
 
-async function awardMatchPR(
-    matchId,
-    p1,
-    p2,
-    winner
-) {
+async function awardMatchPR(matchId, p1, p2, winner) {
 
-    const alreadyRewarded =
-        await isMatchRewarded(
-            matchId
-        );
-
-
+    // 1. Проверяем, не выдавали ли уже награду
+    const alreadyRewarded = await isMatchRewarded(matchId);
     if (alreadyRewarded) {
+        console.log("PR уже выдавался за матч:", matchId);
+        return;
+    }
 
-        console.log(
-            "PR уже выдавался за матч:",
-            matchId
+    // 2. Получаем базовый PR (зависит от формата)
+    const basePR = getBasePR();
+    if (basePR <= 0) {
+        return;
+    }
+
+    // 3. Проверяем формат турнира (командный или одиночный)
+    const isTeamFormat = (tournamentFormat === "2v2" || tournamentFormat === "5v5");
+
+    try {
+        if (isTeamFormat) {
+            /* 
+               =======================================
+               ЛОГИКА ДЛЯ КОМАНД (2v2, 5v5)
+               =======================================
+            */
+            // Узнаем победы команды для коэффициента
+            const winsBefore = await getTournamentTeamWins(winner, matchId);
+            const prReward = calculatePRReward(winsBefore);
+
+            // ДОСТАЕМ ИГРОКОВ ИЗ КОМАНДЫ-ПОБЕДИТЕЛЯ
+            const players = await getTeamPlayers(winner);
+
+            if (players.length === 0) {
+                console.log("В команде-победителе нет игроков, некому выдать PR.");
+            }
+
+            // ВЫДАЕМ PR КАЖДОМУ ИГРОКУ В КОМАНДЕ
+            for (const playerName of players) {
+                await addPRToPlayer(playerName, prReward);
+            }
+            
+            console.log(`Награда ${prReward} PR выдана команде ${winner} (игроки: ${players.join(', ')})`);
+
+        } else {
+            /* 
+               =======================================
+               ЛОГИКА ДЛЯ ОДИНОЧЕК (1v1)
+               =======================================
+            */
+            const winsBefore = await getTournamentWins(winner, matchId);
+            const prReward = calculatePRReward(winsBefore);
+
+            // Выдаем PR напрямую игроку
+            await addPRToPlayer(winner, prReward);
+            
+            console.log(`Награда ${prReward} PR выдана игроку ${winner}`);
+        }
+
+        // 4. ПОМЕЧАЕМ МАТЧ КАК НАГРАЖДЕННЫЙ (чтобы не абузили)
+        await firebasePatch(
+            `tournaments/${safeFirebaseKey(tourneyId)}/rewards/${safeFirebaseKey(matchId)}`,
+            {
+                rewarded: true,
+                timestamp: Date.now()
+            }
         );
 
-        return;
+    } catch (error) {
+        console.error("Ошибка при выдаче PR:", error);
+        throw error; // Пробрасываем ошибку дальше, чтобы saveMatchScore её поймал
     }
-
-
-    const basePR =
-        getBasePR();
-
-
-    if (
-        basePR <= 0
-    ) {
-
-        return;
-    }
+}
     /* ==========================================
        CSS ДЛЯ LEVEL
     ========================================== */
