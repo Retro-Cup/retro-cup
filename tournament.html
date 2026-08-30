@@ -3249,9 +3249,8 @@ function setLoadingButton(
     }
 }
 
-
 /* =========================================================
-   USERS PRELOADER
+   USERS PRELOADER (ИСПРАВЛЕННЫЙ)
    ========================================================= */
 
 async function preloadUsers(data) {
@@ -3264,87 +3263,75 @@ async function preloadUsers(data) {
     ) {
 
         if (data.players) {
-
-            namesToFetch =
-                Object.keys(
-                    data.players
-                );
+            namesToFetch = Object.keys(data.players);
         }
     }
 
     if (data.teams) {
-
-        Object.values(
-            data.teams
-        ).forEach(team => {
-
+        Object.values(data.teams).forEach(team => {
             if (team.players) {
-
-                namesToFetch.push(
-                    ...Object.keys(
-                        team.players
-                    )
-                );
+                namesToFetch.push(...Object.keys(team.players));
             }
         });
     }
 
-    namesToFetch =
-        [...new Set(namesToFetch)];
-
+    namesToFetch = [...new Set(namesToFetch)];
 
     await Promise.all(
-        namesToFetch.map(
-            async name => {
+        namesToFetch.map(async name => {
+            try {
+                const res = await fetch(`${dbBase}users/${encodeURIComponent(name)}.json`);
+                let userData = await res.json();
 
-                try {
+                // =================================================
+                // ✅ ТОТ САМЫЙ ТРЮК: ИНИЦИАЛИЗАЦИЯ PR В БАЗЕ ДАННЫХ
+                // =================================================
+                if (userData) {
+                    let needsUpdate = false;
 
-                    const res =
-                        await fetch(
-                            `${dbBase}users/${encodeURIComponent(name)}.json`
-                        );
-
-                    const userData =
-                        await res.json();
-
-                    usersCache[name] =
-                        userData || {
-
-                            avatar:
-                                defaultAvatar,
-
-                            steamCode:
-                                null,
-
-                            pr:
-                                1
-                        };
-
-
-                    if (
-                        !usersCache[name].avatar
-                    ) {
-
-                        usersCache[name].avatar =
-                            defaultAvatar;
+                    // Если у игрока нет PR в базе, ставим 1
+                    if (userData.pr === undefined) {
+                        userData.pr = 1;
+                        needsUpdate = true;
+                    }
+                    
+                    // Если у игрока нет Уровня в базе, ставим 1
+                    if (userData.level === undefined) {
+                        userData.level = 1;
+                        needsUpdate = true;
                     }
 
-                } catch (e) {
-
-                    usersCache[name] = {
-
-                        avatar:
-                            defaultAvatar,
-
-                        steamCode:
-                            null,
-
-                        pr:
-                            1
-                    };
+                    // Если мы что-то добавили, сохраняем обратно в базу!
+                    if (needsUpdate) {
+                        await firebasePatch(`users/${safeFirebaseKey(name)}`, {
+                            pr: userData.pr,
+                            level: userData.level
+                        });
+                        console.log(`Игроку ${name} автоматически записан в базу стартовый PR и Уровень!`);
+                    }
                 }
+                // =================================================
+
+                usersCache[name] = userData || {
+                    avatar: defaultAvatar,
+                    steamCode: null,
+                    pr: 1,
+                    level: 1
+                };
+
+                if (!usersCache[name].avatar) {
+                    usersCache[name].avatar = defaultAvatar;
+                }
+
+            } catch (e) {
+                usersCache[name] = {
+                    avatar: defaultAvatar,
+                    steamCode: null,
+                    pr: 1,
+                    level: 1
+                };
             }
-        )
+        })
     );
 }
 
