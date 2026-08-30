@@ -3561,9 +3561,7 @@ function getLevelColor(level) {
 /* =========================================================
    СОЗДАНИЕ LEVEL В МИНИ-ПРОФИЛЕ
    ========================================================= */
-/* =========================================================
-   СОЗДАНИЕ LEVEL В МИНИ-ПРОФИЛЕ
-   ========================================================= */
+
 function createMiniProfileLevel() {
     const modalBox = document.querySelector("#profileModal .modal-box");
     if (!modalBox) return;
@@ -3840,6 +3838,49 @@ async function addPRToPlayer(
     }
 
 
+/* =========================================================
+   ОБНОВЛЕНИЕ СТАТИСТИКИ (МАТЧИ И ВИНРЕЙТ)
+   ========================================================= */
+async function updatePlayerMatchStats(playerName, isWin) {
+    if (!playerName) return;
+
+    // Получаем профиль игрока
+    const user = await firebaseGet(`users/${safeFirebaseKey(playerName)}`);
+    if (!user) return;
+
+    // Берем текущие данные или ставим 0, если игрок новый
+    let matches = Number(user.matches) || 0;
+    let wins = Number(user.wins) || 0;
+    let losses = Number(user.losses) || 0;
+
+    // Прибавляем матч
+    matches += 1;
+
+    // Прибавляем победу или поражение
+    if (isWin) {
+        wins += 1;
+    } else {
+        losses += 1;
+    }
+
+    // Высчитываем Винрейт (%)
+    let winrate = 0;
+    if (matches > 0) {
+        winrate = Math.round((wins / matches) * 100);
+    }
+
+    // Сохраняем обратно в базу
+    await firebasePatch(`users/${safeFirebaseKey(playerName)}`, {
+        matches: matches,
+        wins: wins,
+        losses: losses,
+        winrate: winrate
+    });
+
+    console.log(`Статистика обновлена для ${playerName}. Матчей: ${matches}, Винрейт: ${winrate}%`);
+}
+
+    
     /* =====================================================
        ПОЛУЧАЕМ USER
     ===================================================== */
@@ -4018,68 +4059,66 @@ async function isMatchRewarded(
 
 
 /* =========================================================
-   НАЧИСЛЕНИЕ PR ЗА МАТЧ (С ПОДДЕРЖКОЙ 2v2 И 5v5)
+   НАЧИСЛЕНИЕ PR И СТАТИСТИКИ ЗА МАТЧ
    ========================================================= */
-
 async function awardMatchPR(matchId, p1, p2, winner) {
-
-    // 1. Проверяем, не выдавали ли уже награду
     const alreadyRewarded = await isMatchRewarded(matchId);
+
     if (alreadyRewarded) {
-        console.log("PR уже выдавался за матч:", matchId);
+        console.log("Награды и статистика уже выдавались за матч:", matchId);
         return;
     }
 
-    // 2. Получаем базовый PR (зависит от формата)
-    const basePR = getBasePR();
-    if (basePR <= 0) {
-        return;
-    }
-
-    // 3. Проверяем формат турнира (командный или одиночный)
+    // Определяем проигравшего (если p1 выиграл, значит p2 проиграл, и наоборот)
+    const loser = (winner === p1) ? p2 : p1;
+    
+    // Проверяем формат
     const isTeamFormat = (tournamentFormat === "2v2" || tournamentFormat === "5v5");
+    const basePR = getBasePR();
 
     try {
         if (isTeamFormat) {
             /* 
                =======================================
-               ЛОГИКА ДЛЯ КОМАНД (2v2, 5v5)
+               КОМАНДНЫЕ ФОРМАТЫ (2v2, 5v5)
                =======================================
             */
-            // Узнаем победы команды для коэффициента
+            // Достаем списки игроков из обеих команд
+            const winPlayers = await getTeamPlayers(winner);
+            const losePlayers = await getTeamPlayers(loser);
+
+            // 1. ОБРАБАТЫВАЕМ ПОБЕДИТЕЛЕЙ
             const winsBefore = await getTournamentTeamWins(winner, matchId);
-            const prReward = calculatePRReward(winsBefore);
+            const prReward = (basePR > 0) ? calculatePRReward(winsBefore) : 0;
 
-            // ДОСТАЕМ ИГРОКОВ ИЗ КОМАНДЫ-ПОБЕДИТЕЛЯ
-            const players = await getTeamPlayers(winner);
-
-            if (players.length === 0) {
-                console.log("В команде-победителе нет игроков, некому выдать PR.");
+            for (const playerName of winPlayers) {
+                if (prReward > 0) await addPRToPlayer(playerName, prReward); // Даем PR
+                await updatePlayerMatchStats(playerName, true);              // Записываем победу
             }
 
-            // ВЫДАЕМ PR КАЖДОМУ ИГРОКУ В КОМАНДЕ
-            for (const playerName of players) {
-                await addPRToPlayer(playerName, prReward);
+            // 2. ОБРАБАТЫВАЕМ ПРОИГРАВШИХ
+            for (const playerName of losePlayers) {
+                await updatePlayerMatchStats(playerName, false);             // Записываем поражение (PR не даем)
             }
-            
-            console.log(`Награда ${prReward} PR выдана команде ${winner} (игроки: ${players.join(', ')})`);
 
         } else {
             /* 
                =======================================
-               ЛОГИКА ДЛЯ ОДИНОЧЕК (1v1)
+               ОДИНОЧНЫЕ ФОРМАТЫ (1v1)
                =======================================
             */
+            // Обрабатываем победителя
             const winsBefore = await getTournamentWins(winner, matchId);
-            const prReward = calculatePRReward(winsBefore);
-
-            // Выдаем PR напрямую игроку
-            await addPRToPlayer(winner, prReward);
+            const prReward = (basePR > 0) ? calculatePRReward(winsBefore) : 0;
             
-            console.log(`Награда ${prReward} PR выдана игроку ${winner}`);
+            if (prReward > 0) await addPRToPlayer(winner, prReward);
+            await updatePlayerMatchStats(winner, true); // Победа
+
+            // Обрабатываем проигравшего
+            await updatePlayerMatchStats(loser, false); // Поражение
         }
 
-        // 4. ПОМЕЧАЕМ МАТЧ КАК НАГРАЖДЕННЫЙ (чтобы не абузили)
+        // ПОМЕЧАЕМ МАТЧ КАК ОБРАБОТАННЫЙ В БАЗЕ
         await firebasePatch(
             `tournaments/${safeFirebaseKey(tourneyId)}/rewards/${safeFirebaseKey(matchId)}`,
             {
@@ -4088,9 +4127,11 @@ async function awardMatchPR(matchId, p1, p2, winner) {
             }
         );
 
+        console.log(`Матч ${matchId} успешно обработан. Статистика и PR начислены!`);
+
     } catch (error) {
-        console.error("Ошибка при выдаче PR:", error);
-        throw error; // Пробрасываем ошибку дальше, чтобы saveMatchScore её поймал
+        console.error("Ошибка при выдаче наград и статы:", error);
+        throw error;
     }
 }
     /* ==========================================
